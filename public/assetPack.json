@@ -1,0 +1,36 @@
+{
+  "assetPack": {
+    "files": [
+      {
+        "type": "image",
+        "key": "bg",
+        "url": "assets/bg.png"
+      },
+      {
+        "type": "image",
+        "key": "logo",
+        "url": "assets/logo.png"
+      },
+      {
+        "type": "image",
+        "key": "martin",
+        "url": "assets/martin.png"
+      },
+      {
+        "type": "image",
+        "key": "tilemap-test",
+        "url": "assets/tilemap-test.png"
+      },
+      {
+        "type": "tilemapTiledJSON",
+        "key": "test-island-16",
+        "url": "assets/test-island-16.json"
+      }
+    ]
+  },
+  "meta": {
+    "generated": "1726176883407",
+    "app": "Phaser Vite Plugin",
+    "version": "0.1"
+  }
+}

@@ -1,0 +1,53 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "test-island-16.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "": {
+            "scaleInEditor": 1
+        },
+        "test-island-16.tmx": {
+            "scale": 1.7736,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 888.0243572395128,
+                "y": 395.80514208389707
+            }
+        },
+        "test-island-16.tmx#tilemap": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "tilemap-test.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "/Users/debone/Sources/the-wildfires/public/assets",
+    "last.imagePath": "/Users/debone/Sources/the-wildfires/assets/tiles",
+    "map.height": 80,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.orientation": null,
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 128,
+    "openFiles": [
+        "test-island-16.tmx"
+    ],
+    "project": "maps.tiled-project",
+    "recentFiles": [
+        "test-island-16.tmx",
+        "tilemap-test.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
