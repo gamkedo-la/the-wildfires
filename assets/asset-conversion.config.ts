@@ -20,6 +20,7 @@ const config = {
       args: "--export-map json --embed-tilesets ${input} ${output}",
     },
     { input: "airplane/martin.png", output: "martin.png" },
+    { input: "sounds/airplane-propeller-loop.mp3", output: "airplane-propeller-loop.mp3" },
   ],
 };
 
