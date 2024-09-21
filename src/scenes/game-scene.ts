@@ -19,6 +19,7 @@ export class Game extends Scene {
   key_w!: Phaser.Input.Keyboard.Key;
   key_a!: Phaser.Input.Keyboard.Key;
   key_d!: Phaser.Input.Keyboard.Key;
+  key_p!: Phaser.Input.Keyboard.Key;
 
   create() {
     this.camera = this.cameras.main;
@@ -31,6 +32,7 @@ export class Game extends Scene {
     this.key_w = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W);
     this.key_a = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A);
     this.key_d = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.key_p = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
     this.map = this.add.tilemap(RESOURCES["test-island-16"]);
     this.map.addTilesetImage("tilemap", RESOURCES["tilemap-test"]);
@@ -252,6 +254,10 @@ export class Game extends Scene {
       this.waterLevel += 5;
       this.waterLevel = Math.Clamp(this.waterLevel, 1, this.maxWaterLevel);
       this.water_level.width = this.waterLevel;
+    }
+
+    if (this.key_p.isDown) {
+      console.log("Pause key down");
     }
   }
 }
