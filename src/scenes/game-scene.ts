@@ -96,6 +96,12 @@ export class Game extends Scene {
     const burnableTiles = [1, 5, 6];
     const damagedTiles = [5, 6];
 
+    this.tileLayer
+      .filterTiles((t: Tilemaps.Tile) => t.index === 2)
+      .forEach(tile => {
+        this.emitSmoke(tile);
+      });
+
     this.fireCounter = this.fireCounterSpeed;
     this.events.on("fire", () => {
       this.tileLayer
@@ -107,47 +113,24 @@ export class Game extends Scene {
           tile.properties.burned += 1;
           if (tile.properties.burned > 3) {
             tile.index = 7;
+            this.stopSmoke(tile);
           }
           let leftTile = this.tileLayer.getTileAt(tile.x - 1, tile.y);
           let rightTile = this.tileLayer.getTileAt(tile.x + 1, tile.y);
           let topTile = this.tileLayer.getTileAt(tile.x, tile.y - 1);
           let bottomTile = this.tileLayer.getTileAt(tile.x, tile.y + 1);
 
-          if (leftTile && burnableTiles.indexOf(leftTile.index) >= 0) {
-            if (damagedTiles.indexOf(leftTile.index) >= 0) {
-              this.damageLevel += 1;
-              this.damage_level.width =
-                (this.damageLevel / this.maxDamageLevel) * 200;
+          [leftTile, rightTile, topTile, bottomTile].forEach(tile => {
+            if (tile && burnableTiles.indexOf(tile.index) >= 0) {
+              if (damagedTiles.indexOf(tile.index) >= 0) {
+                this.damageLevel += 1;
+                this.damage_level.width =
+                  (this.damageLevel / this.maxDamageLevel) * 200;
+              }
+              tile.index = 2;
+              this.emitSmoke(tile);
             }
-            leftTile.index = 2;
-          }
-
-          if (rightTile && burnableTiles.indexOf(rightTile.index) >= 0) {
-            if (damagedTiles.indexOf(rightTile.index) >= 0) {
-              this.damageLevel += 1;
-              this.damage_level.width =
-                (this.damageLevel / this.maxDamageLevel) * 200;
-            }
-            rightTile.index = 2;
-          }
-
-          if (topTile && burnableTiles.indexOf(topTile.index) >= 0) {
-            if (damagedTiles.indexOf(topTile.index) >= 0) {
-              this.damageLevel += 1;
-              this.damage_level.width =
-                (this.damageLevel / this.maxDamageLevel) * 200;
-            }
-            topTile.index = 2;
-          }
-
-          if (bottomTile && burnableTiles.indexOf(bottomTile.index) >= 0) {
-            if (damagedTiles.indexOf(bottomTile.index) >= 0) {
-              this.damageLevel += 1;
-              this.damage_level.width =
-                (this.damageLevel / this.maxDamageLevel) * 200;
-            }
-            bottomTile.index = 2;
-          }
+          });
         });
     });
 
@@ -239,6 +222,7 @@ export class Game extends Scene {
         .filter((t: Tilemaps.Tile) => t.index === 2)
         .forEach((t: Tilemaps.Tile) => {
           this.tileLayer.putTileAt(1, t.x, t.y);
+          this.stopSmoke(t);
         });
     }
 
@@ -259,5 +243,25 @@ export class Game extends Scene {
     if (this.key_p.isDown) {
       console.log("Pause key down");
     }
+  }
+
+  private emitSmoke(tile: Tilemaps.Tile) {
+    if (tile.properties.smoke === undefined) {
+      tile.properties.smoke = this.add.particles(
+        tile.pixelX, tile.pixelY, 'smoke', {
+        x: { random: [0, tile.width] },
+        y: { random: [0, tile.height] },
+        quantity: 1,
+        angle: { min: -45, max: -15 },
+        speed: 5,
+        frequency: 80,
+        lifespan: 2000
+      });
+    }
+  }
+
+  private stopSmoke(tile: Tilemaps.Tile) {
+    tile.properties.smoke?.destroy();
+    delete tile.properties.smoke;
   }
 }
