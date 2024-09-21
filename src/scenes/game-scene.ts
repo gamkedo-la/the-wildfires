@@ -13,7 +13,7 @@ export class GameScene extends Scene {
     super("Game");
   }
 
-  martin: Phaser.GameObjects.Image;
+  vehicle: Phaser.GameObjects.Image;
 
   tileLayer!: Phaser.Tilemaps.TilemapLayer;
 
@@ -50,8 +50,14 @@ export class GameScene extends Scene {
     this.map.addTilesetImage("tilemap", RESOURCES["tilemap-test"]);
     this.tileLayer = this.map.createLayer("map", "tilemap")!;
 
-    this.martin = this.add.image(382, 235, RESOURCES.martin).setScale(0.25);
-
+    this.vehicle = this.add
+      .image(
+        this.vehiclePosition.x,
+        this.vehiclePosition.y,
+        "martin-spritesheet",
+        2
+      )
+      .setScale(0.25);
 
     const burnableTiles = [1, 5, 6];
     const damagedTiles = [5, 6];
@@ -117,42 +123,49 @@ export class GameScene extends Scene {
   fireCounterSpeed = 600;
   fireCounter = 0;
 
-  martinDirection = Math.Vector2.DOWN.clone();
-  martinVelocity = new Math.Vector2(0, 0);
-  martinAcceleration = new Math.Vector2(0, 0);
+  vehicleDirection = Math.Vector2.DOWN.clone();
+  vehiclePosition = new Math.Vector2(382, 235);
+  vehicleVelocity = new Math.Vector2(0, 0);
+  vehicleAcceleration = new Math.Vector2(0, 0);
 
   update() {
-    this.martin.x += this.martinVelocity.x;
-    this.martin.y += this.martinVelocity.y;
+    this.vehiclePosition.add(this.vehicleVelocity);
+
+    this.vehicle.x = this.vehiclePosition.x;
+    this.vehicle.y = this.vehiclePosition.y;
 
     if (this.key_a.isDown || this.key_left.isDown) {
-      this.martinDirection.rotate(-1 / 50);
-      this.martinVelocity.rotate(-1 / 50);
+      this.vehicleDirection.rotate(-1 / 50);
+      this.vehicleVelocity.rotate(-1 / 50);
+      this.vehicle.setFrame(1);
     } else if (this.key_d.isDown || this.key_right.isDown) {
-      this.martinDirection.rotate(1 / 50);
-      this.martinVelocity.rotate(1 / 50);
+      this.vehicleDirection.rotate(1 / 50);
+      this.vehicleVelocity.rotate(1 / 50);
+      this.vehicle.setFrame(3);
+    } else {
+      this.vehicle.setFrame(2);
     }
 
     if (this.key_w.isDown || this.key_up.isDown) {
-      this.martinAcceleration = this.martinDirection.clone().scale(0.1);
+      this.vehicleAcceleration = this.vehicleDirection.clone().scale(0.1);
     } else {
-      this.martinAcceleration = new Math.Vector2(0, 0);
+      this.vehicleAcceleration = new Math.Vector2(0, 0);
     }
 
-    this.martinVelocity.add(this.martinAcceleration);
-    this.martinVelocity.limit(1.5);
+    this.vehicleVelocity.add(this.vehicleAcceleration);
+    this.vehicleVelocity.limit(1.5);
 
     // Convert martinDirection to degrees
     const degrees = Phaser.Math.RadToDeg(
       Phaser.Math.Angle.Between(
         0,
         0,
-        this.martinDirection.x,
-        this.martinDirection.y
+        this.vehicleDirection.x,
+        this.vehicleDirection.y
       )
     );
 
-    this.martin.rotation = Phaser.Math.DegToRad(degrees - 90);
+    this.vehicle.rotation = Phaser.Math.DegToRad(degrees - 90);
 
     this.fireCounter -= 1;
     if (this.fireCounter <= 0) {
@@ -164,8 +177,8 @@ export class GameScene extends Scene {
       this.space_key.isDown &&
       this.waterLevel > 5 &&
       this.tileLayer.getTileAtWorldXY(
-        this.martin.x,
-        this.martin.y,
+        this.vehiclePosition.x,
+        this.vehiclePosition.y,
         true,
         this.camera
       )?.index !== 3
@@ -176,8 +189,8 @@ export class GameScene extends Scene {
 
       this.tileLayer
         .getTilesWithinWorldXY(
-          this.martin.x,
-          this.martin.y,
+          this.vehiclePosition.x,
+          this.vehiclePosition.y,
           24,
           24,
           {},
@@ -193,8 +206,8 @@ export class GameScene extends Scene {
     if (
       this.space_key.isDown &&
       this.tileLayer.getTileAtWorldXY(
-        this.martin.x,
-        this.martin.y,
+        this.vehiclePosition.x,
+        this.vehiclePosition.y,
         true,
         this.camera
       )?.index === 3

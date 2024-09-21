@@ -37,6 +37,27 @@ export class Preloader extends Scene {
 
     // Load the assetPack.json
     this.load.pack("assetPack", "assetPack.json");
+
+    // TODO:
+    // Make the spritesheets to be handled by assetPack.json through
+    // the asset-conversion vite plugin. I'm not sure yet how to set
+    // the metadata for the spritesheets.
+    // PixelOver generates a spritesheet with a metadata file but not
+    // sure it is worth the effort to parse it.
+    this.load.spritesheet("martin-spritesheet", "assets/martin-sprite.png", {
+      frameWidth: 125,
+      frameHeight: 101,
+      frameCount: 5,
+    });
+    this.load.spritesheet(
+      "canadair-spritesheet",
+      "assets/canadair-sprite.png",
+      {
+        frameWidth: 83,
+        frameHeight: 85,
+        frameCount: 5,
+      }
+    );
   }
 
   create() {
