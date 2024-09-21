@@ -1,7 +1,11 @@
 import { Math, Scene, Tilemaps } from "phaser";
 import { RESOURCES } from "../assets";
+import PhaserGamebus from "../lib/gamebus";
 
-export class Game extends Scene {
+export class GameScene extends Scene {
+  declare bus: Phaser.Events.EventEmitter;
+  declare gamebus: PhaserGamebus;
+
   camera: Phaser.Cameras.Scene2D.Camera;
   map: Phaser.Tilemaps.Tilemap;
 
@@ -9,8 +13,6 @@ export class Game extends Scene {
     super("Game");
   }
 
-  water_level: Phaser.GameObjects.Rectangle;
-  damage_level: Phaser.GameObjects.Rectangle;
   martin: Phaser.GameObjects.Image;
 
   tileLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -26,6 +28,8 @@ export class Game extends Scene {
   key_esc!: Phaser.Input.Keyboard.Key;
 
   create() {
+    this.bus = this.gamebus.getBus();
+
     this.camera = this.cameras.main;
     this.camera.setBackgroundColor(0x00ff00);
     this.camera.scrollX = 200;
@@ -48,58 +52,6 @@ export class Game extends Scene {
 
     this.martin = this.add.image(382, 235, RESOURCES.martin).setScale(0.25);
 
-    const water_bg = this.add.rectangle(175, 670, 210, 50);
-    water_bg.isStroked = true;
-    water_bg.strokeColor = 0x333333;
-    water_bg.lineWidth = 4;
-    water_bg.setScrollFactor(0, 0);
-
-    this.water_level = this.add.rectangle(75, 670, 1, 40);
-    this.water_level.setOrigin(0, 0.5);
-    this.water_level.isFilled = true;
-    this.water_level.fillColor = 0x8ff8e2;
-    this.water_level.isStroked = true;
-    this.water_level.strokeColor = 0xffffff;
-    this.water_level.lineWidth = 4;
-    this.water_level.setScrollFactor(0, 0);
-    this.add
-      .text(175, 720, "WATER", {
-        fontFamily: "DotGothic16",
-        fontSize: "24px",
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 8,
-        align: "center",
-      })
-      .setOrigin(0.5)
-      .setScrollFactor(0, 0);
-
-    const damage_bg = this.add.rectangle(175, 540, 210, 50);
-    damage_bg.isStroked = true;
-    damage_bg.strokeColor = 0x333333;
-    damage_bg.lineWidth = 4;
-    damage_bg.setScrollFactor(0, 0);
-
-    this.damage_level = this.add.rectangle(75, 540, 1, 40);
-    this.damage_level.setOrigin(0, 0.5);
-    this.damage_level.isFilled = true;
-    this.damage_level.fillColor = 0xae2339;
-    this.damage_level.isStroked = true;
-    this.damage_level.strokeColor = 0xffffff;
-    this.damage_level.lineWidth = 4;
-    this.damage_level.setScrollFactor(0, 0);
-
-    this.add
-      .text(175, 590, "DAMAGE", {
-        fontFamily: "DotGothic16",
-        fontSize: "24px",
-        color: "#ffffff",
-        stroke: "#000000",
-        strokeThickness: 8,
-        align: "center",
-      })
-      .setOrigin(0.5)
-      .setScrollFactor(0, 0);
 
     const burnableTiles = [1, 5, 6];
     const damagedTiles = [5, 6];
@@ -132,8 +84,7 @@ export class Game extends Scene {
             if (tile && burnableTiles.indexOf(tile.index) >= 0) {
               if (damagedTiles.indexOf(tile.index) >= 0) {
                 this.damageLevel += 1;
-                this.damage_level.width =
-                  (this.damageLevel / this.maxDamageLevel) * 200;
+                this.bus.emit("damage_level_changed", this.damageLevel);
               }
               tile.index = 2;
               this.emitSmoke(tile);
@@ -150,6 +101,11 @@ export class Game extends Scene {
     this.maxDamageLevel = this.tileLayer.filterTiles(
       (t: Tilemaps.Tile) => t.index === 5 || t.index === 6
     ).length;
+
+    this.scene.run("UI", {
+      gameScene: this,
+    });
+    this.scene.run("Debug");
   }
 
   waterLevel = 0;
@@ -216,7 +172,7 @@ export class Game extends Scene {
     ) {
       this.waterLevel -= 3;
       this.waterLevel = Math.Clamp(this.waterLevel, 1, this.maxWaterLevel);
-      this.water_level.width = this.waterLevel;
+      this.bus.emit("water_level_changed", this.waterLevel);
 
       this.tileLayer
         .getTilesWithinWorldXY(
@@ -245,7 +201,7 @@ export class Game extends Scene {
     ) {
       this.waterLevel += 5;
       this.waterLevel = Math.Clamp(this.waterLevel, 1, this.maxWaterLevel);
-      this.water_level.width = this.waterLevel;
+      this.bus.emit("water_level_changed", this.waterLevel);
     }
 
     if (this.key_p.isDown || this.key_esc.isDown) {

@@ -46,7 +46,7 @@ export class Preloader extends Scene {
       },
       active: () => {
         //if (import.meta.env.DEV) {
-        this.scene.run("Debug");
+        //this.scene.run("Debug");
         this.scene.start("Game");
         //} else {
         //this.add.image(0, 0, RESOURCES.MAIN_MENU).setOrigin(0, 0);

@@ -11,11 +11,14 @@ export default class PhaserGamebus extends Phaser.Plugins.BasePlugin {
     return this.gamebus;
   }
 
-  on(event: string | symbol, fn: (...args: unknown[]) => void): Phaser.Events.EventEmitter {
+  on(
+    event: string | symbol,
+    fn: (...args: any[]) => void
+  ): Phaser.Events.EventEmitter {
     return this.gamebus.on.call(this.gamebus, event, fn);
   }
 
-  emit(event: string | symbol, ...args: unknown[]): boolean {
+  emit(event: string | symbol, ...args: any[]): boolean {
     return this.gamebus.emit.call(this.gamebus, event, args);
   }
 }

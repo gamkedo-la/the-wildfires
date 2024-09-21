@@ -5,9 +5,10 @@ import { Boot } from "./scenes/boot/boot-scene";
 import { Preloader } from "./scenes/boot/preloader-scene";
 import { Debug } from "./scenes/debug-scene";
 
-import { Game as MainGame } from "./scenes/game-scene";
+import { GameScene as MainGame } from "./scenes/game-scene";
 
 import { Game, Types } from "phaser";
+import { UIScene } from "./scenes/ui-scene";
 
 export const GAME_WIDTH = 1024;
 export const GAME_HEIGHT = 768;
@@ -39,7 +40,7 @@ const config: Types.Core.GameConfig = {
       },
     ],
   },
-  scene: [Boot, Preloader, Debug, MainGame],
+  scene: [Boot, Preloader, MainGame, UIScene, Debug],
 };
 
 export default new Game(config);
