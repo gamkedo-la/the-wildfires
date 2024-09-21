@@ -2,6 +2,21 @@
   "assetPack": {
     "files": [
       {
+        "type": "audio",
+        "key": "airplane-propeller-loop",
+        "url": "assets/airplane-propeller-loop.mp3"
+      },
+      {
+        "type": "image",
+        "key": "canadair-sprite",
+        "url": "assets/canadair-sprite.png"
+      },
+      {
+        "type": "image",
+        "key": "martin-sprite",
+        "url": "assets/martin-sprite.png"
+      },
+      {
         "type": "image",
         "key": "martin",
         "url": "assets/martin.png"
@@ -10,6 +25,11 @@
         "type": "image",
         "key": "smoke",
         "url": "assets/smoke.png"
+      },
+      {
+        "type": "image",
+        "key": "the-wildfires-ui",
+        "url": "assets/the-wildfires-ui.png"
       },
       {
         "type": "image",
@@ -24,7 +44,7 @@
     ]
   },
   "meta": {
-    "generated": "1726927340659",
+    "generated": "1726959410614",
     "app": "Phaser Vite Plugin",
     "version": "0.1"
   }

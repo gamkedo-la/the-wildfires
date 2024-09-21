@@ -12,11 +12,11 @@
             "scaleInEditor": 1
         },
         "test-island-16.tmx": {
-            "scale": 1.7736,
+            "scale": 0.7518,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 888.0243572395128,
-                "y": 395.80514208389707
+                "x": 674.3814844373503,
+                "y": 481.51104017025796
             }
         },
         "test-island-16.tmx#tilemap": {

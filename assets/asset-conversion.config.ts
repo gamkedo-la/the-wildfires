@@ -20,7 +20,17 @@ const config = {
       args: "--export-map json --embed-tilesets ${input} ${output}",
     },
     { input: "airplane/martin.png", output: "martin.png" },
-    { input: "sounds/airplane-propeller-loop.mp3", output: "airplane-propeller-loop.mp3" },
+    {
+      input: "sounds/airplane-propeller-loop.mp3",
+      output: "airplane-propeller-loop.mp3",
+    },
+
+    { input: "airplane/martin_export.png", output: "martin-sprite.png" },
+    {
+      input: "canadair-c415/canadair_export.png",
+      output: "canadair-sprite.png",
+    },
+    { input: "ui/the-wildfires-ui-sketch.png", output: "the-wildfires-ui.png" },
   ],
 };
 

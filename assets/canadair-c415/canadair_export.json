@@ -1,0 +1,68 @@
+{
+	"frames": [
+		{
+			"frame": {
+				"x": 0,
+				"y": 0,
+				"w": 83,
+				"h": 85
+			},
+			"duration": 200
+		},
+		{
+			"frame": {
+				"x": 83,
+				"y": 0,
+				"w": 83,
+				"h": 85
+			},
+			"duration": 200
+		},
+		{
+			"frame": {
+				"x": 166,
+				"y": 0,
+				"w": 83,
+				"h": 85
+			},
+			"duration": 200
+		},
+		{
+			"frame": {
+				"x": 0,
+				"y": 85,
+				"w": 83,
+				"h": 85
+			},
+			"duration": 200
+		},
+		{
+			"frame": {
+				"x": 83,
+				"y": 85,
+				"w": 83,
+				"h": 85
+			},
+			"duration": 200
+		}
+	],
+	"meta": {
+		"app": "https://pixelover.io",
+		"version": "0.15.1",
+		"filepath": "/Users/debone/Sources/the-wildfires/assets/canadair-c415/canadair_export.png",
+		"frameAnimations": [
+			{
+				"name": "New animation",
+				"fps": 5,
+				"speed_scale": 1,
+				"from": 0,
+				"to": 4
+			}
+		],
+		"size": {
+			"w": 249,
+			"h": 170
+		},
+		"view": "Preview"
+	}
+}
