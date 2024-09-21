@@ -47,7 +47,6 @@ export class Preloader extends Scene {
     this.load.spritesheet("martin-spritesheet", "assets/martin-sprite.png", {
       frameWidth: 125,
       frameHeight: 101,
-      frameCount: 5,
     });
     this.load.spritesheet(
       "canadair-spritesheet",
@@ -55,7 +54,6 @@ export class Preloader extends Scene {
       {
         frameWidth: 83,
         frameHeight: 85,
-        frameCount: 5,
       }
     );
   }

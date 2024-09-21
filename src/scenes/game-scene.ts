@@ -38,13 +38,21 @@ export class GameScene extends Scene {
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
     this.key_w = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-    this.key_up = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+    this.key_up = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.UP
+    );
     this.key_a = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-    this.key_left = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+    this.key_left = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.LEFT
+    );
     this.key_d = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.key_right = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    this.key_right = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.RIGHT
+    );
     this.key_p = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.P);
-    this.key_esc = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+    this.key_esc = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.ESC
+    );
 
     this.map = this.add.tilemap(RESOURCES["test-island-16"]);
     this.map.addTilesetImage("tilemap", RESOURCES["tilemap-test"]);
@@ -64,7 +72,7 @@ export class GameScene extends Scene {
 
     this.tileLayer
       .filterTiles((t: Tilemaps.Tile) => t.index === 2)
-      .forEach(tile => {
+      .forEach((tile) => {
         this.emitSmoke(tile);
       });
 
@@ -86,7 +94,7 @@ export class GameScene extends Scene {
           let topTile = this.tileLayer.getTileAt(tile.x, tile.y - 1);
           let bottomTile = this.tileLayer.getTileAt(tile.x, tile.y + 1);
 
-          [leftTile, rightTile, topTile, bottomTile].forEach(tile => {
+          [leftTile, rightTile, topTile, bottomTile].forEach((tile) => {
             if (tile && burnableTiles.indexOf(tile.index) >= 0) {
               if (damagedTiles.indexOf(tile.index) >= 0) {
                 this.damageLevel += 1;
@@ -225,15 +233,19 @@ export class GameScene extends Scene {
   private emitSmoke(tile: Tilemaps.Tile) {
     if (tile.properties.smoke === undefined) {
       tile.properties.smoke = this.add.particles(
-        tile.pixelX, tile.pixelY, 'smoke', {
-        x: { random: [0, tile.width] },
-        y: { random: [0, tile.height] },
-        quantity: 1,
-        angle: { min: -45, max: -15 },
-        speed: 5,
-        frequency: 80,
-        lifespan: 2000
-      });
+        tile.pixelX,
+        tile.pixelY,
+        "smoke",
+        {
+          x: { random: [0, tile.width] },
+          y: { random: [0, tile.height] },
+          quantity: 1,
+          angle: { min: -45, max: -15 },
+          speed: 5,
+          frequency: 80,
+          lifespan: 2000,
+        }
+      );
     }
   }
 

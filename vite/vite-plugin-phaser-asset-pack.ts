@@ -184,7 +184,6 @@ export default function phaserAssetsPlugin(): Plugin {
         files: Object.values(assets).flat(),
       },
       meta: {
-        generated: Date.now().toString(),
         app: "Phaser Vite Plugin",
         version: "0.1",
       },
