@@ -17,9 +17,13 @@ export class Game extends Scene {
 
   space_key!: Phaser.Input.Keyboard.Key;
   key_w!: Phaser.Input.Keyboard.Key;
+  key_up!: Phaser.Input.Keyboard.Key;
   key_a!: Phaser.Input.Keyboard.Key;
+  key_left!: Phaser.Input.Keyboard.Key;
   key_d!: Phaser.Input.Keyboard.Key;
+  key_right!: Phaser.Input.Keyboard.Key;
   key_p!: Phaser.Input.Keyboard.Key;
+  key_esc!: Phaser.Input.Keyboard.Key;
 
   create() {
     this.camera = this.cameras.main;
@@ -30,9 +34,13 @@ export class Game extends Scene {
       Phaser.Input.Keyboard.KeyCodes.SPACE
     );
     this.key_w = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    this.key_up = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     this.key_a = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    this.key_left = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     this.key_d = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.key_right = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.key_p = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+    this.key_esc = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
     this.map = this.add.tilemap(RESOURCES["test-island-16"]);
     this.map.addTilesetImage("tilemap", RESOURCES["tilemap-test"]);
@@ -161,15 +169,15 @@ export class Game extends Scene {
     this.martin.x += this.martinVelocity.x;
     this.martin.y += this.martinVelocity.y;
 
-    if (this.key_a.isDown) {
+    if (this.key_a.isDown || this.key_left.isDown) {
       this.martinDirection.rotate(-1 / 50);
       this.martinVelocity.rotate(-1 / 50);
-    } else if (this.key_d.isDown) {
+    } else if (this.key_d.isDown || this.key_right.isDown) {
       this.martinDirection.rotate(1 / 50);
       this.martinVelocity.rotate(1 / 50);
     }
 
-    if (this.key_w.isDown) {
+    if (this.key_w.isDown || this.key_up.isDown) {
       this.martinAcceleration = this.martinDirection.clone().scale(0.1);
     } else {
       this.martinAcceleration = new Math.Vector2(0, 0);
@@ -240,7 +248,7 @@ export class Game extends Scene {
       this.water_level.width = this.waterLevel;
     }
 
-    if (this.key_p.isDown) {
+    if (this.key_p.isDown || this.key_esc.isDown) {
       console.log("Pause key down");
     }
   }
