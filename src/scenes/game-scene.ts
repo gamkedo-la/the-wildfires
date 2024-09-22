@@ -1,6 +1,7 @@
 import { Math, Scene, Tilemaps } from "phaser";
 import { RESOURCES } from "../assets";
 import PhaserGamebus from "../lib/gamebus";
+import { VehicleSystem } from "../systems/vehicle/vehicle-system";
 
 export class GameScene extends Scene {
   declare bus: Phaser.Events.EventEmitter;
@@ -12,8 +13,6 @@ export class GameScene extends Scene {
   constructor() {
     super("Game");
   }
-
-  vehicle: Phaser.GameObjects.Image;
 
   tileLayer!: Phaser.Tilemaps.TilemapLayer;
 
@@ -57,15 +56,6 @@ export class GameScene extends Scene {
     this.map = this.add.tilemap(RESOURCES["test-island-16"]);
     this.map.addTilesetImage("tilemap", RESOURCES["tilemap-test"]);
     this.tileLayer = this.map.createLayer("map", "tilemap")!;
-
-    this.vehicle = this.add
-      .image(
-        this.vehiclePosition.x,
-        this.vehiclePosition.y,
-        "martin-spritesheet",
-        2
-      )
-      .setScale(0.25);
 
     const burnableTiles = [1, 5, 6];
     const damagedTiles = [5, 6];
@@ -116,10 +106,22 @@ export class GameScene extends Scene {
       (t: Tilemaps.Tile) => t.index === 5 || t.index === 6
     ).length;
 
+    this.registerSystems();
+
     this.scene.run("UI", {
       gameScene: this,
     });
     this.scene.run("Debug");
+  }
+
+  vehiclesSystem: VehicleSystem;
+
+  registerSystems() {
+    this.vehiclesSystem = new VehicleSystem(this).create();
+  }
+
+  updateSystems(time: number, delta: number) {
+    this.vehiclesSystem.update(time, delta);
   }
 
   waterLevel = 0;
@@ -131,98 +133,13 @@ export class GameScene extends Scene {
   fireCounterSpeed = 600;
   fireCounter = 0;
 
-  vehicleDirection = Math.Vector2.DOWN.clone();
-  vehiclePosition = new Math.Vector2(382, 235);
-  vehicleVelocity = new Math.Vector2(0, 0);
-  vehicleAcceleration = new Math.Vector2(0, 0);
-
-  update() {
-    this.vehiclePosition.add(this.vehicleVelocity);
-
-    this.vehicle.x = this.vehiclePosition.x;
-    this.vehicle.y = this.vehiclePosition.y;
-
-    if (this.key_a.isDown || this.key_left.isDown) {
-      this.vehicleDirection.rotate(-1 / 50);
-      this.vehicleVelocity.rotate(-1 / 50);
-      this.vehicle.setFrame(1);
-    } else if (this.key_d.isDown || this.key_right.isDown) {
-      this.vehicleDirection.rotate(1 / 50);
-      this.vehicleVelocity.rotate(1 / 50);
-      this.vehicle.setFrame(3);
-    } else {
-      this.vehicle.setFrame(2);
-    }
-
-    if (this.key_w.isDown || this.key_up.isDown) {
-      this.vehicleAcceleration = this.vehicleDirection.clone().scale(0.1);
-    } else {
-      this.vehicleAcceleration = new Math.Vector2(0, 0);
-    }
-
-    this.vehicleVelocity.add(this.vehicleAcceleration);
-    this.vehicleVelocity.limit(1.5);
-
-    // Convert martinDirection to degrees
-    const degrees = Phaser.Math.RadToDeg(
-      Phaser.Math.Angle.Between(
-        0,
-        0,
-        this.vehicleDirection.x,
-        this.vehicleDirection.y
-      )
-    );
-
-    this.vehicle.rotation = Phaser.Math.DegToRad(degrees - 90);
+  update(time: number, delta: number) {
+    this.updateSystems(time, delta);
 
     this.fireCounter -= 1;
     if (this.fireCounter <= 0) {
       this.fireCounter = this.fireCounterSpeed;
       this.events.emit("fire");
-    }
-
-    if (
-      this.space_key.isDown &&
-      this.waterLevel > 5 &&
-      this.tileLayer.getTileAtWorldXY(
-        this.vehiclePosition.x,
-        this.vehiclePosition.y,
-        true,
-        this.camera
-      )?.index !== 3
-    ) {
-      this.waterLevel -= 3;
-      this.waterLevel = Math.Clamp(this.waterLevel, 1, this.maxWaterLevel);
-      this.bus.emit("water_level_changed", this.waterLevel);
-
-      this.tileLayer
-        .getTilesWithinWorldXY(
-          this.vehiclePosition.x,
-          this.vehiclePosition.y,
-          24,
-          24,
-          {},
-          this.camera
-        )
-        .filter((t: Tilemaps.Tile) => t.index === 2)
-        .forEach((t: Tilemaps.Tile) => {
-          this.tileLayer.putTileAt(1, t.x, t.y);
-          this.stopSmoke(t);
-        });
-    }
-
-    if (
-      this.space_key.isDown &&
-      this.tileLayer.getTileAtWorldXY(
-        this.vehiclePosition.x,
-        this.vehiclePosition.y,
-        true,
-        this.camera
-      )?.index === 3
-    ) {
-      this.waterLevel += 5;
-      this.waterLevel = Math.Clamp(this.waterLevel, 1, this.maxWaterLevel);
-      this.bus.emit("water_level_changed", this.waterLevel);
     }
 
     if (this.key_p.isDown || this.key_esc.isDown) {
@@ -249,7 +166,8 @@ export class GameScene extends Scene {
     }
   }
 
-  private stopSmoke(tile: Tilemaps.Tile) {
+  // TODO Removed the private, but this will go to its system (fire system?)
+  stopSmoke(tile: Tilemaps.Tile) {
     tile.properties.smoke?.destroy();
     delete tile.properties.smoke;
   }
