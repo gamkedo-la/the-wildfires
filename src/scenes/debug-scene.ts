@@ -52,12 +52,13 @@ export class Debug extends Scene {
       options: [
         { text: "martin", value: "martin" },
         { text: "canadair", value: "canadair" },
+        { text: "skycrane", value: "skycrane" },
       ],
       value: "martin",
     }) as ListBladeApi<string>;
 
     vehiclePicker.on("change", ({ value }) => {
-      gameScene.vehicle.setTexture(`${value}-spritesheet`);
+      gameScene.vehiclesSystem.vehicle.setTexture(`${value}-spritesheet`);
     });
   }
 
