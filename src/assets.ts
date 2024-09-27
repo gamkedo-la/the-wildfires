@@ -4,9 +4,13 @@
 
 export const RESOURCES = {
   "airplane-propeller-loop": "airplane-propeller-loop",
+  "fire-extinguished": "fire-extinguished",
+  "fire-loop": "fire-loop",
+  "water-loop": "water-loop",
   "canadair-sprite": "canadair-sprite",
   "martin-sprite": "martin-sprite",
   "martin": "martin",
+  "skycrane-sprite": "skycrane-sprite",
   "smoke": "smoke",
   "the-wildfires-ui": "the-wildfires-ui",
   "tilemap-test": "tilemap-test",

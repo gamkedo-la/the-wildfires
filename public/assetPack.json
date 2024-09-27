@@ -7,6 +7,21 @@
         "url": "assets/airplane-propeller-loop.mp3"
       },
       {
+        "type": "audio",
+        "key": "fire-extinguished",
+        "url": "assets/fire-extinguished.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "fire-loop",
+        "url": "assets/fire-loop.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "water-loop",
+        "url": "assets/water-loop.mp3"
+      },
+      {
         "type": "image",
         "key": "canadair-sprite",
         "url": "assets/canadair-sprite.png"
@@ -20,6 +35,11 @@
         "type": "image",
         "key": "martin",
         "url": "assets/martin.png"
+      },
+      {
+        "type": "image",
+        "key": "skycrane-sprite",
+        "url": "assets/skycrane-sprite.png"
       },
       {
         "type": "image",
