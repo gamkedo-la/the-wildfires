@@ -30,6 +30,10 @@ const config = {
       input: "canadair-c415/canadair_export.png",
       output: "canadair-sprite.png",
     },
+    {
+      input: "skycrane/skycrane_export.png",
+      output: "skycrane-sprite.png",
+    },
     { input: "ui/the-wildfires-ui-sketch.png", output: "the-wildfires-ui.png" },
   ],
 };
