@@ -46,19 +46,17 @@ export class Debug extends Scene {
         gameScene.gamebus.emit("water_level_changed", 200);
       });
 
+    let vehicles = gameScene.vehiclesSystem.getVehicles();
+
     let vehiclePicker = this.pane.addBlade({
       view: "list",
       label: "vehicle",
-      options: [
-        { text: "martin", value: "martin" },
-        { text: "canadair", value: "canadair" },
-        { text: "skycrane", value: "skycrane" },
-      ],
-      value: "martin",
+      options: vehicles.map(v => { return { text: v, value: v } }),
+      value: vehicles[0],
     }) as ListBladeApi<string>;
 
     vehiclePicker.on("change", ({ value }) => {
-      gameScene.vehiclesSystem.vehicle.setTexture(`${value}-spritesheet`);
+      gameScene.vehiclesSystem.setVehicle(value);
     });
   }
 

@@ -3,6 +3,26 @@ import { GameScene } from "../../scenes/game-scene";
 
 import { Math, Tilemaps } from "phaser";
 
+interface VehicleEntry {
+  sprite: string;
+  scale: number;
+}
+
+const VEHICLES: Record<string, VehicleEntry> = {
+  "martin": {
+    sprite: "martin",
+    scale: 0.25
+  },
+  "canadair": {
+    sprite: "canadair",
+    scale: 0.4
+  },
+  "skycrane": {
+    sprite: "skycrane",
+    scale: 0.4
+  }
+};
+
 export class VehicleSystem implements System {
   scene: GameScene;
 
@@ -28,6 +48,16 @@ export class VehicleSystem implements System {
       .setScale(0.25);
 
     return this;
+  }
+
+  getVehicles(): Array<string> {
+    return Object.keys(VEHICLES);
+  }
+
+  setVehicle(name: string): void {
+    let vehicle = VEHICLES[name];
+    this.vehicle.setTexture(`${vehicle.sprite}-spritesheet`);
+    this.vehicle.setScale(vehicle.scale);
   }
 
   update(time: number, delta: number): void {
