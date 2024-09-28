@@ -1,4 +1,4 @@
-import { Math as PMath } from "phaser";
+import { Math as PMath, Tilemaps } from "phaser";
 import { GameScene } from "../../scenes/game-scene";
 
 export abstract class Vehicle {
@@ -39,8 +39,6 @@ export abstract class Vehicle {
     this.image = scene.add.image(x, y, texture, 2).setScale(imageScale);
     this.started = false;
   }
-
-  abstract useTank(): void;
 
   update(time: number, delta: number): void {
     this.position.add(this.velocity);
@@ -91,6 +89,50 @@ export abstract class Vehicle {
     const rads = PMath.Angle.Between(0, 0, this.direction.x, this.direction.y);
 
     this.image.rotation = rads - PMath.TAU;
+  }
+
+  useTank(): void {
+    if (
+      this.tankLevel > 5 &&
+      this.scene.tileLayer.getTileAtWorldXY(
+        this.position.x,
+        this.position.y,
+        true,
+        this.scene.camera
+      )?.index !== 3
+    ) {
+      this.tankLevel -= this.tankConsumptionRate;
+      this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
+      this.scene.bus.emit("water_level_changed", this.tankLevel);
+
+      this.scene.tileLayer
+        .getTilesWithinWorldXY(
+          this.position.x,
+          this.position.y,
+          24,
+          24,
+          {},
+          this.scene.camera
+        )
+        .filter((t: Tilemaps.Tile) => t.index === 2)
+        .forEach((t: Tilemaps.Tile) => {
+          this.scene.tileLayer.putTileAt(1, t.x, t.y);
+          this.scene.stopSmoke(t);
+        });
+    }
+
+    if (
+      this.scene.tileLayer.getTileAtWorldXY(
+        this.position.x,
+        this.position.y,
+        true,
+        this.scene.camera
+      )?.index === 3
+    ) {
+      this.tankLevel += this.tankRefillRate;
+      this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
+      this.scene.bus.emit("water_level_changed", this.tankLevel);
+    }
   }
 
   destroy(): void {

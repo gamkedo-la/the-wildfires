@@ -2,6 +2,7 @@ import { Scene } from "phaser";
 import { FolderApi, InputBindingApi, Pane, ButtonApi } from "tweakpane";
 import { GameScene } from "./game-scene";
 import { Vehicle } from "../entities/vehicles/Vehicle";
+import vehicles from "../entities/vehicles";
 
 interface VehicleConfig {
   speed: number;
@@ -22,7 +23,6 @@ export class Debug extends Scene {
   }
 
   vehicleConfig: any = {};
-
 
   create() {
     this.pane = new Pane();
@@ -48,11 +48,13 @@ export class Debug extends Scene {
 
     vehicleFolder
       .addBinding(gameScene.vehiclesSystem, "vehicleType", {
-        options: {
-          Martin: "martin",
-          Canadair: "canadair",
-          Skycrane: "skycrane",
-        },
+        options: Object.keys(vehicles).reduce(
+          (acc: Record<string, string>, key) => {
+            acc[key] = key;
+            return acc;
+          },
+          {} as Record<string, string>
+        ),
       })
       .on("change", ({ value }) => {
         this.changeVehicle(gameScene, value, vehicleFolder);

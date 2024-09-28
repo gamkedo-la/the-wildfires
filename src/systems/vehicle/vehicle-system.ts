@@ -1,7 +1,6 @@
 import { System } from "..";
+import vehicles from "../../entities/vehicles";
 import { Canadair } from "../../entities/vehicles/Canadair";
-import { Martin } from "../../entities/vehicles/Martin";
-import { Skycrane } from "../../entities/vehicles/Skycrane";
 import { Vehicle } from "../../entities/vehicles/Vehicle";
 import { GameScene } from "../../scenes/game-scene";
 
@@ -34,12 +33,12 @@ export class VehicleSystem implements System {
     const position = this.vehicle.position;
     this.vehicle.destroy();
 
-    if (type === "martin") {
-      this.vehicle = new Martin(this.scene, position.x, position.y);
-    } else if (type === "canadair") {
-      this.vehicle = new Canadair(this.scene, position.x, position.y);
-    } else if (type === "skycrane") {
-      this.vehicle = new Skycrane(this.scene, position.x, position.y);
+    const VehicleClass = vehicles[type as keyof typeof vehicles];
+
+    if (VehicleClass) {
+      this.vehicle = new VehicleClass(this.scene, position.x, position.y);
+    } else {
+      console.warn(`Vehicle type ${type} not found`);
     }
   }
 }
