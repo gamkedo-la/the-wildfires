@@ -53,15 +53,15 @@ export class Preloader extends Scene {
       "assets/canadair-sprite.png",
       {
         frameWidth: 83,
-        frameHeight: 35,
+        frameHeight: 85,
       }
     );
     this.load.spritesheet(
       "skycrane-spritesheet",
       "assets/skycrane-sprite.png",
       {
-        frameWidth: 83,
-        frameHeight: 35,
+        frameWidth: 48,
+        frameHeight: 83,
       }
     );
   }
