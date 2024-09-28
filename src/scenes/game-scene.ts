@@ -1,4 +1,4 @@
-import { Math, Scene, Tilemaps } from "phaser";
+import { Scene, Tilemaps } from "phaser";
 import { RESOURCES } from "../assets";
 import PhaserGamebus from "../lib/gamebus";
 import { VehicleSystem } from "../systems/vehicle/vehicle-system";
@@ -123,9 +123,6 @@ export class GameScene extends Scene {
   updateSystems(time: number, delta: number) {
     this.vehiclesSystem.update(time, delta);
   }
-
-  waterLevel = 0;
-  maxWaterLevel = 200;
 
   damageLevel = 0;
   maxDamageLevel = 1;
