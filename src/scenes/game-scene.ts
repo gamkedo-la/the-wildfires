@@ -141,7 +141,13 @@ export class GameScene extends Scene {
 
     if (this.key_p.isDown || this.key_esc.isDown) {
       console.log("Pause key down");
+      this.doPause();
     }
+  }
+
+  doPause() {
+    this.scene.pause();
+    this.scene.launch('Pause');
   }
 
   private emitSmoke(tile: Tilemaps.Tile) {

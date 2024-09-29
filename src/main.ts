@@ -9,6 +9,7 @@ import { GameScene as MainGame } from "./scenes/game-scene";
 
 import { Game, Types } from "phaser";
 import { UIScene } from "./scenes/ui-scene";
+import { PauseScene } from "./scenes/pause-scene";
 
 export const GAME_WIDTH = 1024;
 export const GAME_HEIGHT = 768;
@@ -40,7 +41,7 @@ const config: Types.Core.GameConfig = {
       },
     ],
   },
-  scene: [Boot, Preloader, MainGame, UIScene, Debug],
+  scene: [Boot, Preloader, MainGame, UIScene, PauseScene, Debug],
 };
 
 export default new Game(config);
