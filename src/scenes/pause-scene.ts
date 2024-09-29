@@ -5,7 +5,11 @@ export class PauseScene extends Scene {
     super("Pause");
   }
 
+  key_esc!: Phaser.Input.Keyboard.Key;
+
   create() {
+    this.key_esc = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+
     const { width, height } = this.scale;
 
     this.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
@@ -24,6 +28,12 @@ export class PauseScene extends Scene {
       this.scene.resume('Game');
       this.scene.stop();
     });
+  }
+
+  update(time: number, delta: number) {
+    if (this.key_esc.isDown) {
+      this.resumeGame();
+    }
   }
 
   resumeGame() {
