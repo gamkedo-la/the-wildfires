@@ -40,22 +40,22 @@ export abstract class Vehicle {
     this.started = false;
   }
 
-  update(time: number, delta: number): void {
-    this.position.add(this.velocity);
+  update(_time: number, delta: number): void {
+    const deltaSeconds = delta * 0.001;
 
     this.image.x = this.position.x;
     this.image.y = this.position.y;
 
     if (this.scene.key_a.isDown || this.scene.key_left.isDown) {
-      this.turningState = Math.max(this.turningState - this.turningBias, 0);
+      this.turningState = Math.max(this.turningState - this.turningBias * deltaSeconds, 0);
     } else if (this.scene.key_d.isDown || this.scene.key_right.isDown) {
-      this.turningState = Math.min(this.turningState + this.turningBias, 100);
+      this.turningState = Math.min(this.turningState + this.turningBias * deltaSeconds, 100);
     } else {
       // Gradually return to center (50)
       if (this.turningState < 50) {
-        this.turningState += this.straightBias;
+        this.turningState += this.straightBias * deltaSeconds;
       } else if (this.turningState > 50) {
-        this.turningState -= this.straightBias;
+        this.turningState -= this.straightBias * deltaSeconds;
       }
     }
 
@@ -66,11 +66,11 @@ export abstract class Vehicle {
 
     // Apply turning based on turning state
     if (this.turningState < 50) {
-      this.direction.rotate(-this.turnRate);
-      this.velocity.rotate(-this.turnRate);
+      this.direction.rotate(-this.turnRate * deltaSeconds);
+      this.velocity.rotate(-this.turnRate * deltaSeconds);
     } else if (this.turningState > 50) {
-      this.direction.rotate(this.turnRate);
-      this.velocity.rotate(this.turnRate);
+      this.direction.rotate(this.turnRate * deltaSeconds);
+      this.velocity.rotate(this.turnRate * deltaSeconds);
     }
 
     if (this.scene.key_w.isDown || this.scene.key_up.isDown) {
@@ -86,12 +86,16 @@ export abstract class Vehicle {
     this.velocity.add(this.acceleration);
     this.velocity.limit(this.maxSpeed);
 
+    this.position.add(this.velocity.clone().scale(deltaSeconds));
+
     const rads = PMath.Angle.Between(0, 0, this.direction.x, this.direction.y);
 
     this.image.rotation = rads - PMath.TAU;
   }
 
-  useTank(): void {
+  useTank(_time: number, delta: number): void {
+    const deltaSeconds = delta * 0.001;
+
     if (
       this.tankLevel > 5 &&
       this.scene.tileLayer.getTileAtWorldXY(
@@ -101,7 +105,8 @@ export abstract class Vehicle {
         this.scene.camera
       )?.index !== 3
     ) {
-      this.tankLevel -= this.tankConsumptionRate;
+
+      this.tankLevel -= this.tankConsumptionRate * deltaSeconds;
       this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
       this.scene.bus.emit("water_level_changed", this.tankLevel);
 
@@ -129,7 +134,7 @@ export abstract class Vehicle {
         this.scene.camera
       )?.index === 3
     ) {
-      this.tankLevel += this.tankRefillRate;
+      this.tankLevel += this.tankRefillRate * deltaSeconds;
       this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
       this.scene.bus.emit("water_level_changed", this.tankLevel);
     }

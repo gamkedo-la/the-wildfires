@@ -25,7 +25,7 @@ export class VehicleSystem implements System {
     this.vehicle.update(time, delta);
 
     if (this.scene.space_key.isDown) {
-      this.vehicle.useTank();
+      this.vehicle.useTank(time, delta);
     }
   }
 

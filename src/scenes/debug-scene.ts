@@ -99,15 +99,15 @@ export class Debug extends Scene {
       string,
       { min: number; max: number; step: number }
     > = {
-      maxSpeed: { min: 0, max: 10, step: 0.1 },
-      accelerationRate: { min: 0, max: 2, step: 0.01 },
-      turnRate: { min: 0, max: 2, step: 0.01 },
+      maxSpeed: { min: 0, max: 200, step: 1 },
+      accelerationRate: { min: 0, max: 300, step: 1 },
+      turnRate: { min: 0, max: 2 * Math.PI, step: Math.PI / 180 },
       tankCapacity: { min: 0, max: 2000, step: 10 },
       tankLevel: { min: 0, max: 2000, step: 10 },
-      tankConsumptionRate: { min: 0, max: 10, step: 0.1 },
-      tankRefillRate: { min: 0, max: 50, step: 1 },
-      turningBias: { min: 0, max: 10, step: 1 },
-      straightBias: { min: 0, max: 10, step: 1 },
+      tankConsumptionRate: { min: 0, max: 300, step: 1 },
+      tankRefillRate: { min: 0, max: 500, step: 1 },
+      turningBias: { min: 0, max: 500, step: 1 },
+      straightBias: { min: 0, max: 500, step: 1 },
     };
 
     for (const [key, value] of Object.entries(vehicle)) {

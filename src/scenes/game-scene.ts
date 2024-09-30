@@ -66,7 +66,6 @@ export class GameScene extends Scene {
         this.emitSmoke(tile);
       });
 
-    this.fireCounter = this.fireCounterSpeed;
     this.events.on("fire", () => {
       this.tileLayer
         .filterTiles((t: Tilemaps.Tile) => t.index === 2)
@@ -102,6 +101,15 @@ export class GameScene extends Scene {
       this.events.emit("fire");
     });
 
+    this.time.addEvent({
+      delay: 10000,
+      startAt: 10000,
+      loop: true,
+      callback: () => {
+        this.events.emit("fire");
+      }
+    });
+
     this.maxDamageLevel = this.tileLayer.filterTiles(
       (t: Tilemaps.Tile) => t.index === 5 || t.index === 6
     ).length;
@@ -127,17 +135,8 @@ export class GameScene extends Scene {
   damageLevel = 0;
   maxDamageLevel = 1;
 
-  fireCounterSpeed = 600;
-  fireCounter = 0;
-
   update(time: number, delta: number) {
     this.updateSystems(time, delta);
-
-    this.fireCounter -= 1;
-    if (this.fireCounter <= 0) {
-      this.fireCounter = this.fireCounterSpeed;
-      this.events.emit("fire");
-    }
 
     if (this.key_p.isDown || this.key_esc.isDown) {
       console.log("Pause key down");
