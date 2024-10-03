@@ -8,6 +8,9 @@ export abstract class Vehicle {
   waterSound: Phaser.Sound.HTML5AudioSound |
             Phaser.Sound.WebAudioSound   |
             Phaser.Sound.NoAudioSound;
+  splashSound: Phaser.Sound.HTML5AudioSound |
+            Phaser.Sound.WebAudioSound   |
+            Phaser.Sound.NoAudioSound;
 
   position: PMath.Vector2;
   direction: PMath.Vector2;
@@ -49,6 +52,7 @@ export abstract class Vehicle {
     this.waterSound = scene.sound.add("water-loop", { loop: true, volume: 0 });
     this.waterSound.play();
 
+    this.splashSound = scene.sound.add("fire-extinguished", { loop: false, volume: 0.5 });
 
     this.started = false;
   }
@@ -139,6 +143,10 @@ export abstract class Vehicle {
         .forEach((t: Tilemaps.Tile) => {
           this.scene.tileLayer.putTileAt(1, t.x, t.y);
           this.scene.stopSmoke(t);
+          
+          // fixme: only play one sound when multiple tiles are being extinguished
+          this.splashSound.play(); // sound effect
+
         });
     }
 
