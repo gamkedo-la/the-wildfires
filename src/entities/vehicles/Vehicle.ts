@@ -4,6 +4,10 @@ import { GameScene } from "../../scenes/game-scene";
 export abstract class Vehicle {
   scene: GameScene;
   image: Phaser.GameObjects.Image;
+  engineSound: Phaser.Sound.BaseSound;
+  waterSound: Phaser.Sound.HTML5AudioSound |
+            Phaser.Sound.WebAudioSound   |
+            Phaser.Sound.NoAudioSound;
 
   position: PMath.Vector2;
   direction: PMath.Vector2;
@@ -37,10 +41,22 @@ export abstract class Vehicle {
     this.velocity = new PMath.Vector2(0, 0);
     this.acceleration = new PMath.Vector2(0, 0);
     this.image = scene.add.image(x, y, texture, 2).setScale(imageScale);
+    
+    // a looped audio file we can pitch-shift and fade in
+    this.engineSound = scene.sound.add("airplane-propeller-loop", { loop: true, volume: 0.25 });
+    this.engineSound.play();
+
+    this.waterSound = scene.sound.add("water-loop", { loop: true, volume: 0 });
+    this.waterSound.play();
+
+
     this.started = false;
   }
 
   update(_time: number, delta: number): void {
+    
+    this.waterSound.setVolume(0); // silent unless useTank is active
+
     const deltaSeconds = delta * 0.001;
 
     this.image.x = this.position.x;
@@ -137,6 +153,9 @@ export abstract class Vehicle {
       this.tankLevel += this.tankRefillRate * deltaSeconds;
       this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
       this.scene.bus.emit("water_level_changed", this.tankLevel);
+
+      this.waterSound.setVolume(0.25);
+
     }
   }
 
