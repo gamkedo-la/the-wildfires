@@ -2,6 +2,12 @@ import { Scene, Tilemaps } from "phaser";
 import { RESOURCES } from "../assets";
 import PhaserGamebus from "../lib/gamebus";
 import { VehicleSystem } from "../systems/vehicle/vehicle-system";
+import { FireSystem } from "../systems/fire/fire-system";
+import { MapSystem } from "../systems/map/map-system";
+
+const MAX_BURN = 4;
+const FIRE_INTERVAL_MS = 8000;
+const BURN_INTERVAL_MS = 5000;
 
 export class GameScene extends Scene {
   declare bus: Phaser.Events.EventEmitter;
@@ -14,7 +20,9 @@ export class GameScene extends Scene {
     super("Game");
   }
 
-  tileLayer!: Phaser.Tilemaps.TilemapLayer;
+  mapLayer!: Phaser.Tilemaps.TilemapLayer;
+  fireLayer!: Phaser.Tilemaps.TilemapLayer;
+  fireTileId!: integer;
 
   space_key!: Phaser.Input.Keyboard.Key;
   key_w!: Phaser.Input.Keyboard.Key;
@@ -55,63 +63,19 @@ export class GameScene extends Scene {
 
     this.map = this.add.tilemap(RESOURCES["test-island-16"]);
     this.map.addTilesetImage("tilemap", RESOURCES["tilemap-test"]);
-    this.tileLayer = this.map.createLayer("map", "tilemap")!;
+    this.mapLayer = this.map.createLayer("map", "tilemap")!;
+    this.fireLayer = this.map.createLayer("fire", "tilemap")!;
+    // Tilemap global properties seem to be missing type info?
+    let mapProperties = this.map.properties as Array<{ name: string, value: number }>;
+    let fireTileId = mapProperties.find(p => p.name === "fireTileId")?.value
+    if (fireTileId) {
+      this.fireTileId = fireTileId
+    } else {
+      throw new Error('Invalid or missing fireTileId property in tilemap')
+    }
 
-    const burnableTiles = [1, 5, 6];
-    const damagedTiles = [5, 6];
-
-    this.tileLayer
-      .filterTiles((t: Tilemaps.Tile) => t.index === 2)
-      .forEach((tile) => {
-        this.emitSmoke(tile);
-      });
-
-    this.events.on("fire", () => {
-      this.tileLayer
-        .filterTiles((t: Tilemaps.Tile) => t.index === 2)
-        .forEach((tile) => {
-          if (tile.properties.burned === undefined) {
-            tile.properties.burned = 0;
-          }
-          tile.properties.burned += 1;
-          if (tile.properties.burned > 3) {
-            tile.index = 7;
-            this.stopSmoke(tile);
-          }
-          let leftTile = this.tileLayer.getTileAt(tile.x - 1, tile.y);
-          let rightTile = this.tileLayer.getTileAt(tile.x + 1, tile.y);
-          let topTile = this.tileLayer.getTileAt(tile.x, tile.y - 1);
-          let bottomTile = this.tileLayer.getTileAt(tile.x, tile.y + 1);
-
-          [leftTile, rightTile, topTile, bottomTile].forEach((tile) => {
-            if (tile && burnableTiles.indexOf(tile.index) >= 0) {
-              if (damagedTiles.indexOf(tile.index) >= 0) {
-                this.damageLevel += 1;
-                this.bus.emit("damage_level_changed", this.damageLevel);
-              }
-              tile.index = 2;
-              this.emitSmoke(tile);
-            }
-          });
-        });
-    });
-
-    this.time.delayedCall(1000, () => {
-      this.events.emit("fire");
-      this.events.emit("fire");
-    });
-
-    this.time.addEvent({
-      delay: 10000,
-      startAt: 10000,
-      loop: true,
-      callback: () => {
-        this.events.emit("fire");
-      }
-    });
-
-    this.maxDamageLevel = this.tileLayer.filterTiles(
-      (t: Tilemaps.Tile) => t.index === 5 || t.index === 6
+    this.maxDamageLevel = this.mapLayer.filterTiles(
+      (t: Tilemaps.Tile) => t.properties.addsDamage
     ).length;
 
     this.registerSystems();
@@ -123,13 +87,19 @@ export class GameScene extends Scene {
   }
 
   vehiclesSystem: VehicleSystem;
+  fireSystem: FireSystem;
+  mapSystem: MapSystem;
 
   registerSystems() {
     this.vehiclesSystem = new VehicleSystem(this).create();
+    this.fireSystem = new FireSystem(this, FIRE_INTERVAL_MS).create();
+    this.mapSystem = new MapSystem(this, BURN_INTERVAL_MS, MAX_BURN).create();
   }
 
   updateSystems(time: number, delta: number) {
     this.vehiclesSystem.update(time, delta);
+    this.fireSystem.update(time, delta);
+    this.mapSystem.update(time, delta);
   }
 
   damageLevel = 0;
@@ -144,33 +114,13 @@ export class GameScene extends Scene {
     }
   }
 
+  increaseDamage(points: number) {
+    this.damageLevel += points;
+    this.bus.emit("damage_level_changed", this.damageLevel);
+  }
+
   doPause() {
     this.scene.pause();
     this.scene.launch('Pause');
-  }
-
-  private emitSmoke(tile: Tilemaps.Tile) {
-    if (tile.properties.smoke === undefined) {
-      tile.properties.smoke = this.add.particles(
-        tile.pixelX,
-        tile.pixelY,
-        "smoke",
-        {
-          x: { random: [0, tile.width] },
-          y: { random: [0, tile.height] },
-          quantity: 1,
-          angle: { min: -45, max: -15 },
-          speed: 5,
-          frequency: 80,
-          lifespan: 2000,
-        }
-      );
-    }
-  }
-
-  // TODO Removed the private, but this will go to its system (fire system?)
-  stopSmoke(tile: Tilemaps.Tile) {
-    tile.properties.smoke?.destroy();
-    delete tile.properties.smoke;
   }
 }
