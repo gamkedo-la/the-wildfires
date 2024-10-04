@@ -67,10 +67,10 @@ export class Preloader extends Scene {
 
 
     // FIXME: perhaps we should access these urls via RESOURCES[] 
-    this.load.audio("airplane-propeller-loop","public/assets/airplane-propeller-loop.mp3");
-    this.load.audio("fire-extinguished","public/assets/fire-extinguished.mp3");
-    this.load.audio("fire-loop","public/assets/fire-loop.mp3");
-    this.load.audio("water-loop","public/assets/water-loop.mp3");
+    this.load.audio("airplane-propeller-loop","assets/airplane-propeller-loop.mp3");
+    this.load.audio("fire-extinguished","assets/fire-extinguished.mp3");
+    this.load.audio("fire-loop","assets/fire-loop.mp3");
+    this.load.audio("water-loop","assets/water-loop.mp3");
 
   }
 
