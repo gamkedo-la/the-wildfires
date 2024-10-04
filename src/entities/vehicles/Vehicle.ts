@@ -5,7 +5,9 @@ import { MapTileType } from "../../systems/map/map-system";
 export abstract class Vehicle {
   scene: GameScene;
   image: Phaser.GameObjects.Image;
-  engineSound: Phaser.Sound.BaseSound;
+  engineSound: Phaser.Sound.HTML5AudioSound |
+    Phaser.Sound.WebAudioSound |
+    Phaser.Sound.NoAudioSound;
   waterSound: Phaser.Sound.HTML5AudioSound |
     Phaser.Sound.WebAudioSound |
     Phaser.Sound.NoAudioSound;
@@ -45,24 +47,42 @@ export abstract class Vehicle {
     this.velocity = new PMath.Vector2(0, 0);
     this.acceleration = new PMath.Vector2(0, 0);
     this.image = scene.add.image(x, y, texture, 2).setScale(imageScale);
-
-    // a looped audio file we can pitch-shift and fade in
-    this.engineSound = scene.sound.add("airplane-propeller-loop", { loop: true, volume: 0.25 });
-    this.engineSound.play();
-
-    this.waterSound = scene.sound.add("water-loop", { loop: true, volume: 0 });
-    this.waterSound.play();
-
-    this.splashSound = scene.sound.add("fire-extinguished", { loop: false, volume: 0.5 });
-
+    this.initSounds();
     this.started = false;
   }
 
+  initSounds() {
+
+    // looped audio we can pitch-shift based on velocity
+    this.engineSound = this.scene.sound.add("airplane-propeller-loop", { loop: true, volume: 0.25 });
+    this.engineSound.play();
+
+    // looped audio we can fade in/out based on proximity to flame
+    this.waterSound = this.scene.sound.add("water-loop", { loop: true, volume: 0 });
+    this.waterSound.play();
+
+    // a non-looped sound effect
+    this.splashSound = this.scene.sound.add("fire-extinguished", { loop: false, volume: 0.5 });
+    
+  }
+
+  updateSounds(dt:number) {
+    
+    // slowly fade out the water tank filling sound
+    let newVolume = this.waterSound.volume -= 0.25 * dt;
+    if (newVolume < 0) newVolume = 0;
+    this.waterSound.setVolume(newVolume);
+
+    // pitch-shift the engine loop based on velocity
+    this.engineSound.setRate(0.2 + (this.velocity.length() / 200));
+
+  }  
+
   update(_time: number, delta: number): void {
 
-    this.waterSound.setVolume(0); // silent unless useTank is active
-
     const deltaSeconds = delta * 0.001;
+
+    this.updateSounds(deltaSeconds);
 
     this.image.x = this.position.x;
     this.image.y = this.position.y;
@@ -147,7 +167,10 @@ export abstract class Vehicle {
       this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
       this.scene.bus.emit("water_level_changed", this.tankLevel);
 
-      this.waterSound.setVolume(0.25);
+      // fade in the water tank filling sound
+      let newVolume = this.waterSound.volume + (0.5 * deltaSeconds);
+      if (newVolume > 0.25) newVolume = 0.25;
+      this.waterSound.setVolume(newVolume);
 
     }
   }

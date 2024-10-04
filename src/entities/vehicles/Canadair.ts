@@ -6,7 +6,7 @@ export class Canadair extends Vehicle {
     super(scene, x, y, "canadair-spritesheet", 0.4);
 
     this.maxSpeed = 130;
-    this.accelerationRate = 130;
+    this.accelerationRate = 1; // was 130; but this was instant
     this.turnRate = Math.PI * 0.75;
 
     this.tankCapacity = 100;
