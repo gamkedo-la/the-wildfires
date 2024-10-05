@@ -97,11 +97,11 @@ export class Debug extends Scene {
 
     const parameterConfig: Record<
       string,
-      { min: number; max: number; step: number }
+      { min: number; max: number; step: number; format?: (v: number) => string; }
     > = {
       maxSpeed: { min: 0, max: 200, step: 1 },
       accelerationRate: { min: 0, max: 300, step: 1 },
-      turnRate: { min: 0, max: 2 * Math.PI, step: Math.PI / 180 },
+      turnRate: { min: 0, max: 2 * Math.PI, step: Math.PI / 180, format: (v: number) => v.toFixed(2) },
       tankCapacity: { min: 0, max: 2000, step: 10 },
       tankLevel: { min: 0, max: 2000, step: 10 },
       tankConsumptionRate: { min: 0, max: 300, step: 1 },
