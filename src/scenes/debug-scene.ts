@@ -12,6 +12,8 @@ interface VehicleConfig {
 
 export const params = {
   fps: 0,
+  windAngle: 0,
+  windSpeed: 0
 };
 
 export class Debug extends Scene {
@@ -27,6 +29,8 @@ export class Debug extends Scene {
   create() {
     this.pane = new Pane();
     this.pane.addBinding(params, "fps", { readonly: true });
+    this.pane.addBinding(params, "windAngle", { readonly: true });
+    this.pane.addBinding(params, "windSpeed", { readonly: true });
 
     // Add bindings for damage and water levels
     const gameScene = this.scene.get("Game") as GameScene;
@@ -168,7 +172,11 @@ export class Debug extends Scene {
   }
 
   update() {
+    const gameScene = this.scene.get("Game") as GameScene;
+    const { angle, speed } = gameScene.windSystem.get();
     params.fps = this.game.loop.actualFps;
+    params.windAngle = angle;
+    params.windSpeed = speed;
     this.pane.refresh();
   }
 }
