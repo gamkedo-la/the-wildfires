@@ -57,6 +57,11 @@
         "url": "assets/tilemap-test.png"
       },
       {
+        "type": "image",
+        "key": "water-dial",
+        "url": "assets/water-dial.png"
+      },
+      {
         "type": "tilemapTiledJSON",
         "key": "test-island-16",
         "url": "assets/test-island-16.json"

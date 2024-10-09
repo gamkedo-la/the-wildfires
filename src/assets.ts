@@ -14,5 +14,6 @@ export const RESOURCES = {
   "smoke": "smoke",
   "the-wildfires-ui": "the-wildfires-ui",
   "tilemap-test": "tilemap-test",
+  "water-dial": "water-dial",
   "test-island-16": "test-island-16",
 } as const;
