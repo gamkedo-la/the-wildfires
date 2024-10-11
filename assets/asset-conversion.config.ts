@@ -14,6 +14,19 @@ const config = {
       args: "-b ${input} --sheet ${output}",
     },
     {
+      input: "tiles/tilemap-test-2.aseprite",
+      output: "tilemap-test-2.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
+      input: "tiles/tilemap-test-2.aseprite",
+      output: "tiles/tilemap-test-2.png",
+      outputFolder: "assets/",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
       input: "maps/test-island-16.tmx",
       output: "test-island-16.json",
       executable: "tiled",

@@ -4,7 +4,7 @@ import { GameScene } from "../../scenes/game-scene";
 
 export enum MapTileType {
   Ground,
-  Water
+  Water,
 }
 
 export class MapSystem implements System {
@@ -22,16 +22,19 @@ export class MapSystem implements System {
     this.scene.time.addEvent({
       delay: this.burnInterval,
       loop: true,
-      callback: () => this.burn()
+      callback: () => this.burn(),
     });
 
-    this.scene.events.on("ignite", ({ x, y }: { x: number, y: number }) => {
+    this.scene.events.on("ignite", ({ x, y }: { x: number; y: number }) => {
       this.ignite(x, y);
     });
 
-    this.scene.events.on("drop-water", ({ x, y, range }: { x: number, y: number, range: number }) => {
-      this.extinguish(x, y, range);
-    });
+    this.scene.events.on(
+      "drop-water",
+      ({ x, y, range }: { x: number; y: number; range: number }) => {
+        this.extinguish(x, y, range);
+      }
+    );
 
     return this;
   }
@@ -41,13 +44,12 @@ export class MapSystem implements System {
   }
 
   typeAtWorldXY(x: number, y: number) {
-    let tile =
-      this.scene.mapLayer.getTileAtWorldXY(
-        x,
-        y,
-        true,
-        this.scene.camera
-      )
+    let tile = this.scene.mapLayer.getTileAtWorldXY(
+      x,
+      y,
+      true,
+      this.scene.camera
+    );
 
     return this.getType(tile);
   }
@@ -77,13 +79,11 @@ export class MapSystem implements System {
       .filter((t: Tilemaps.Tile) => t.properties.isBurning)
       .forEach((t: Tilemaps.Tile) => {
         t.properties.isBurning = false;
-        that.scene.events.emit("stop-fire", { x: t.x, y: t.y })
+        that.scene.events.emit("stop-fire", { x: t.x, y: t.y });
       });
   }
 
   private burn() {
-    let that = this;
-
     this.scene.mapLayer
       .filterTiles((t: Tilemaps.Tile) => t.properties.isBurning)
       .forEach((t: Tilemaps.Tile) => {
@@ -91,12 +91,12 @@ export class MapSystem implements System {
 
         if (t.properties.burned >= this.maxBurn) {
           if (t.properties.addsDamage) {
-            this.scene.increaseDamage(1)
+            this.scene.increaseDamage(1);
           }
-          this.scene.mapLayer.putTileAt(t.properties.burnedTileId, t.x, t.y);
+          t.index = t.properties.burnedTileId;
           t.properties.isBurning = false;
           t.properties.burnRate = 0;
-          that.scene.events.emit("stop-fire", { x: t.x, y: t.y })
+          this.scene.events.emit("stop-fire", { x: t.x, y: t.y });
         }
       });
   }

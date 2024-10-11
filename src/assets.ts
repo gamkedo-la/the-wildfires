@@ -13,6 +13,7 @@ export const RESOURCES = {
   "skycrane-sprite": "skycrane-sprite",
   "smoke": "smoke",
   "the-wildfires-ui": "the-wildfires-ui",
+  "tilemap-test-2": "tilemap-test-2",
   "tilemap-test": "tilemap-test",
   "water-dial": "water-dial",
   "test-island-16": "test-island-16",

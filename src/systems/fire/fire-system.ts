@@ -33,15 +33,15 @@ export class FireSystem implements System {
     this.scene.time.addEvent({
       delay: this.fireInterval,
       loop: true,
-      callback: () => this.spreadFire()
+      callback: () => this.spreadFire(),
     });
 
-    this.scene.events.on("start-fire", ({ x, y }: { x: number, y: number }) => {
-      this.startFire(x, y)
+    this.scene.events.on("start-fire", ({ x, y }: { x: number; y: number }) => {
+      this.startFire(x, y);
     });
 
-    this.scene.events.on("stop-fire", ({ x, y }: { x: number, y: number }) => {
-      this.stopFire(x, y)
+    this.scene.events.on("stop-fire", ({ x, y }: { x: number; y: number }) => {
+      this.stopFire(x, y);
     });
 
     return this;
@@ -51,7 +51,7 @@ export class FireSystem implements System {
     let {
       direction: windDirection,
       angle: windAngle,
-      speed: windSpeed
+      speed: windSpeed,
     } = this.scene.windSystem.get();
 
     this.windDirection = windDirection;
@@ -62,19 +62,25 @@ export class FireSystem implements System {
   private startFire(tileX: number, tileY: number) {
     let tile = this.scene.fireLayer.getTileAt(tileX, tileY);
 
-    if (tile?.index !== this.scene.fireTileId) {
-      tile = this.scene.fireLayer.putTileAt(this.scene.fireTileId, tileX, tileY);
-      this.emitSmoke(tile);
-    }
+    const tileData = this.scene.map.tilesets[0].tileData;
+    const tileId = this.scene.fireTileId;
+
+    tile = this.scene.fireLayer.putTileAt(tileId, tileX, tileY);
+    // TODO: Fires will be different for different tiles and also change during the health of the tile
+    this.scene.animatedTiles.push({
+      tile,
+      elapsedTime: 0,
+      tileAnimationData: (tileData as any)[tileId - 1].animation,
+      firstgid: this.scene.map.tilesets[0].firstgid,
+    });
+    this.emitSmoke(tile);
   }
 
   private stopFire(tileX: number, tileY: number) {
     let tile = this.scene.fireLayer.getTileAt(tileX, tileY);
 
-    if (tile.index === this.scene.fireTileId) {
-      this.scene.fireLayer.removeTileAt(tileX, tileY);
-      this.stopSmoke(tile);
-    }
+    this.scene.fireLayer.removeTileAt(tileX, tileY);
+    this.stopSmoke(tile);
   }
 
   private spreadFire() {
@@ -96,28 +102,35 @@ export class FireSystem implements System {
     }
 
     if (this.windSpeed >= 7) {
-      [westSpread, eastSpread] = this.windDirection.x >= 0.5 ?
-        [Math.max(westSpread - 1, 0), eastSpread + 1] : [westSpread, eastSpread];
-      [westSpread, eastSpread] = this.windDirection.x >= -0.5 ?
-        [westSpread + 1, Math.max(eastSpread - 1)] : [westSpread, eastSpread];
-      [northSpread, southSpread] = this.windDirection.y >= 0.5 ?
-        [Math.max(northSpread - 1, 0), southSpread + 1] : [northSpread, southSpread];
-      [northSpread, southSpread] = this.windDirection.y >= -0.5 ?
-        [northSpread + 1, Math.max(southSpread - 1, 0)] : [northSpread, southSpread];
+      [westSpread, eastSpread] =
+        this.windDirection.x >= 0.5
+          ? [Math.max(westSpread - 1, 0), eastSpread + 1]
+          : [westSpread, eastSpread];
+      [westSpread, eastSpread] =
+        this.windDirection.x >= -0.5
+          ? [westSpread + 1, Math.max(eastSpread - 1)]
+          : [westSpread, eastSpread];
+      [northSpread, southSpread] =
+        this.windDirection.y >= 0.5
+          ? [Math.max(northSpread - 1, 0), southSpread + 1]
+          : [northSpread, southSpread];
+      [northSpread, southSpread] =
+        this.windDirection.y >= -0.5
+          ? [northSpread + 1, Math.max(southSpread - 1, 0)]
+          : [northSpread, southSpread];
     }
 
-    const ignitionPoints =
-      this.scene.fireLayer
-        .filterTiles((t: Tilemaps.Tile) => t.index === this.scene.fireTileId)
-        .flatMap((tile) => [
-          { x: tile.x - westSpread, y: tile.y },
-          { x: tile.x + eastSpread, y: tile.y },
-          { x: tile.x, y: tile.y - northSpread },
-          { x: tile.x, y: tile.y + southSpread },
-        ]);
+    const ignitionPoints = this.scene.fireLayer
+      .filterTiles((t: Tilemaps.Tile) => t.index === this.scene.fireTileId)
+      .flatMap((tile) => [
+        { x: tile.x - westSpread, y: tile.y },
+        { x: tile.x + eastSpread, y: tile.y },
+        { x: tile.x, y: tile.y - northSpread },
+        { x: tile.x, y: tile.y + southSpread },
+      ]);
 
-    [...new Set(ignitionPoints)].forEach(p => {
-      this.scene.events.emit("ignite", p)
+    [...new Set(ignitionPoints)].forEach((p) => {
+      this.scene.events.emit("ignite", p);
     });
   }
 
@@ -131,7 +144,8 @@ export class FireSystem implements System {
           x: { random: [0, tile.width] },
           y: { random: [0, tile.height] },
           quantity: 1,
-          angle: () => PMath.RND.between(this.windAngle - 15, this.windAngle + 15),
+          angle: () =>
+            PMath.RND.between(this.windAngle - 15, this.windAngle + 15),
           speed: () => 4 + this.windSpeed,
           frequency: 80,
           lifespan: 2000,
@@ -141,7 +155,11 @@ export class FireSystem implements System {
   }
 
   private stopSmoke(tile: Tilemaps.Tile) {
-    tile.properties.smoke?.destroy();
-    delete tile.properties.smoke;
+    // TO DECIDE: Maybe we shouldn't destroy the emitter like before? Thoughts?
+    //tile.properties.smoke?.destroy();
+    //delete tile.properties.smoke;
+    (
+      tile.properties.smoke as Phaser.GameObjects.Particles.ParticleEmitter
+    ).stop();
   }
 }
