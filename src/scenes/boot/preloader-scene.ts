@@ -65,13 +65,14 @@ export class Preloader extends Scene {
       }
     );
 
-
-    // FIXME: perhaps we should access these urls via RESOURCES[] 
-    this.load.audio("airplane-propeller-loop","assets/airplane-propeller-loop.mp3");
-    this.load.audio("fire-extinguished","assets/fire-extinguished.mp3");
-    this.load.audio("fire-loop","assets/fire-loop.mp3");
-    this.load.audio("water-loop","assets/water-loop.mp3");
-
+    // FIXME: perhaps we should access these urls via RESOURCES[]
+    this.load.audio(
+      "airplane-propeller-loop",
+      "assets/airplane-propeller-loop.mp3"
+    );
+    this.load.audio("fire-extinguished", "assets/fire-extinguished.mp3");
+    this.load.audio("fire-loop", "assets/fire-loop.mp3");
+    this.load.audio("water-loop", "assets/water-loop.mp3");
   }
 
   create() {
@@ -80,16 +81,20 @@ export class Preloader extends Scene {
         families: ["DotGothic16"],
       },
       active: () => {
-        //if (import.meta.env.DEV) {
-        //this.scene.run("Debug");
-        this.scene.start("Game");
-        //} else {
-        //this.add.image(0, 0, RESOURCES.MAIN_MENU).setOrigin(0, 0);
+        // We start the game right away in dev mode
+        if (import.meta.env.VITE_DEBUG) {
+          return this.scene.run("Game");
+        }
 
-        //this.input.once("pointerdown", () => {
-        // this.scene.start("MainMenu");
-        //});
-        //}
+        // Otherwise we await for user input so the sound works correctly
+        this.add.text(20, 20, "Click to start", {
+          fontFamily: "DotGothic16",
+          fontSize: "32px",
+        });
+
+        this.input.once("pointerdown", () => {
+          this.scene.start("Game");
+        });
       },
     });
   }
