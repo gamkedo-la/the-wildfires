@@ -28,9 +28,9 @@ export class Debug extends Scene {
 
   create() {
     this.pane = new Pane();
-    this.pane.addBinding(params, "fps", { readonly: true });
-    this.pane.addBinding(params, "windAngle", { readonly: true });
-    this.pane.addBinding(params, "windSpeed", { readonly: true });
+    this.pane.addBinding(params, "fps", { readonly: true, format: (v: number) => v.toFixed(0) });
+    this.pane.addBinding(params, "windAngle", { readonly: true, format: (v: number) => v.toFixed(0) });
+    this.pane.addBinding(params, "windSpeed", { readonly: true, format: (v: number) => v.toFixed(1) });
 
     // Add bindings for damage and water levels
     const gameScene = this.scene.get("Game") as GameScene;
