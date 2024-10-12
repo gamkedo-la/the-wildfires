@@ -22,7 +22,7 @@ export abstract class Vehicle {
 
   maxSpeed: number;
   accelerationRate: number;
-  slowingRate: number = 50;
+  slowingRate: number = 3;
   turnRate: number;
   tankCapacity: number;
   tankLevel: number;
@@ -120,11 +120,12 @@ export abstract class Vehicle {
     }
 
     if (this.scene.key_s.isDown || this.scene.key_down.isDown) {
-      const slowVector = this.velocity.clone().normalize().scale(this.slowingRate * deltaSeconds);
+      const slowProportionally = this.slowingRate * (this.accelerationRate + this.velocity.length());
+      const slowVector = this.velocity.clone().normalize().scale(slowProportionally * deltaSeconds);
       this.velocity.subtract(slowVector);
-      this.velocity.scale(1 - (this.slowingRate * deltaSeconds / this.maxSpeed));
+      this.velocity.scale(1 - (slowProportionally * deltaSeconds / this.maxSpeed));
 
-      // to avoid slowing going backwards or stalling
+      // to avoid going backwards or stalling
       if (this.velocity.dot(this.direction) < 0) {
          this.velocity.setLength(0);
       }
