@@ -22,6 +22,7 @@ export abstract class Vehicle {
 
   maxSpeed: number;
   accelerationRate: number;
+  slowingRate: number = 50;
   turnRate: number;
   tankCapacity: number;
   tankLevel: number;
@@ -116,6 +117,17 @@ export abstract class Vehicle {
 
     if (this.scene.key_w.isDown || this.scene.key_up.isDown) {
       this.started = true;
+    }
+
+    if (this.scene.key_s.isDown || this.scene.key_down.isDown) {
+      console.log("slow down aeroplane speed")
+      const slowVector = this.velocity.clone().normalize().scale(this.slowingRate * deltaSeconds);
+      this.velocity.subtract(slowVector);
+      this.velocity.scale(1 - (this.slowingRate * deltaSeconds / this.maxSpeed));
+      // to avoid slowing going backwards or stalling
+      if (this.velocity.dot(this.direction) < 0) {
+         this.velocity.setLength(0);
+      }
     }
 
     if (this.started) {

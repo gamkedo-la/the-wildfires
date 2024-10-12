@@ -151,10 +151,6 @@ export class GameScene extends Scene {
       this.doPause();
     }
 
-    if (this.key_s.isDown || this.key_down.isDown) {
-      console.log("slow down aeroplane speed")
-    }
-
     // TODO: This is here but we might just make it into the fire-system? I suspect we won't see any other tile animated
     this.animatedTiles.forEach((tile) => {
       if (!tile.tileAnimationData) return;
