@@ -33,6 +33,8 @@ export class GameScene extends Scene {
   key_left!: Phaser.Input.Keyboard.Key;
   key_d!: Phaser.Input.Keyboard.Key;
   key_right!: Phaser.Input.Keyboard.Key;
+  key_s!: Phaser.Input.Keyboard.Key;
+  key_down!: Phaser.Input.Keyboard.Key;
   key_p!: Phaser.Input.Keyboard.Key;
   key_esc!: Phaser.Input.Keyboard.Key;
 
@@ -57,6 +59,10 @@ export class GameScene extends Scene {
     this.key_d = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.key_right = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.RIGHT
+    );
+    this.key_s = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    this.key_down = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.DOWN
     );
     this.key_p = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     this.key_esc = this.input.keyboard!.addKey(
@@ -142,8 +148,11 @@ export class GameScene extends Scene {
     this.updateSystems(time, delta);
 
     if (this.key_p.isDown || this.key_esc.isDown) {
-      console.log("Pause key down");
       this.doPause();
+    }
+
+    if (this.key_s.isDown || this.key_down.isDown) {
+      console.log("slow down aeroplane speed")
     }
 
     // TODO: This is here but we might just make it into the fire-system? I suspect we won't see any other tile animated
