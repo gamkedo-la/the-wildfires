@@ -6,7 +6,6 @@ import { FireSystem } from "../systems/fire/fire-system";
 import { MapSystem } from "../systems/map/map-system";
 import { WindSystem } from "../systems/wind/wind-system";
 
-const MAX_BURN = 4;
 const FIRE_INTERVAL_MS = 8000;
 const BURN_INTERVAL_MS = 5000;
 const WIND_INTERVAL_MS = 10000;
@@ -143,7 +142,7 @@ export class GameScene extends Scene {
   registerSystems() {
     this.vehiclesSystem = new VehicleSystem(this).create();
     this.fireSystem = new FireSystem(this, FIRE_INTERVAL_MS).create();
-    this.mapSystem = new MapSystem(this, BURN_INTERVAL_MS, MAX_BURN).create();
+    this.mapSystem = new MapSystem(this, BURN_INTERVAL_MS).create();
     this.windSystem = new WindSystem(this, WIND_INTERVAL_MS).create();
   }
 

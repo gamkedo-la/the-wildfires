@@ -1,4 +1,3 @@
-import { Tilemaps } from "phaser";
 import { System } from "..";
 import { GameScene } from "../../scenes/game-scene";
 import {
@@ -17,21 +16,13 @@ export enum MapTileType {
 export class MapSystem implements System {
   scene: GameScene;
   burnInterval: number;
-  maxBurn: number;
 
-  constructor(scene: GameScene, burnInterval: number, maxBurn: number) {
+  constructor(scene: GameScene, burnInterval: number) {
     this.scene = scene;
     this.burnInterval = burnInterval;
-    this.maxBurn = maxBurn;
   }
 
   create(): this {
-    this.scene.time.addEvent({
-      delay: this.burnInterval,
-      loop: true,
-      callback: () => this.burn(),
-    });
-
     this.scene.events.on(EVENT_IGNITE, ({ x, y }: { x: number; y: number }) => {
       this.ignite(x, y);
     });
@@ -46,8 +37,8 @@ export class MapSystem implements System {
     return this;
   }
 
-  update(_time: number, _delta: number): void {
-    // noop for now
+  update(_time: number, delta: number): void {
+    this.burnTiles(delta);
   }
 
   typeAtWorldXY(x: number, y: number) {
@@ -67,6 +58,8 @@ export class MapSystem implements System {
     if (tile?.properties.burnRate > 0 && !tile?.properties.isBurning) {
       tile.properties.isBurning = true;
       tile.properties.burned = 0;
+      tile.properties.fuel = tile.properties.maxFuel || 50;
+      tile.properties.burnTimer = 0;
       this.scene.events.emit(EVENT_START_FIRE, { x: tileX, y: tileY });
     }
   }
@@ -90,22 +83,48 @@ export class MapSystem implements System {
       });
   }
 
-  private burn() {
+  private burnTiles(delta: number) {
     this.scene.mapLayer
       .filterTiles((t: MapLayerTile) => t.properties.isBurning)
       .forEach((t: MapLayerTile) => {
-        t.properties.burned += t.properties.burnRate;
+        t.properties.burnTimer += delta;
 
-        if (t.properties.burned >= this.maxBurn) {
-          if (t.properties.addsDamage) {
-            this.scene.increaseDamage(1);
+        if (
+          t.properties.burnTimer >=
+          this.burnInterval / t.properties.burnRate
+        ) {
+          t.properties.burnTimer = 0;
+          t.properties.burned += 1;
+          // TODO: Fuel can be killed by water
+          t.properties.fuel -= 1;
+
+          // The closer to 0, the higher chance of spreading fire
+          // TODO: This should probably be a function of a tile spread speed (TBD)
+          let spreadChance = t.properties.fuel / t.properties.maxFuel;
+          if (spreadChance) {
+            // The position of the ignition point is relative to the tile
+            this.ignite(
+              t.x + Math.floor(Math.random() * 3) - 1,
+              t.y + Math.floor(Math.random() * 3) - 1
+            );
           }
-          t.index = t.properties.burnedTileId;
-          t.properties.isBurning = false;
-          t.properties.burnRate = 0;
-          this.scene.events.emit(EVENT_STOP_FIRE, { x: t.x, y: t.y });
+
+          if (t.properties.fuel <= 0) {
+            this.consumeTile(t);
+          }
         }
       });
+  }
+
+  private consumeTile(t: MapLayerTile) {
+    if (t.properties.addsDamage) {
+      this.scene.increaseDamage(1);
+    }
+    t.index = t.properties.burnedTileId;
+    t.properties.isBurning = false;
+    t.properties.burnRate = 0;
+    t.properties.fuel = 0;
+    this.scene.events.emit(EVENT_STOP_FIRE, { x: t.x, y: t.y });
   }
 
   private getType(tile: MapLayerTile | null) {
