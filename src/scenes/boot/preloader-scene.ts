@@ -83,7 +83,7 @@ export class Preloader extends Scene {
       active: () => {
         // We start the game right away in dev mode
         if (import.meta.env.VITE_DEBUG) {
-          return this.scene.run("Game");
+          return this.scene.start("Game");
         }
 
         // Otherwise we await for user input so the sound works correctly

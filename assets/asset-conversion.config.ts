@@ -29,6 +29,19 @@ const config = {
     { input: "tiles/smoke.png", output: "smoke.png" },
     { input: "tiles/water.png", output: "water.png" },
     {
+      input: "tiles/tilemap-test-3.aseprite",
+      output: "tilemap-test-3.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
+      input: "tiles/tilemap-test-3.aseprite",
+      output: "tiles/tilemap-test-3.png",
+      outputFolder: "assets/",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
       input: "maps/test-island-16.tmx",
       output: "test-island-16.json",
       executable: "tiled",

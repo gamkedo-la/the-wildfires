@@ -70,9 +70,22 @@ export class GameScene extends Scene {
     );
 
     this.map = this.add.tilemap(RESOURCES["test-island-16"]);
-    this.map.addTilesetImage("tilemap", RESOURCES["tilemap-test-2"]);
-    this.mapLayer = this.map.createLayer("map", "tilemap")!;
-    this.fireLayer = this.map.createLayer("fire", "tilemap")!;
+    this.map.addTilesetImage(
+      "tilemap-large",
+      RESOURCES["tilemap-test-3"],
+      24,
+      32
+    );
+    this.mapLayer = this.map.createLayer("map", "tilemap-large")!;
+
+    //TODO: Might move all structures here (even forest)
+    this.map.createLayer("structures", "tilemap-large")!;
+
+    // Phaser <3
+    this.mapLayer.tileset[0].tileOffset = new Phaser.Math.Vector2(4, 16);
+
+    this.fireLayer = this.map.createLayer("fire", "tilemap-large")!;
+
     // Tilemap global properties seem to be missing type info?
     let mapProperties = this.map.properties as Array<{
       name: string;

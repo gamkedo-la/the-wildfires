@@ -58,6 +58,11 @@
       },
       {
         "type": "image",
+        "key": "tilemap-test-3",
+        "url": "assets/tilemap-test-3.png"
+      },
+      {
+        "type": "image",
         "key": "tilemap-test",
         "url": "assets/tilemap-test.png"
       },
