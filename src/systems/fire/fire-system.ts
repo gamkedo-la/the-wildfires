@@ -3,6 +3,8 @@ import { Math as PMath } from "phaser";
 import { Tilemaps } from "phaser";
 import { System } from "..";
 import { GameScene } from "../../scenes/game-scene";
+import { EVENT_IGNITE, EVENT_START_FIRE, EVENT_STOP_FIRE } from "../../consts";
+import { FireLayerTile } from "../../entities/maps";
 
 export class FireSystem implements System {
   scene: GameScene;
@@ -36,13 +38,19 @@ export class FireSystem implements System {
       callback: () => this.spreadFire(),
     });
 
-    this.scene.events.on("start-fire", ({ x, y }: { x: number; y: number }) => {
-      this.startFire(x, y);
-    });
+    this.scene.events.on(
+      EVENT_START_FIRE,
+      ({ x, y }: { x: number; y: number }) => {
+        this.startFire(x, y);
+      }
+    );
 
-    this.scene.events.on("stop-fire", ({ x, y }: { x: number; y: number }) => {
-      this.stopFire(x, y);
-    });
+    this.scene.events.on(
+      EVENT_STOP_FIRE,
+      ({ x, y }: { x: number; y: number }) => {
+        this.stopFire(x, y);
+      }
+    );
 
     return this;
   }
@@ -130,11 +138,11 @@ export class FireSystem implements System {
       ]);
 
     [...new Set(ignitionPoints)].forEach((p) => {
-      this.scene.events.emit("ignite", p);
+      this.scene.events.emit(EVENT_IGNITE, p);
     });
   }
 
-  private emitSmoke(tile: Tilemaps.Tile) {
+  private emitSmoke(tile: FireLayerTile) {
     if (tile.properties.smoke === undefined) {
       tile.properties.smoke = this.scene.add.particles(
         tile.pixelX,
@@ -154,12 +162,10 @@ export class FireSystem implements System {
     }
   }
 
-  private stopSmoke(tile: Tilemaps.Tile) {
+  private stopSmoke(tile: FireLayerTile) {
     // TO DECIDE: Maybe we shouldn't destroy the emitter like before? Thoughts?
     //tile.properties.smoke?.destroy();
     //delete tile.properties.smoke;
-    (
-      tile.properties.smoke as Phaser.GameObjects.Particles.ParticleEmitter
-    ).stop();
+    tile.properties.smoke.stop();
   }
 }

@@ -1,6 +1,13 @@
 import { Tilemaps } from "phaser";
 import { System } from "..";
 import { GameScene } from "../../scenes/game-scene";
+import {
+  EVENT_DROP_WATER,
+  EVENT_IGNITE,
+  EVENT_START_FIRE,
+  EVENT_STOP_FIRE,
+} from "../../consts";
+import { MapLayerTile } from "../../entities/maps";
 
 export enum MapTileType {
   Ground,
@@ -25,12 +32,12 @@ export class MapSystem implements System {
       callback: () => this.burn(),
     });
 
-    this.scene.events.on("ignite", ({ x, y }: { x: number; y: number }) => {
+    this.scene.events.on(EVENT_IGNITE, ({ x, y }: { x: number; y: number }) => {
       this.ignite(x, y);
     });
 
     this.scene.events.on(
-      "drop-water",
+      EVENT_DROP_WATER,
       ({ x, y, range }: { x: number; y: number; range: number }) => {
         this.extinguish(x, y, range);
       }
@@ -55,12 +62,12 @@ export class MapSystem implements System {
   }
 
   private ignite(tileX: number, tileY: number) {
-    let tile = this.scene.mapLayer.getTileAt(tileX, tileY);
+    let tile = this.scene.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
 
     if (tile?.properties.burnRate > 0 && !tile?.properties.isBurning) {
       tile.properties.isBurning = true;
       tile.properties.burned = 0;
-      this.scene.events.emit("start-fire", { x: tileX, y: tileY });
+      this.scene.events.emit(EVENT_START_FIRE, { x: tileX, y: tileY });
     }
   }
 
@@ -76,17 +83,17 @@ export class MapSystem implements System {
         {},
         this.scene.camera
       )
-      .filter((t: Tilemaps.Tile) => t.properties.isBurning)
-      .forEach((t: Tilemaps.Tile) => {
+      .filter((t: MapLayerTile) => t.properties.isBurning)
+      .forEach((t: MapLayerTile) => {
         t.properties.isBurning = false;
-        that.scene.events.emit("stop-fire", { x: t.x, y: t.y });
+        that.scene.events.emit(EVENT_STOP_FIRE, { x: t.x, y: t.y });
       });
   }
 
   private burn() {
     this.scene.mapLayer
-      .filterTiles((t: Tilemaps.Tile) => t.properties.isBurning)
-      .forEach((t: Tilemaps.Tile) => {
+      .filterTiles((t: MapLayerTile) => t.properties.isBurning)
+      .forEach((t: MapLayerTile) => {
         t.properties.burned += t.properties.burnRate;
 
         if (t.properties.burned >= this.maxBurn) {
@@ -96,12 +103,12 @@ export class MapSystem implements System {
           t.index = t.properties.burnedTileId;
           t.properties.isBurning = false;
           t.properties.burnRate = 0;
-          this.scene.events.emit("stop-fire", { x: t.x, y: t.y });
+          this.scene.events.emit(EVENT_STOP_FIRE, { x: t.x, y: t.y });
         }
       });
   }
 
-  private getType(tile: Tilemaps.Tile | null) {
+  private getType(tile: MapLayerTile | null) {
     if (tile?.properties.isWater === true) {
       return MapTileType.Water;
     } else {
