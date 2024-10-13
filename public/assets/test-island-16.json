@@ -702,7 +702,13 @@
                          "duration":1500,
                          "tileid":53
                         }],
-                 "id":50
+                 "id":50,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }, 
                 {
                  "animation":[
@@ -722,7 +728,13 @@
                          "duration":1500,
                          "tileid":50
                         }],
-                 "id":51
+                 "id":51,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }, 
                 {
                  "animation":[
@@ -742,7 +754,13 @@
                          "duration":1500,
                          "tileid":51
                         }],
-                 "id":52
+                 "id":52,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }, 
                 {
                  "animation":[
@@ -762,7 +780,13 @@
                          "duration":1500,
                          "tileid":52
                         }],
-                 "id":53
+                 "id":53,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }, 
                 {
                  "animation":[
@@ -786,7 +810,13 @@
                          "duration":5000,
                          "tileid":58
                         }],
-                 "id":54
+                 "id":54,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }, 
                 {
                  "animation":[
@@ -810,7 +840,13 @@
                          "duration":7000,
                          "tileid":58
                         }],
-                 "id":55
+                 "id":55,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }, 
                 {
                  "animation":[
@@ -834,7 +870,13 @@
                          "duration":4500,
                          "tileid":58
                         }],
-                 "id":56
+                 "id":56,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }, 
                 {
                  "animation":[
@@ -858,7 +900,22 @@
                          "duration":5300,
                          "tileid":58
                         }],
-                 "id":57
+                 "id":57,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":58,
+                 "properties":[
+                        {
+                         "name":"isWater",
+                         "type":"bool",
+                         "value":true
+                        }]
                 }, 
                 {
                  "id":82,

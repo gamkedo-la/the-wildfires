@@ -172,6 +172,9 @@
    </animation>
   </tile>
   <tile id="50">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
    <animation>
     <frame tileid="50" duration="1500"/>
     <frame tileid="51" duration="1500"/>
@@ -180,6 +183,9 @@
    </animation>
   </tile>
   <tile id="51">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
    <animation>
     <frame tileid="51" duration="1500"/>
     <frame tileid="52" duration="1500"/>
@@ -188,6 +194,9 @@
    </animation>
   </tile>
   <tile id="52">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
    <animation>
     <frame tileid="52" duration="1500"/>
     <frame tileid="53" duration="1500"/>
@@ -196,6 +205,9 @@
    </animation>
   </tile>
   <tile id="53">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
    <animation>
     <frame tileid="53" duration="1500"/>
     <frame tileid="50" duration="1500"/>
@@ -204,6 +216,9 @@
    </animation>
   </tile>
   <tile id="54">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
    <animation>
     <frame tileid="54" duration="1500"/>
     <frame tileid="55" duration="1500"/>
@@ -213,6 +228,9 @@
    </animation>
   </tile>
   <tile id="55">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
    <animation>
     <frame tileid="54" duration="1700"/>
     <frame tileid="55" duration="1700"/>
@@ -222,6 +240,9 @@
    </animation>
   </tile>
   <tile id="56">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
    <animation>
     <frame tileid="54" duration="400"/>
     <frame tileid="55" duration="400"/>
@@ -231,6 +252,9 @@
    </animation>
   </tile>
   <tile id="57">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
    <animation>
     <frame tileid="54" duration="530"/>
     <frame tileid="55" duration="530"/>
@@ -238,6 +262,11 @@
     <frame tileid="57" duration="530"/>
     <frame tileid="58" duration="5300"/>
    </animation>
+  </tile>
+  <tile id="58">
+   <properties>
+    <property name="isWater" type="bool" value="true"/>
+   </properties>
   </tile>
   <tile id="82">
    <properties>
