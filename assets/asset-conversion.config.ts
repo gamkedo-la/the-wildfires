@@ -26,6 +26,8 @@ const config = {
       executable: "aseprite",
       args: "-b ${input} --sheet ${output}",
     },
+    { input: "tiles/smoke.png", output: "smoke.png" },
+    { input: "tiles/water.png", output: "water.png" },
     {
       input: "maps/test-island-16.tmx",
       output: "test-island-16.json",
