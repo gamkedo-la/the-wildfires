@@ -1,10 +1,11 @@
-import { Scene, Tilemaps } from "phaser";
-import { RESOURCES } from "../assets";
+import { Scene } from "phaser";
+import { TestMap } from "../entities/maps/Test";
 import PhaserGamebus from "../lib/gamebus";
-import { VehicleSystem } from "../systems/vehicle/vehicle-system";
 import { FireSystem } from "../systems/fire/fire-system";
 import { MapSystem } from "../systems/map/map-system";
+import { VehicleSystem } from "../systems/vehicle/vehicle-system";
 import { WindSystem } from "../systems/wind/wind-system";
+import { GameMap } from "../entities/maps/GameMap";
 
 const FIRE_INTERVAL_MS = 8000;
 const BURN_INTERVAL_MS = 5000;
@@ -15,16 +16,11 @@ export class GameScene extends Scene {
   declare gamebus: PhaserGamebus;
 
   camera: Phaser.Cameras.Scene2D.Camera;
-  map: Phaser.Tilemaps.Tilemap;
 
   constructor() {
     super("Game");
   }
 
-  mapLayer!: Phaser.Tilemaps.TilemapLayer;
-  fireLayer!: Phaser.Tilemaps.TilemapLayer;
-  fireTileId!: integer;
-  animatedTiles: any[] = [];
   space_key!: Phaser.Input.Keyboard.Key;
   key_w!: Phaser.Input.Keyboard.Key;
   key_up!: Phaser.Input.Keyboard.Key;
@@ -68,63 +64,7 @@ export class GameScene extends Scene {
       Phaser.Input.Keyboard.KeyCodes.ESC
     );
 
-    this.map = this.add.tilemap(RESOURCES["test-island-16"]);
-    this.map.addTilesetImage(
-      "tilemap-large",
-      RESOURCES["tilemap-test-3"],
-      24,
-      32
-    );
-    this.mapLayer = this.map.createLayer("map", "tilemap-large")!;
-
-    //TODO: Might move all structures here (even forest)
-    this.map.createLayer("structures", "tilemap-large")!;
-
-    // Phaser <3
-    this.mapLayer.tileset[0].tileOffset = new Phaser.Math.Vector2(4, 16);
-
-    this.fireLayer = this.map.createLayer("fire", "tilemap-large")!;
-
-    // Tilemap global properties seem to be missing type info?
-    let mapProperties = this.map.properties as Array<{
-      name: string;
-      value: number;
-    }>;
-    let fireTileId = mapProperties.find((p) => p.name === "fireTileId")?.value;
-    if (fireTileId) {
-      this.fireTileId = fireTileId;
-    } else {
-      throw new Error("Invalid or missing fireTileId property in tilemap");
-    }
-
-    this.animatedTiles = [];
-    const tileData = this.map.tilesets[0].tileData;
-
-    // Tiles animation system from https://medium.com/@0xNicko/how-to-animate-your-tiles-in-a-phaser-3-game-scene-a2394bd7494b
-    // TODO: If we know this will be only for fire, we don't need this here
-    for (let tileid in tileData) {
-      this.map.layers.forEach((layer) => {
-        layer.data.forEach((tileRow) => {
-          tileRow.forEach((tile) => {
-            if (
-              tile.index - this.map.tilesets[0].firstgid ===
-              parseInt(tileid)
-            ) {
-              this.animatedTiles.push({
-                tile,
-                tileAnimationData: (tileData as any)[tileid].animation,
-                firstgid: this.map.tilesets[0].firstgid,
-                elapsedTime: 0,
-              });
-            }
-          });
-        });
-      });
-    }
-
-    this.maxDamageLevel = this.mapLayer.filterTiles(
-      (t: Tilemaps.Tile) => t.properties.addsDamage
-    ).length;
+    this.currentMap = new TestMap(this);
 
     this.registerSystems();
 
@@ -134,6 +74,7 @@ export class GameScene extends Scene {
     this.scene.run("Debug");
   }
 
+  currentMap: GameMap;
   vehiclesSystem: VehicleSystem;
   fireSystem: FireSystem;
   mapSystem: MapSystem;
@@ -146,40 +87,19 @@ export class GameScene extends Scene {
     this.windSystem = new WindSystem(this, WIND_INTERVAL_MS).create();
   }
 
-  updateSystems(time: number, delta: number) {
-    this.vehiclesSystem.update(time, delta);
-    this.fireSystem.update(time, delta);
-    this.mapSystem.update(time, delta);
-    this.windSystem.update(time, delta);
-  }
-
   damageLevel = 0;
   maxDamageLevel = 1;
 
   update(time: number, delta: number) {
-    this.updateSystems(time, delta);
+    this.vehiclesSystem.update(time, delta);
+    this.fireSystem.update(time, delta);
+    this.mapSystem.update(time, delta);
+    this.windSystem.update(time, delta);
+    this.currentMap.update(time, delta);
 
     if (this.key_p.isDown || this.key_esc.isDown) {
       this.doPause();
     }
-
-    // TODO: This is here but we might just make it into the fire-system? I suspect we won't see any other tile animated
-    this.animatedTiles.forEach((tile) => {
-      if (!tile.tileAnimationData) return;
-
-      let animationDuration =
-        tile.tileAnimationData[0].duration * tile.tileAnimationData.length;
-
-      tile.elapsedTime += delta;
-      tile.elapsedTime %= animationDuration;
-
-      const animatonFrameIndex = Math.floor(
-        tile.elapsedTime / tile.tileAnimationData[0].duration
-      );
-
-      tile.tile.index =
-        tile.tileAnimationData[animatonFrameIndex].tileid + tile.firstgid;
-    });
   }
 
   increaseDamage(points: number) {

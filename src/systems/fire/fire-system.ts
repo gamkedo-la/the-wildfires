@@ -5,6 +5,7 @@ import { System } from "..";
 import { GameScene } from "../../scenes/game-scene";
 import { EVENT_IGNITE, EVENT_START_FIRE, EVENT_STOP_FIRE } from "../../consts";
 import { FireLayerTile } from "../../entities/maps";
+import { GameMap } from "../../entities/maps/GameMap";
 
 export class FireSystem implements System {
   scene: GameScene;
@@ -13,16 +14,20 @@ export class FireSystem implements System {
   windSpeed: number;
   windDirection: PMath.Vector2;
 
+  map: GameMap;
+
   constructor(scene: GameScene, fireInterval: number) {
     this.scene = scene;
+    this.map = scene.currentMap;
+
     this.fireInterval = fireInterval;
     this.windAngle = PMath.RadToDeg(PMath.Vector2.UP.angle());
     this.windSpeed = 2;
   }
 
   create(): this {
-    this.scene.fireLayer
-      .filterTiles((t: Tilemaps.Tile) => t.index === this.scene.fireTileId)
+    this.map.fireLayer
+      .filterTiles((t: Tilemaps.Tile) => t.index === this.map.fireTileId)
       .forEach((tile) => {
         this.emitSmoke(tile);
       });
@@ -68,26 +73,14 @@ export class FireSystem implements System {
   }
 
   private startFire(tileX: number, tileY: number) {
-    let tile = this.scene.fireLayer.getTileAt(tileX, tileY);
+    let tile = this.map.putFire(tileX, tileY);
 
-    const tileData = this.scene.map.tilesets[0].tileData;
-    const tileId = this.scene.fireTileId;
-
-    tile = this.scene.fireLayer.putTileAt(tileId, tileX, tileY);
-    // TODO: Fires will be different for different tiles and also change during the health of the tile
-    this.scene.animatedTiles.push({
-      tile,
-      elapsedTime: 0,
-      tileAnimationData: (tileData as any)[tileId - 1].animation,
-      firstgid: this.scene.map.tilesets[0].firstgid,
-    });
     this.emitSmoke(tile);
   }
 
   private stopFire(tileX: number, tileY: number) {
-    let tile = this.scene.fireLayer.getTileAt(tileX, tileY);
+    let tile = this.map.removeFire(tileX, tileY);
 
-    this.scene.fireLayer.removeTileAt(tileX, tileY);
     this.stopSmoke(tile);
   }
 
@@ -128,8 +121,8 @@ export class FireSystem implements System {
           : [northSpread, southSpread];
     }
 
-    const ignitionPoints = this.scene.fireLayer
-      .filterTiles((t: Tilemaps.Tile) => t.index === this.scene.fireTileId)
+    const ignitionPoints = this.map.fireLayer
+      .filterTiles((t: Tilemaps.Tile) => t.index === this.map.fireTileId)
       .flatMap((tile) => [
         { x: tile.x - westSpread, y: tile.y },
         { x: tile.x + eastSpread, y: tile.y },
@@ -159,6 +152,8 @@ export class FireSystem implements System {
           lifespan: 2000,
         }
       );
+    } else {
+      tile.properties.smoke.start();
     }
   }
 

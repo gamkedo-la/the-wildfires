@@ -1,5 +1,12 @@
 import { TestMap } from "./Test";
 
+export interface MapWithProperties extends Phaser.Tilemaps.Tilemap {
+  properties: Array<{
+    name: string;
+    value: number;
+  }>;
+}
+
 export interface FireLayerTile extends Phaser.Tilemaps.Tile {
   properties: {
     smoke: Phaser.GameObjects.Particles.ParticleEmitter;

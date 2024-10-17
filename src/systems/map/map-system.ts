@@ -7,6 +7,7 @@ import {
   EVENT_STOP_FIRE,
 } from "../../consts";
 import { MapLayerTile } from "../../entities/maps";
+import { GameMap } from "../../entities/maps/GameMap";
 
 export enum MapTileType {
   Ground,
@@ -17,9 +18,12 @@ export class MapSystem implements System {
   scene: GameScene;
   burnInterval: number;
 
+  map: GameMap;
+
   constructor(scene: GameScene, burnInterval: number) {
     this.scene = scene;
     this.burnInterval = burnInterval;
+    this.map = scene.currentMap;
   }
 
   create(): this {
@@ -42,7 +46,7 @@ export class MapSystem implements System {
   }
 
   typeAtWorldXY(x: number, y: number) {
-    let tile = this.scene.mapLayer.getTileAtWorldXY(
+    let tile = this.map.mapLayer.getTileAtWorldXY(
       x,
       y,
       true,
@@ -53,7 +57,7 @@ export class MapSystem implements System {
   }
 
   private ignite(tileX: number, tileY: number) {
-    let tile = this.scene.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
+    let tile = this.map.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
 
     if (tile?.properties.burnRate > 0 && !tile?.properties.isBurning) {
       tile.properties.isBurning = true;
@@ -67,7 +71,7 @@ export class MapSystem implements System {
   private extinguish(worldX: number, worldY: number, range: number) {
     let that = this;
 
-    this.scene.mapLayer
+    this.map.mapLayer
       .getTilesWithinWorldXY(
         worldX,
         worldY,
@@ -84,7 +88,7 @@ export class MapSystem implements System {
   }
 
   private burnTiles(delta: number) {
-    this.scene.mapLayer
+    this.map.mapLayer
       .filterTiles((t: MapLayerTile) => t.properties.isBurning)
       .forEach((t: MapLayerTile) => {
         t.properties.burnTimer += delta;
