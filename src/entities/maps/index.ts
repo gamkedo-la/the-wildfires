@@ -29,6 +29,11 @@ export interface MapLayerTile extends Phaser.Tilemaps.Tile {
   };
 }
 
+export enum MapTileType {
+  Ground,
+  Water,
+}
+
 const maps = {
   test: TestMap,
 };

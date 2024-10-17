@@ -1,7 +1,7 @@
 import { Math as PMath } from "phaser";
 import { GameScene } from "../../scenes/game-scene";
-import { MapTileType } from "../../systems/map/map-system";
 import { EVENT_DROP_WATER } from "../../consts";
+import { MapTileType } from "../maps";
 
 export abstract class Vehicle {
   scene: GameScene;
@@ -192,7 +192,7 @@ export abstract class Vehicle {
 
     if (
       this.tankLevel > 5 &&
-      this.scene.mapSystem.typeAtWorldXY(this.position.x, this.position.y) !==
+      this.scene.currentMap.typeAtWorldXY(this.position.x, this.position.y) !==
         MapTileType.Water
     ) {
       this.tankLevel -= this.tankConsumptionRate * deltaSeconds;
@@ -202,7 +202,7 @@ export abstract class Vehicle {
       this.scene.events.emit(EVENT_DROP_WATER, {
         x: this.position.x,
         y: this.position.y,
-        range: 24,
+        range: 1,
       });
 
       this.water.emitting = true;
@@ -214,7 +214,7 @@ export abstract class Vehicle {
     }
 
     if (
-      this.scene.mapSystem.typeAtWorldXY(this.position.x, this.position.y) ===
+      this.scene.currentMap.typeAtWorldXY(this.position.x, this.position.y) ===
       MapTileType.Water
     ) {
       this.tankLevel += this.tankRefillRate * deltaSeconds;

@@ -1,10 +1,13 @@
 import { RESOURCES } from "../../assets";
+import { GameScene } from "../../scenes/game-scene";
 import { GameMap } from "./GameMap";
 import { MapWithProperties } from "./index";
 
 export class TestMap extends GameMap {
-  constructor(scene: Phaser.Scene) {
+  constructor(scene: GameScene) {
     super();
+
+    this.scene = scene;
 
     this.map = scene.add.tilemap(
       RESOURCES["test-island-16"]

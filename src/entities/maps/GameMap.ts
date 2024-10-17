@@ -1,6 +1,8 @@
-import { MapWithProperties } from ".";
+import { MapLayerTile, MapTileType, MapWithProperties } from ".";
+import { GameScene } from "../../scenes/game-scene";
 
 export abstract class GameMap {
+  scene: GameScene;
   map: MapWithProperties;
 
   fireLayer: Phaser.Tilemaps.TilemapLayer;
@@ -92,5 +94,19 @@ export abstract class GameMap {
     this.animatedTiles = this.animatedTiles.filter((t) => t.tile !== tile);
     this.fireLayer.removeTileAt(tile.x, tile.y);
     return tile;
+  }
+
+  typeAtWorldXY(x: number, y: number) {
+    let tile = this.mapLayer.getTileAtWorldXY(x, y, true, this.scene.camera);
+
+    return this.getType(tile);
+  }
+
+  private getType(tile: MapLayerTile | null) {
+    if (tile?.properties.isWater === true) {
+      return MapTileType.Water;
+    } else {
+      return MapTileType.Ground;
+    }
   }
 }

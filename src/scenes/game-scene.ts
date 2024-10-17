@@ -1,8 +1,7 @@
 import { Scene } from "phaser";
 import { TestMap } from "../entities/maps/Test";
 import PhaserGamebus from "../lib/gamebus";
-import { FireSystem } from "../systems/fire/fire-system";
-import { MapSystem } from "../systems/map/map-system";
+import { FireMapSystem } from "../systems/fire/fire-map-system";
 import { VehicleSystem } from "../systems/vehicle/vehicle-system";
 import { WindSystem } from "../systems/wind/wind-system";
 import { GameMap } from "../entities/maps/GameMap";
@@ -76,14 +75,16 @@ export class GameScene extends Scene {
 
   currentMap: GameMap;
   vehiclesSystem: VehicleSystem;
-  fireSystem: FireSystem;
-  mapSystem: MapSystem;
+  fireMapSystem: FireMapSystem;
   windSystem: WindSystem;
 
   registerSystems() {
     this.vehiclesSystem = new VehicleSystem(this).create();
-    this.fireSystem = new FireSystem(this, FIRE_INTERVAL_MS).create();
-    this.mapSystem = new MapSystem(this, BURN_INTERVAL_MS).create();
+    this.fireMapSystem = new FireMapSystem(
+      this,
+      FIRE_INTERVAL_MS,
+      BURN_INTERVAL_MS
+    ).create();
     this.windSystem = new WindSystem(this, WIND_INTERVAL_MS).create();
   }
 
@@ -92,8 +93,7 @@ export class GameScene extends Scene {
 
   update(time: number, delta: number) {
     this.vehiclesSystem.update(time, delta);
-    this.fireSystem.update(time, delta);
-    this.mapSystem.update(time, delta);
+    this.fireMapSystem.update(time, delta);
     this.windSystem.update(time, delta);
     this.currentMap.update(time, delta);
 
