@@ -94,7 +94,7 @@ export abstract class Vehicle {
     // a non-looped sound effect
     this.splashSound = this.scene.sound.add("fire-extinguished", {
       loop: false,
-      volume: 0.5,
+      volume: 0.15,
     });
   }
 
@@ -207,8 +207,8 @@ export abstract class Vehicle {
 
       this.water.emitting = true;
 
-      // fixme: only play one sound when multiple tiles are being extinguished
-      this.splashSound.play(); // sound effect
+      if (!this.splashSound.isPlaying) this.splashSound.play(); // sound effect
+
     } else {
       this.water.emitting = false;
     }
