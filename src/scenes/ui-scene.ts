@@ -16,6 +16,7 @@ export class UIScene extends Scene {
   water_level: Phaser.GameObjects.Rectangle;
   damage_level: Phaser.GameObjects.Rectangle;
   waterDialSprite: Phaser.GameObjects.Image;
+  speedDialSprite: Phaser.GameObjects.Image;
 
   create({ gameScene }: { gameScene: GameScene }) {
     this.gameScene = gameScene;
@@ -29,13 +30,26 @@ export class UIScene extends Scene {
     });
 
     this.gamebus.on("damage_level_changed", (damage_level: number) => {
-      // console.log("ui damage gauge changing: "+damage_level.toFixed(1));
+      console.log("ui damage gauge changing: "+damage_level.toFixed(1));
     });
+
+    this.gamebus.on("speed_changed", (vel: number) => {
+      //console.log("speed updated: "+vel.toFixed(1));
+      // FIXME: 150 is a magic number set to look correct on a plane w max spd 400
+      this.speedDialSprite.angle = 270+90*vel/150; 
+    });
+
+
 
     this.add.image(512, 384, RESOURCES["the-wildfires-ui"]);
 
-    // why is this not being added to assets.ts as expected? 
+    // q) why was this not being added to assets.ts as expected?
+    // a) you need to stop vite and re-run it (npm run dev) to refresh
     this.waterDialSprite = this.add.image(264, 745, RESOURCES["water-dial"]);
     this.waterDialSprite.angle = 225;
+
+    this.speedDialSprite = this.add.image(28, 754, RESOURCES["water-dial"]);
+    this.speedDialSprite.angle = 270;
+
   }
 }

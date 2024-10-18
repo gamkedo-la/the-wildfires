@@ -185,6 +185,9 @@ export abstract class Vehicle {
     const rads = PMath.Angle.Between(0, 0, this.direction.x, this.direction.y);
 
     this.image.rotation = rads - PMath.TAU;
+
+    // update the airspeed gauge every frame
+    this.scene.bus.emit("speed_changed", this.velocity.length());
   }
 
   useTank(_time: number, delta: number): void {
