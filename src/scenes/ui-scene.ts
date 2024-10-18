@@ -17,6 +17,7 @@ export class UIScene extends Scene {
   damage_level: Phaser.GameObjects.Rectangle;
   waterDialSprite: Phaser.GameObjects.Image;
   speedDialSprite: Phaser.GameObjects.Image;
+  knotsTXT: Phaser.GameObjects.Text;
 
   create({ gameScene }: { gameScene: GameScene }) {
     this.gameScene = gameScene;
@@ -35,8 +36,12 @@ export class UIScene extends Scene {
 
     this.gamebus.on("speed_changed", (vel: number) => {
       //console.log("speed updated: "+vel.toFixed(1));
-      // FIXME: 150 is a magic number set to look correct on a plane w max spd 400
+      // FIXME: 150 is a magic number set to look correct - depends on max speed!
       this.speedDialSprite.angle = 270+90*vel/150; 
+      vel = Math.round(vel);
+      let str = vel;
+      if (vel<10) str = "00"+str; else if (vel<100) str = "0"+str;
+      this.knotsTXT.text = str;
     });
 
 
@@ -50,6 +55,8 @@ export class UIScene extends Scene {
 
     this.speedDialSprite = this.add.image(28, 754, RESOURCES["water-dial"]);
     this.speedDialSprite.angle = 270;
+
+    this.knotsTXT = this.add.text(44, 700, '0000', { fontFamily: 'Arial', fontSize: 12, color: '#efd8a1' });
 
   }
 }
