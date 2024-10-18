@@ -23,13 +23,13 @@ export class UIScene extends Scene {
 
     // These events keys should probably be constants
     this.gamebus.on("water_level_changed", (water_level: number) => {
-      console.log("ui water gauge changing: "+water_level.toFixed(1));
+      // console.log("ui water gauge changing: "+water_level.toFixed(1));
       // the num we get is 0 to 100 and needle starts at about 225
       this.waterDialSprite.angle = 225+90*water_level/100;
     });
 
     this.gamebus.on("damage_level_changed", (damage_level: number) => {
-      console.log("ui damage gauge changing: "+damage_level.toFixed(1));
+      // console.log("ui damage gauge changing: "+damage_level.toFixed(1));
     });
 
     this.add.image(512, 384, RESOURCES["the-wildfires-ui"]);

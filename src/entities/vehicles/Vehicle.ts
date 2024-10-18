@@ -94,7 +94,7 @@ export abstract class Vehicle {
     // a non-looped sound effect
     this.splashSound = this.scene.sound.add("fire-extinguished", {
       loop: false,
-      volume: 0.15,
+      volume: 0.25,
     });
   }
 
