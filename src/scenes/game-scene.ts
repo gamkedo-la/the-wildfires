@@ -37,7 +37,6 @@ export class GameScene extends Scene {
 
     this.camera = this.cameras.main;
     this.camera.setBackgroundColor(0x00ff00);
-    this.camera.scrollX = 200;
 
     this.space_key = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.SPACE
@@ -64,6 +63,9 @@ export class GameScene extends Scene {
     );
 
     this.currentMap = new TestMap(this);
+
+    this.camera.scrollX = Math.floor(this.currentMap.cameraPosition.x);
+    this.camera.scrollY = Math.floor(this.currentMap.cameraPosition.y);
 
     this.registerSystems();
 

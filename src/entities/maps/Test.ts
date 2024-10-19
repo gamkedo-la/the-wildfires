@@ -12,6 +12,9 @@ export class TestMap extends GameMap {
     this.map = scene.add.tilemap(
       RESOURCES["test-island-16"]
     ) as MapWithProperties;
+
+    this.configurationObjects = this.map.getObjectLayer("configuration")!;
+
     this.map.addTilesetImage(
       "tilemap-large",
       RESOURCES["tilemap-test-3"],

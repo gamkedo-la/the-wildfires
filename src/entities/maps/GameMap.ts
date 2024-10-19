@@ -1,14 +1,20 @@
 import { MapLayerTile, MapTileType, MapWithProperties } from ".";
 import { GameScene } from "../../scenes/game-scene";
+import { PointOfInterest } from "../point-of-interest/PointOfInterest";
 
 export abstract class GameMap {
   scene: GameScene;
   map: MapWithProperties;
 
+  configurationObjects: Phaser.Tilemaps.ObjectLayer;
   fireLayer: Phaser.Tilemaps.TilemapLayer;
   mapLayer: Phaser.Tilemaps.TilemapLayer;
 
   fireTileId: number;
+  cameraPosition: Phaser.Math.Vector2;
+  aircraftStartPosition: Phaser.Math.Vector2;
+  pointsOfInterest: PointOfInterest[];
+
   animatedTiles: any[];
 
   create() {
@@ -22,6 +28,35 @@ export abstract class GameMap {
       throw new Error("Invalid or missing fireTileId property in tilemap");
     }
 
+    // find the camera-position object
+    let cameraPositionObject = this.configurationObjects.objects.find(
+      (o) => o.name === "camera-position"
+    );
+
+    if (cameraPositionObject) {
+      this.cameraPosition = new Phaser.Math.Vector2(
+        cameraPositionObject.x,
+        cameraPositionObject.y
+      );
+    } else {
+      throw new Error("Invalid or missing camera-position object in tilemap");
+    }
+
+    // find the aircraft-start object
+    let aircraftStartObject = this.configurationObjects.objects.find(
+      (o) => o.name === "aircraft-start"
+    );
+
+    if (aircraftStartObject) {
+      this.aircraftStartPosition = new Phaser.Math.Vector2(
+        aircraftStartObject.x,
+        aircraftStartObject.y
+      );
+    } else {
+      throw new Error("Invalid or missing aircraft-start object in tilemap");
+    }
+
+    this.registerPointsOfInterest();
     this.registerAnimatedTiles();
   }
 
@@ -41,6 +76,32 @@ export abstract class GameMap {
 
       tile.tile.index =
         tile.tileAnimationData[animatonFrameIndex].tileid + tile.firstgid;
+    });
+  }
+
+  registerPointsOfInterest() {
+    this.pointsOfInterest = [];
+
+    this.configurationObjects.objects.forEach((obj) => {
+      if (
+        obj.properties &&
+        obj.properties.some((prop: any) => prop.name === "duration") &&
+        obj.properties.some((prop: any) => prop.name === "delay")
+      ) {
+        this.pointsOfInterest.push(
+          new PointOfInterest(
+            this.scene,
+            this,
+            obj.name,
+            obj.properties.find((prop: any) => prop.name === "duration").value +
+              Phaser.Math.Between(-5, 5),
+            obj.properties.find((prop: any) => prop.name === "delay").value +
+              Phaser.Math.Between(-5, 5),
+            obj.x!,
+            obj.y!
+          )
+        );
+      }
     });
   }
 

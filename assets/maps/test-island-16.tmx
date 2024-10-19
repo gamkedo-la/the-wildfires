@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="hexagonal" renderorder="right-down" width="128" height="80" tilewidth="16" tileheight="16" infinite="0" hexsidelength="8" staggeraxis="y" staggerindex="odd" nextlayerid="5" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.1" orientation="hexagonal" renderorder="right-down" width="128" height="80" tilewidth="16" tileheight="16" infinite="0" hexsidelength="8" staggeraxis="y" staggerindex="odd" nextlayerid="6" nextobjectid="9">
  <editorsettings>
   <export target="../../public/assets/test-island-16.tmj" format="json"/>
  </editorsettings>
@@ -528,4 +528,47 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="5" name="configuration">
+  <object id="1" name="national park" x="830" y="141">
+   <properties>
+    <property name="delay" type="int" value="40"/>
+    <property name="duration" type="int" value="100"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2" name="camping" x="1000" y="345">
+   <properties>
+    <property name="delay" type="int" value="20"/>
+    <property name="duration" type="int" value="100"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="3" name="aircraft-start" x="384.21" y="226.96">
+   <point/>
+  </object>
+  <object id="4" name="camera-position" x="200.211" y="30.8017">
+   <point/>
+  </object>
+  <object id="6" name="city A" x="740.861" y="483.1">
+   <properties>
+    <property name="delay" type="int" value="80"/>
+    <property name="duration" type="int" value="150"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="7" name="city B" x="1001.86" y="471.752">
+   <properties>
+    <property name="delay" type="int" value="150"/>
+    <property name="duration" type="int" value="150"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="8" name="village" x="842.993" y="623.328">
+   <properties>
+    <property name="delay" type="int" value="300"/>
+    <property name="duration" type="int" value="100"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
 </map>

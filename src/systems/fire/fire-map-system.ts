@@ -44,8 +44,11 @@ export class FireMapSystem implements System {
         this.emitSmoke(tile as FireLayerTile);
       });
 
-    this.scene.time.delayedCall(1000, () => {
+    this.scene.time.delayedCall(100, () => {
       this.spreadFire();
+    });
+
+    this.scene.time.delayedCall(200, () => {
       this.spreadFire();
     });
   }
