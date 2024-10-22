@@ -47,6 +47,12 @@ const config = {
       executable: "tiled",
       args: "--export-map json --embed-tilesets ${input} ${output}",
     },
+    {
+      input: "maps/continental.tmx",
+      output: "continental.json",
+      executable: "tiled",
+      args: "--export-map json --embed-tilesets ${input} ${output}",
+    },
     { input: "airplane/martin.png", output: "martin.png" },
     {
       input: "sounds/airplane-propeller-loop.mp3",

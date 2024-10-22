@@ -18,5 +18,6 @@ export const RESOURCES = {
   "tilemap-test": "tilemap-test",
   "water-dial": "water-dial",
   "water": "water",
+  "continental": "continental",
   "test-island-16": "test-island-16",
 } as const;

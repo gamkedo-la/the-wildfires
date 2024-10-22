@@ -78,6 +78,11 @@
       },
       {
         "type": "tilemapTiledJSON",
+        "key": "continental",
+        "url": "assets/continental.json"
+      },
+      {
+        "type": "tilemapTiledJSON",
         "key": "test-island-16",
         "url": "assets/test-island-16.json"
       }

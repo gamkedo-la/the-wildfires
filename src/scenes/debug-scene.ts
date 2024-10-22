@@ -13,7 +13,7 @@ interface VehicleConfig {
 export const params = {
   fps: 0,
   windAngle: 0,
-  windSpeed: 0
+  windSpeed: 0,
 };
 
 export class Debug extends Scene {
@@ -27,10 +27,19 @@ export class Debug extends Scene {
   vehicleConfig: any = {};
 
   create() {
-    this.pane = new Pane();
-    this.pane.addBinding(params, "fps", { readonly: true, format: (v: number) => v.toFixed(0) });
-    this.pane.addBinding(params, "windAngle", { readonly: true, format: (v: number) => v.toFixed(0) });
-    this.pane.addBinding(params, "windSpeed", { readonly: true, format: (v: number) => v.toFixed(1) });
+    this.pane = new Pane({ expanded: false, title: "Debug" });
+    this.pane.addBinding(params, "fps", {
+      readonly: true,
+      format: (v: number) => v.toFixed(0),
+    });
+    this.pane.addBinding(params, "windAngle", {
+      readonly: true,
+      format: (v: number) => v.toFixed(0),
+    });
+    this.pane.addBinding(params, "windSpeed", {
+      readonly: true,
+      format: (v: number) => v.toFixed(1),
+    });
 
     // Add bindings for damage and water levels
     const gameScene = this.scene.get("Game") as GameScene;
@@ -48,7 +57,10 @@ export class Debug extends Scene {
   }
 
   addVehicleControls(gameScene: GameScene) {
-    const vehicleFolder = this.pane.addFolder({ title: "Vehicle" });
+    const vehicleFolder = this.pane.addFolder({
+      title: "Vehicle",
+      expanded: false,
+    });
 
     vehicleFolder
       .addBinding(gameScene.vehiclesSystem, "vehicleType", {
@@ -101,11 +113,16 @@ export class Debug extends Scene {
 
     const parameterConfig: Record<
       string,
-      { min: number; max: number; step: number; format?: (v: number) => string; }
+      { min: number; max: number; step: number; format?: (v: number) => string }
     > = {
       maxSpeed: { min: 0, max: 200, step: 1 },
       accelerationRate: { min: 0, max: 300, step: 1 },
-      turnRate: { min: 0, max: 2 * Math.PI, step: Math.PI / 180, format: (v: number) => v.toFixed(2) },
+      turnRate: {
+        min: 0,
+        max: 2 * Math.PI,
+        step: Math.PI / 180,
+        format: (v: number) => v.toFixed(2),
+      },
       tankCapacity: { min: 0, max: 2000, step: 10 },
       tankLevel: { min: 0, max: 2000, step: 10 },
       tankConsumptionRate: { min: 0, max: 300, step: 1 },

@@ -5,6 +5,7 @@ import { FireMapSystem } from "../systems/fire/fire-map-system";
 import { VehicleSystem } from "../systems/vehicle/vehicle-system";
 import { WindSystem } from "../systems/wind/wind-system";
 import { GameMap } from "../entities/maps/GameMap";
+import { ContinentalMap } from "../entities/maps/Continental";
 
 const FIRE_INTERVAL_MS = 8000;
 const BURN_INTERVAL_MS = 5000;
@@ -62,7 +63,7 @@ export class GameScene extends Scene {
       Phaser.Input.Keyboard.KeyCodes.ESC
     );
 
-    this.currentMap = new TestMap(this);
+    this.currentMap = new ContinentalMap(this);
 
     this.camera.scrollX = Math.floor(this.currentMap.cameraPosition.x);
     this.camera.scrollY = Math.floor(this.currentMap.cameraPosition.y);
