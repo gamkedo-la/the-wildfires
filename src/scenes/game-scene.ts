@@ -9,7 +9,6 @@ import { ContinentalMap } from "../entities/maps/Continental";
 
 const FIRE_INTERVAL_MS = 8000;
 const BURN_INTERVAL_MS = 5000;
-const WIND_INTERVAL_MS = 10000;
 
 export class GameScene extends Scene {
   declare bus: Phaser.Events.EventEmitter;
@@ -88,7 +87,7 @@ export class GameScene extends Scene {
       FIRE_INTERVAL_MS,
       BURN_INTERVAL_MS
     ).create();
-    this.windSystem = new WindSystem(this, WIND_INTERVAL_MS).create();
+    this.windSystem = new WindSystem(this).create();
   }
 
   damageLevel = 0;
