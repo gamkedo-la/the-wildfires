@@ -61,7 +61,7 @@ export class UIScene extends Scene {
         if (y<70) this.offscreenArrow.setY(70);
         if (y>GAME_HEIGHT-70) this.offscreenArrow.setY(GAME_HEIGHT-70);
       } else { // plane is on-screen so hide the offscreen arror
-        //this.offscreenArrow.setPosition(-999,-999);
+        this.offscreenArrow.setPosition(-999,-999);
       }
     });
 
@@ -82,7 +82,8 @@ export class UIScene extends Scene {
 
     // the arrow that appears when you fly off-screen
     // hmm why is this not visible?? =(
-    this.offscreenArrow = this.gameScene.add.image(20, 20, RESOURCES["plane-offscreen-pointer"]);
+    this.offscreenArrow = this.gameScene.add.image(200, 200, RESOURCES["plane-offscreen-pointer"]);
+    this.offscreenArrow.setZ(999); // no effect
 
 
   }
