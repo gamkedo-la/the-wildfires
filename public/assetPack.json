@@ -38,6 +38,11 @@
       },
       {
         "type": "image",
+        "key": "plane-offscreen-pointer",
+        "url": "assets/plane-offscreen-pointer.png"
+      },
+      {
+        "type": "image",
         "key": "skycrane-sprite",
         "url": "assets/skycrane-sprite.png"
       },

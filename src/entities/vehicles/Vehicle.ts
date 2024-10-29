@@ -2,6 +2,7 @@ import { Math as PMath } from "phaser";
 import { GameScene } from "../../scenes/game-scene";
 import { EVENT_DROP_WATER } from "../../consts";
 import { MapTileType } from "../maps";
+import { GAME_WIDTH, GAME_HEIGHT } from "../../main";
 
 export abstract class Vehicle {
   scene: GameScene;
@@ -113,8 +114,17 @@ export abstract class Vehicle {
 
     this.updateSounds(deltaSeconds);
 
+    // move the sprite to the correct pos on screen
     this.image.x = this.position.x;
     this.image.y = this.position.y;
+
+    // unless it is off-screen! this keeps the visible sprite onscreen
+    // (so it can appear inside the offscreen indicator icon)
+    // but allows this plane entity to keep flying freely
+    if (this.image.x < 70) this.image.x = 70;
+    if (this.image.x > (GAME_WIDTH-70)) this.image.x = GAME_WIDTH-70;
+    if (this.image.y < 70) this.image.y = 70;
+    if (this.image.y > (GAME_HEIGHT-70)) this.image.x = GAME_HEIGHT-70;
 
     if (this.scene.key_a.isDown || this.scene.key_left.isDown) {
       this.turningState = Math.max(
@@ -188,6 +198,10 @@ export abstract class Vehicle {
 
     // update the airspeed gauge every frame
     this.scene.bus.emit("speed_changed", this.velocity.length());
+
+    // update the position (for the offscreen indicator to know)
+    this.scene.bus.emit("position_changed", this.position.x, this.position.y);
+
   }
 
   useTank(_time: number, delta: number): void {
