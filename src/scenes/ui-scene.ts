@@ -39,7 +39,7 @@ export class UIScene extends Scene {
       // FIXME: 150 is a magic number set to look correct - depends on max speed!
       this.speedDialSprite.angle = 270+90*vel/150; 
       vel = Math.round(vel);
-      let str = vel;
+      let str = ""+vel;
       if (vel<10) str = "00"+str; else if (vel<100) str = "0"+str;
       this.knotsTXT.text = str;
     });
