@@ -9,7 +9,7 @@ export class Canadair extends Vehicle {
     this.accelerationRate = 1; // was 130; but this was instant
     this.turnRate = Math.PI * 0.75;
 
-    this.tankCapacity = 100;
+    this.tankCapacity = 300;
     this.tankLevel = 0;
     this.tankConsumptionRate = 130;
     this.tankRefillRate = 150;
