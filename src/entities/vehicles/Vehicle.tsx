@@ -1,12 +1,16 @@
+import { computed, signal } from "@game/state/lib/signals";
+import { Signal } from "@game/state/lib/types";
 import { Math as PMath } from "phaser";
-import { GameScene } from "../../scenes/game-scene";
 import { EVENT_DROP_WATER } from "../../consts";
+import { GAME_HEIGHT, GAME_WIDTH } from "../../main";
+import { GameScene } from "../../scenes/game-scene";
 import { MapTileType } from "../maps";
-import { GAME_WIDTH, GAME_HEIGHT } from "../../main";
 
 export abstract class Vehicle {
   scene: GameScene;
-  image: Phaser.GameObjects.Image;
+
+  imageJSX: Phaser.GameObjects.Image;
+
   engineSound:
     | Phaser.Sound.HTML5AudioSound
     | Phaser.Sound.WebAudioSound
@@ -21,8 +25,8 @@ export abstract class Vehicle {
     | Phaser.Sound.NoAudioSound;
   water: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  position: PMath.Vector2;
-  direction: PMath.Vector2;
+  position: Signal<PMath.Vector2>;
+  direction: Signal<PMath.Vector2>;
   velocity: PMath.Vector2;
   acceleration: PMath.Vector2;
 
@@ -37,7 +41,7 @@ export abstract class Vehicle {
 
   started: boolean;
 
-  turningState: number;
+  turningState: Signal<number>;
   turningBias: number;
   straightBias: number;
 
@@ -49,15 +53,44 @@ export abstract class Vehicle {
     imageScale: number = 0.25
   ) {
     this.scene = scene;
-    this.position = new PMath.Vector2(x, y);
-    this.direction = PMath.Vector2.DOWN.clone();
+    this.position = signal(new PMath.Vector2(x, y));
+    this.direction = signal(PMath.Vector2.DOWN.clone());
     this.velocity = new PMath.Vector2(0, 0);
     this.acceleration = new PMath.Vector2(0, 0);
-    this.image = scene.add.image(x, y, texture, 2).setScale(imageScale);
     this.initSounds();
     this.started = false;
 
     this.water = this.initWaterFX();
+
+    this.turningState = signal(0);
+
+    this.imageJSX = (
+      <image
+        x={computed(() => {
+          const x = this.position.get().x;
+          if (x < 70) return 120;
+          if (x > GAME_WIDTH) return GAME_WIDTH - 20;
+          return x;
+        })}
+        y={computed(() => {
+          const y = this.position.get().y;
+          if (y < 70) return 100;
+          if (y > GAME_HEIGHT) return GAME_HEIGHT - 40;
+          return y;
+        })}
+        texture={texture}
+        angle={computed(
+          () => PMath.RadToDeg(this.direction.get().angle()) - 90
+        )}
+        frame={computed(() => {
+          const currentFrame = Math.floor(this.turningState.get() / 20);
+          return Math.max(0, Math.min(4, currentFrame));
+        })}
+      />
+    );
+
+    // Not handled yet
+    this.imageJSX.setScale(imageScale);
   }
 
   initWaterFX() {
@@ -66,10 +99,12 @@ export abstract class Vehicle {
       y: { random: [0, 8] },
       quantity: 4,
       angle: () => {
-        const directionAngle = PMath.RadToDeg(this.direction.angle()) + 180;
+        const directionAngle =
+          PMath.RadToDeg(this.direction.get().angle()) + 180;
         return PMath.RND.between(directionAngle - 60, directionAngle + 60);
       },
-      follow: this.position,
+      // TODO this is not subscribing or anything, it will not work
+      follow: this.position.get(),
       speed: 12,
       frequency: 20,
       lifespan: 800,
@@ -114,48 +149,37 @@ export abstract class Vehicle {
 
     this.updateSounds(deltaSeconds);
 
-    // move the sprite to the correct pos on screen
-    this.image.x = this.position.x;
-    this.image.y = this.position.y;
-
-    // unless it is off-screen! this keeps the visible sprite onscreen
-    // (so it can appear inside the offscreen indicator icon)
-    // but allows this plane entity to keep flying freely
-    if (this.image.x < 70) this.image.x = 70;
-    if (this.image.x > (GAME_WIDTH-70)) this.image.x = GAME_WIDTH-70;
-    if (this.image.y < 70) this.image.y = 70;
-    if (this.image.y > (GAME_HEIGHT-70)) this.image.x = GAME_HEIGHT-70;
-
     if (this.scene.key_a.isDown || this.scene.key_left.isDown) {
-      this.turningState = Math.max(
-        this.turningState - this.turningBias * deltaSeconds,
-        0
+      this.turningState.update((value) =>
+        Math.max(value - this.turningBias * deltaSeconds, 0)
       );
     } else if (this.scene.key_d.isDown || this.scene.key_right.isDown) {
-      this.turningState = Math.min(
-        this.turningState + this.turningBias * deltaSeconds,
-        100
+      this.turningState.update((value) =>
+        Math.min(value + this.turningBias * deltaSeconds, 100)
       );
     } else {
       // Gradually return to center (50)
-      if (this.turningState < 50) {
-        this.turningState += this.straightBias * deltaSeconds;
-      } else if (this.turningState > 50) {
-        this.turningState -= this.straightBias * deltaSeconds;
+      if (this.turningState.get() < 50) {
+        this.turningState.update(
+          (value) => value + this.straightBias * deltaSeconds
+        );
+      } else if (this.turningState.get() > 50) {
+        this.turningState.update(
+          (value) => value - this.straightBias * deltaSeconds
+        );
       }
     }
 
-    // Update frame based on turning state
-    let currentFrame = Math.floor(this.turningState / 20);
-    currentFrame = Math.max(0, Math.min(4, currentFrame)); // Ensure frame is within 0-4 range
-    this.image.setFrame(currentFrame);
-
     // Apply turning based on turning state
-    if (this.turningState < 50) {
-      this.direction.rotate(-this.turnRate * deltaSeconds);
+    if (this.turningState.get() < 50) {
+      this.direction.rawObjectUpdate((value) =>
+        value.rotate(-this.turnRate * deltaSeconds)
+      );
       this.velocity.rotate(-this.turnRate * deltaSeconds);
-    } else if (this.turningState > 50) {
-      this.direction.rotate(this.turnRate * deltaSeconds);
+    } else if (this.turningState.get() > 50) {
+      this.direction.rawObjectUpdate((value) =>
+        value.rotate(this.turnRate * deltaSeconds)
+      );
       this.velocity.rotate(this.turnRate * deltaSeconds);
     }
 
@@ -176,13 +200,16 @@ export abstract class Vehicle {
       );
 
       // to avoid going backwards or stalling
-      if (this.velocity.dot(this.direction) < 0) {
+      if (this.velocity.dot(this.direction.get()) < 0) {
         this.velocity.setLength(0);
       }
     }
 
     if (this.started) {
-      this.acceleration = this.direction.clone().scale(this.accelerationRate);
+      this.acceleration = this.direction
+        .get()
+        .clone()
+        .scale(this.accelerationRate);
     } else {
       this.acceleration = new PMath.Vector2(0, 0);
     }
@@ -190,18 +217,12 @@ export abstract class Vehicle {
     this.velocity.add(this.acceleration);
     this.velocity.limit(this.maxSpeed);
 
-    this.position.add(this.velocity.clone().scale(deltaSeconds));
-
-    const rads = PMath.Angle.Between(0, 0, this.direction.x, this.direction.y);
-
-    this.image.rotation = rads - PMath.TAU;
+    this.position.rawObjectUpdate((value) =>
+      value.add(this.velocity.clone().scale(deltaSeconds))
+    );
 
     // update the airspeed gauge every frame
     this.scene.bus.emit("speed_changed", this.velocity.length());
-
-    // update the position (for the offscreen indicator to know)
-    this.scene.bus.emit("position_changed", this.position.x, this.position.y);
-
   }
 
   useTank(_time: number, delta: number): void {
@@ -209,30 +230,33 @@ export abstract class Vehicle {
 
     if (
       this.tankLevel > 5 &&
-      this.scene.currentMap.typeAtWorldXY(this.position.x, this.position.y) !==
-        MapTileType.Water
+      this.scene.currentMap.typeAtWorldXY(
+        this.position.get().x,
+        this.position.get().y
+      ) !== MapTileType.Water
     ) {
       this.tankLevel -= this.tankConsumptionRate * deltaSeconds;
       this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
       this.scene.bus.emit("water_level_changed", this.tankLevel);
 
       this.scene.events.emit(EVENT_DROP_WATER, {
-        x: this.position.x,
-        y: this.position.y,
+        x: this.position.get().x,
+        y: this.position.get().y,
         range: 1,
       });
 
       this.water.emitting = true;
 
       if (!this.splashSound.isPlaying) this.splashSound.play(); // sound effect
-
     } else {
       this.water.emitting = false;
     }
 
     if (
-      this.scene.currentMap.typeAtWorldXY(this.position.x, this.position.y) ===
-      MapTileType.Water
+      this.scene.currentMap.typeAtWorldXY(
+        this.position.get().x,
+        this.position.get().y
+      ) === MapTileType.Water
     ) {
       this.tankLevel += this.tankRefillRate * deltaSeconds;
       this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
@@ -250,7 +274,6 @@ export abstract class Vehicle {
   }
 
   destroy(): void {
-    this.image.destroy();
     this.water.destroy();
   }
 }

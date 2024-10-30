@@ -20,6 +20,8 @@ function createSignalBinding(
   const cleanup = signal.subscribe((value) => {
     if (property === "style") {
       (gameObject as any).setStyle(value);
+    } else if (property === "frame") {
+      (gameObject as any).setFrame(value);
     } else {
       (gameObject as any)[property] = value;
     }
@@ -137,6 +139,7 @@ export function setupGameObject<T extends Phaser.GameObjects.GameObject>(
     if (value instanceof SignalImpl) {
       createSignalBinding(gameObject, key, value);
     } else if (typeof value !== "undefined") {
+      // TODO: This is still a bad idea
       //(gameObject as any)[key] = value;
     }
   });

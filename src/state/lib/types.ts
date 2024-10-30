@@ -14,6 +14,7 @@ export interface Signal<T> {
   get(): T;
   set(value: T): void;
   update(fn: (value: T) => T): void;
+  rawObjectUpdate(fn: (value: T) => void): void;
   subscribe(subscriber: Subscriber<T>): () => void;
   dispose(): void;
 }

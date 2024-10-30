@@ -1,16 +1,15 @@
-import { Scene } from "phaser";
-import { TestMap } from "../entities/maps/Test";
+import { JSXScene } from ".";
+import { ContinentalMap } from "../entities/maps/Continental";
+import { GameMap } from "../entities/maps/GameMap";
 import PhaserGamebus from "../lib/gamebus";
 import { FireMapSystem } from "../systems/fire/fire-map-system";
 import { VehicleSystem } from "../systems/vehicle/vehicle-system";
 import { WindSystem } from "../systems/wind/wind-system";
-import { GameMap } from "../entities/maps/GameMap";
-import { ContinentalMap } from "../entities/maps/Continental";
 
 const FIRE_INTERVAL_MS = 8000;
 const BURN_INTERVAL_MS = 5000;
 
-export class GameScene extends Scene {
+export class GameScene extends JSXScene {
   declare bus: Phaser.Events.EventEmitter;
   declare gamebus: PhaserGamebus;
 

@@ -36,6 +36,7 @@ export type SpriteElement = PhaserGameObjectProps<Phaser.GameObjects.Sprite> & {
 
 export type ImageElement = PhaserGameObjectProps<Phaser.GameObjects.Image> & {
   texture: SignalValue<string>;
+  frame?: SignalValue<string | number>;
 };
 
 export type CircleElement = PhaserGameObjectProps<Phaser.GameObjects.Arc> & {

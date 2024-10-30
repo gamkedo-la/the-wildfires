@@ -14,7 +14,7 @@ export class Canadair extends Vehicle {
     this.tankConsumptionRate = 130;
     this.tankRefillRate = 150;
 
-    this.turningState = 50;
+    this.turningState.set(50);
     this.turningBias = 200;
     this.straightBias = 400;
   }

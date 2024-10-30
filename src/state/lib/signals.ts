@@ -73,6 +73,11 @@ export class SignalImpl<T> implements Signal<T> {
     this.set(fn(this._value));
   }
 
+  rawObjectUpdate(fn: (value: T) => void): void {
+    fn(this._value);
+    this.notify();
+  }
+
   subscribe(subscriber: Subscriber<T>): () => void {
     if (this.disposed) {
       throw new Error("Cannot subscribe to disposed signal");
