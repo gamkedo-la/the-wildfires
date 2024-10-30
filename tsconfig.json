@@ -16,7 +16,14 @@
     "strictPropertyInitialization": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    /* JSX */
+    "jsx": "preserve",
+    "jsxImportSource": "@game/ui/lib",
+    "paths": {
+      "@game/*": ["./src/*.ts"]
+    }
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["zz_scratchpad"]
 }

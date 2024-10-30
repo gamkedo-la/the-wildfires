@@ -20,6 +20,19 @@ export default defineConfig({
       },
     },
   },
+  esbuild: {
+    jsx: "automatic",
+    jsxDev: false,
+    jsxFactory: "createElement",
+    jsxFragment: "Fragment",
+    jsxInject: `import { createElement } from '@game/ui/lib'`,
+    jsxSideEffects: true,
+  },
+  resolve: {
+    alias: {
+      "@game": "/src",
+    },
+  },
   server: {
     port: 8080,
   },
