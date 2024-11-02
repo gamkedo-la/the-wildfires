@@ -1,4 +1,4 @@
-import { Signal, Subscriber } from "./types";
+import { EqualityFn, MutableSignal, Signal, Subscriber } from "./types";
 
 /**
  * Signal implementation
@@ -14,8 +14,9 @@ import { Signal, Subscriber } from "./types";
  * - Build time optimizations (like inlining simple signals)
  */
 
+
 export class SignalImpl<T> implements Signal<T> {
-  private _value: T;
+  _value: T;
   private subscribers: Set<Subscriber<T>> = new Set();
   private computeFn?: () => T;
   private dependencies: Set<SignalImpl<any>> = new Set();
@@ -73,11 +74,6 @@ export class SignalImpl<T> implements Signal<T> {
     this.set(fn(this._value));
   }
 
-  rawObjectUpdate(fn: (value: T) => void): void {
-    fn(this._value);
-    this.notify();
-  }
-
   subscribe(subscriber: Subscriber<T>): () => void {
     if (this.disposed) {
       throw new Error("Cannot subscribe to disposed signal");
@@ -112,7 +108,7 @@ export class SignalImpl<T> implements Signal<T> {
     this.dependencies.clear();
   }
 
-  private notify(): void {
+  notify(): void {
     if (this.disposed) {
       return;
     }
@@ -168,6 +164,19 @@ export class SignalImpl<T> implements Signal<T> {
   }
 }
 
+class MutableSignalImpl<T> extends SignalImpl<T> implements MutableSignal<T> {
+  constructor(initialValue: T) {
+    super(initialValue);
+  }
+
+  mutate(fn: (value: T) => boolean): void {
+    const changed = fn(this._value);
+    if (changed) {
+      this.notify();
+    }
+  }
+}
+
 // Helper functions
 export function signal<T>(initialValue: T): Signal<T> {
   return new SignalImpl(initialValue);
@@ -175,4 +184,8 @@ export function signal<T>(initialValue: T): Signal<T> {
 
 export function computed<T>(computeFn: () => T): Signal<T> {
   return new SignalImpl(computeFn);
+}
+
+export function mutable<T>(initialValue: T): MutableSignal<T> {
+  return new MutableSignalImpl(initialValue);
 }

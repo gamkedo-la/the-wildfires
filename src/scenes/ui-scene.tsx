@@ -39,38 +39,42 @@ export class UIScene extends JSXScene {
       console.log("ui damage gauge changing: " + damage_level.toFixed(1));
     });
 
-    // NOTE: this is fired every single frame...
-    // perhaps it should not be an event and we
-    // simply read a global variable instead?
-    this.gamebus.on("speed_changed", (vel: number) => {
-      //console.log("speed updated: "+vel.toFixed(1));
-      // FIXME: 150 is a magic number set to look correct - depends on max speed!
-      this.speedDialSprite.angle = 270 + (90 * vel) / 150;
-      vel = Math.round(vel);
-      let str = "" + vel;
-      if (vel < 10) str = "00" + str;
-      else if (vel < 100) str = "0" + str;
-      this.knotsTXT.text = str;
-    });
-
     // the backdrop of the cockpit control panel
     this.add.image(512, 384, RESOURCES["the-wildfires-ui"]);
+
+    const speedDial = (
+      <image
+        x={28}
+        y={754}
+        texture={RESOURCES["water-dial"]}
+        angle={computed(
+          () => 270 + (90 * vehicle.velocity.get().length()) / vehicle.maxSpeed
+        )}
+      />
+    );
+
+    const knotsTXT = (
+      <text
+        x={44}
+        y={700}
+        text={computed(() => {
+          console.log("knotsTXT", vehicle.velocity.get().length());
+          return Math.round(vehicle.velocity.get().length())
+            .toString()
+            .padStart(3, "0");
+        })}
+        style={{
+          fontFamily: "Arial",
+          fontSize: 12,
+          color: "#efd8a1",
+        }}
+      />
+    );
 
     // q) why was this not being added to assets.ts as expected?
     // a) you need to stop vite and re-run it (npm run dev) to refresh
     this.waterDialSprite = this.add.image(264, 745, RESOURCES["water-dial"]);
     this.waterDialSprite.angle = 225;
-
-    // speedometer
-    this.speedDialSprite = this.add.image(28, 754, RESOURCES["water-dial"]);
-    this.speedDialSprite.angle = 270;
-
-    // txt speed in knots
-    this.knotsTXT = this.add.text(44, 700, "0000", {
-      fontFamily: "Arial",
-      fontSize: 12,
-      color: "#efd8a1",
-    });
 
     // the arrow that appears when you fly off-screen
     this.offscreenArrow = (

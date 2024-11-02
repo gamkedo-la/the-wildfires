@@ -92,6 +92,11 @@ export function setupGameObject<T extends Phaser.GameObjects.GameObject>(
           : textProps.text
         //textProps.style
       ) as unknown as T;
+
+      if (textProps.style) {
+        (gameObject as any).setStyle(textProps.style);
+      }
+
       break;
 
     case "rectangle":

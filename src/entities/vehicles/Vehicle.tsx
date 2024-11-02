@@ -1,5 +1,5 @@
-import { computed, signal } from "@game/state/lib/signals";
-import { Signal } from "@game/state/lib/types";
+import { computed, mutable, signal } from "@game/state/lib/signals";
+import { MutableSignal, Signal } from "@game/state/lib/types";
 import { Math as PMath } from "phaser";
 import { EVENT_DROP_WATER } from "../../consts";
 import { GAME_HEIGHT, GAME_WIDTH } from "../../main";
@@ -9,7 +9,7 @@ import { MapTileType } from "../maps";
 export abstract class Vehicle {
   scene: GameScene;
 
-  imageJSX: Phaser.GameObjects.Image;
+  sprite: Phaser.GameObjects.Image;
 
   engineSound:
     | Phaser.Sound.HTML5AudioSound
@@ -25,10 +25,10 @@ export abstract class Vehicle {
     | Phaser.Sound.NoAudioSound;
   water: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  position: Signal<PMath.Vector2>;
-  direction: Signal<PMath.Vector2>;
-  velocity: PMath.Vector2;
-  acceleration: PMath.Vector2;
+  position: MutableSignal<PMath.Vector2>;
+  direction: MutableSignal<PMath.Vector2>;
+  velocity: MutableSignal<PMath.Vector2>;
+  acceleration: MutableSignal<PMath.Vector2>;
 
   maxSpeed: number;
   accelerationRate: number;
@@ -53,10 +53,10 @@ export abstract class Vehicle {
     imageScale: number = 0.25
   ) {
     this.scene = scene;
-    this.position = signal(new PMath.Vector2(x, y));
-    this.direction = signal(PMath.Vector2.DOWN.clone());
-    this.velocity = new PMath.Vector2(0, 0);
-    this.acceleration = new PMath.Vector2(0, 0);
+    this.position = mutable(new PMath.Vector2(x, y));
+    this.direction = mutable(PMath.Vector2.DOWN.clone());
+    this.velocity = mutable(new PMath.Vector2(0, 0));
+    this.acceleration = mutable(new PMath.Vector2(0, 0));
     this.initSounds();
     this.started = false;
 
@@ -64,7 +64,7 @@ export abstract class Vehicle {
 
     this.turningState = signal(0);
 
-    this.imageJSX = (
+    this.sprite = (
       <image
         x={computed(() => {
           const x = this.position.get().x;
@@ -90,7 +90,7 @@ export abstract class Vehicle {
     );
 
     // Not handled yet
-    this.imageJSX.setScale(imageScale);
+    this.sprite.setScale(imageScale);
   }
 
   initWaterFX() {
@@ -141,13 +141,19 @@ export abstract class Vehicle {
     this.waterSound.setVolume(newVolume);
 
     // pitch-shift the engine loop based on velocity
-    this.engineSound.setRate(0.2 + this.velocity.length() / 200);
+    this.engineSound.setRate(0.2 + this.velocity.get().length() / 200);
   }
 
   update(_time: number, delta: number): void {
     const deltaSeconds = delta * 0.001;
 
     this.updateSounds(deltaSeconds);
+
+    if (this.scene.key_w.isDown || this.scene.key_up.isDown) {
+      this.started = true;
+    }
+
+    if (!this.started) return;
 
     if (this.scene.key_a.isDown || this.scene.key_left.isDown) {
       this.turningState.update((value) =>
@@ -160,69 +166,74 @@ export abstract class Vehicle {
     } else {
       // Gradually return to center (50)
       if (this.turningState.get() < 50) {
-        this.turningState.update(
-          (value) => value + this.straightBias * deltaSeconds
+        this.turningState.update((value) =>
+          Math.min(value + this.straightBias * deltaSeconds, 50)
         );
       } else if (this.turningState.get() > 50) {
-        this.turningState.update(
-          (value) => value - this.straightBias * deltaSeconds
+        this.turningState.update((value) =>
+          Math.max(value - this.straightBias * deltaSeconds, 50)
         );
       }
     }
 
     // Apply turning based on turning state
     if (this.turningState.get() < 50) {
-      this.direction.rawObjectUpdate((value) =>
-        value.rotate(-this.turnRate * deltaSeconds)
-      );
-      this.velocity.rotate(-this.turnRate * deltaSeconds);
+      this.direction.mutate((value) => {
+        value.rotate(-this.turnRate * deltaSeconds);
+        return true;
+      });
+      this.velocity.mutate((value) => {
+        value.rotate(-this.turnRate * deltaSeconds);
+        return true;
+      });
     } else if (this.turningState.get() > 50) {
-      this.direction.rawObjectUpdate((value) =>
-        value.rotate(this.turnRate * deltaSeconds)
-      );
-      this.velocity.rotate(this.turnRate * deltaSeconds);
-    }
-
-    if (this.scene.key_w.isDown || this.scene.key_up.isDown) {
-      this.started = true;
+      this.direction.mutate((value) => {
+        value.rotate(this.turnRate * deltaSeconds);
+        return true;
+      });
+      this.velocity.mutate((value) => {
+        value.rotate(this.turnRate * deltaSeconds);
+        return true;
+      });
     }
 
     if (this.scene.key_s.isDown || this.scene.key_down.isDown) {
       const slowProportionally =
-        this.slowingRate * (this.accelerationRate + this.velocity.length());
+        this.slowingRate *
+        (this.accelerationRate + this.velocity.get().length());
       const slowVector = this.velocity
+        .get()
         .clone()
         .normalize()
         .scale(slowProportionally * deltaSeconds);
-      this.velocity.subtract(slowVector);
-      this.velocity.scale(
-        1 - (slowProportionally * deltaSeconds) / this.maxSpeed
-      );
+      this.velocity.mutate((velocity) => {
+        velocity.subtract(slowVector);
+        velocity.scale(1 - (slowProportionally * deltaSeconds) / this.maxSpeed);
 
-      // to avoid going backwards or stalling
-      if (this.velocity.dot(this.direction.get()) < 0) {
-        this.velocity.setLength(0);
-      }
+        // to avoid going backwards or stalling
+        if (velocity.dot(this.direction.get()) < 0) {
+          velocity.setLength(0);
+        }
+
+        return true;
+      });
     }
 
-    if (this.started) {
-      this.acceleration = this.direction
-        .get()
-        .clone()
-        .scale(this.accelerationRate);
-    } else {
-      this.acceleration = new PMath.Vector2(0, 0);
-    }
+    this.acceleration.mutate((acceleration) => {
+      acceleration.copy(this.direction.get()).scale(this.accelerationRate);
+      return true;
+    });
 
-    this.velocity.add(this.acceleration);
-    this.velocity.limit(this.maxSpeed);
+    this.velocity.mutate((velocity) => {
+      if (velocity.length() >= this.maxSpeed - 0.1) return false;
+      velocity.add(this.acceleration.get());
+      return true;
+    });
 
-    this.position.rawObjectUpdate((value) =>
-      value.add(this.velocity.clone().scale(deltaSeconds))
-    );
-
-    // update the airspeed gauge every frame
-    this.scene.bus.emit("speed_changed", this.velocity.length());
+    this.position.mutate((position) => {
+      position.add(this.velocity.get().clone().scale(deltaSeconds));
+      return true;
+    });
   }
 
   useTank(_time: number, delta: number): void {
