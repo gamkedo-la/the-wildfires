@@ -1,8 +1,7 @@
 import { computed, mutable, signal } from "@game/state/lib/signals";
 import { MutableSignal, Signal } from "@game/state/lib/types";
 import { Math as PMath } from "phaser";
-import { EVENT_DROP_WATER } from "../../consts";
-import { GAME_HEIGHT, GAME_WIDTH } from "../../main";
+import { EVENT_DROP_WATER, GAME_HEIGHT, GAME_WIDTH } from "../../consts";
 import { GameScene } from "../../scenes/game-scene";
 import { MapTileType } from "../maps";
 
@@ -91,6 +90,8 @@ export abstract class Vehicle {
 
     // Not handled yet
     this.sprite.setScale(imageScale);
+
+    this.scene.add.existing(this.sprite);
   }
 
   initWaterFX() {

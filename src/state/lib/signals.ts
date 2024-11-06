@@ -1,4 +1,11 @@
-import { EqualityFn, MutableSignal, Signal, Subscriber } from "./types";
+import {
+  Cleanup,
+  Effect,
+  EqualityFn,
+  MutableSignal,
+  Signal,
+  Subscriber,
+} from "./types";
 
 /**
  * Signal implementation
@@ -14,12 +21,14 @@ import { EqualityFn, MutableSignal, Signal, Subscriber } from "./types";
  * - Build time optimizations (like inlining simple signals)
  */
 
-
 export class SignalImpl<T> implements Signal<T> {
+  displayName: string;
   _value: T;
-  private subscribers: Set<Subscriber<T>> = new Set();
-  private computeFn?: () => T;
-  private dependencies: Set<SignalImpl<any>> = new Set();
+  computeFn?: () => T;
+
+  subscribers: Set<Subscriber<T>> = new Set();
+  dependencies: Set<SignalImpl<any>> = new Set();
+
   private disposed = false;
   private static currentComputation: SignalImpl<any> | null = null;
   private static computationStack: Set<SignalImpl<any>> = new Set();
@@ -34,6 +43,7 @@ export class SignalImpl<T> implements Signal<T> {
     }
   }
 
+  //TODO: Maybe in the future we can have get and set with keys
   get(): T {
     if (this.disposed) {
       throw new Error("Cannot get value of disposed signal");
@@ -139,7 +149,7 @@ export class SignalImpl<T> implements Signal<T> {
     }
   }
 
-  private recompute(): void {
+  protected recompute(): void {
     const oldValue = this._value;
     this._value = this.computeValue();
 
@@ -177,6 +187,16 @@ class MutableSignalImpl<T> extends SignalImpl<T> implements MutableSignal<T> {
   }
 }
 
+class EffectSignal extends SignalImpl<void> {
+  constructor(fn: Effect) {
+    super(fn);
+  }
+
+  recompute(): void {
+    queueMicrotask(this.computeFn!);
+  }
+}
+
 // Helper functions
 export function signal<T>(initialValue: T): Signal<T> {
   return new SignalImpl(initialValue);
@@ -188,4 +208,10 @@ export function computed<T>(computeFn: () => T): Signal<T> {
 
 export function mutable<T>(initialValue: T): MutableSignal<T> {
   return new MutableSignalImpl(initialValue);
+}
+
+export function effect(fn: Effect, displayName: string = ""): Cleanup {
+  const signal = new EffectSignal(fn);
+  signal.displayName = displayName;
+  return () => signal.dispose();
 }

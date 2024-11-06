@@ -6,7 +6,7 @@ export type SignalBindings<T> = {
 
 export type Subscriber<T> = (value: T) => void;
 export type EqualityFn<T> = (a: T, b: T) => boolean;
-export type Effect = () => void | (() => void);
+export type Effect = () => void;
 export type Cleanup = () => void;
 
 export interface Signal<T> {

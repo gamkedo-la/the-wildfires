@@ -1,7 +1,6 @@
+import { GAME_WIDTH } from "@game/consts";
 import { Scene } from "phaser";
 import { RESOURCES } from "../../assets";
-
-import { GAME_WIDTH } from "../../main";
 
 export const RESOURCES_INDEX = Object.keys(RESOURCES).reduce(
   (acc, key, index) => ({ ...acc, [key]: index }),

@@ -1,8 +1,8 @@
 import { computed } from "@game/state/lib/signals";
 import { JSXScene } from ".";
 import { RESOURCES } from "../assets";
+import { GAME_HEIGHT, GAME_WIDTH } from "../consts";
 import PhaserGamebus from "../lib/gamebus";
-import { GAME_HEIGHT, GAME_WIDTH } from "../main";
 import { GameScene } from "./game-scene";
 
 export class UIScene extends JSXScene {
@@ -53,6 +53,8 @@ export class UIScene extends JSXScene {
       />
     );
 
+    this.add.existing(speedDial);
+
     const knotsTXT = (
       <text
         x={44}
@@ -70,6 +72,8 @@ export class UIScene extends JSXScene {
         }}
       />
     );
+
+    this.add.existing(knotsTXT);
 
     // q) why was this not being added to assets.ts as expected?
     // a) you need to stop vite and re-run it (npm run dev) to refresh
@@ -118,5 +122,7 @@ export class UIScene extends JSXScene {
         texture={RESOURCES["plane-offscreen-pointer"]}
       />
     );
+
+    this.add.existing(this.offscreenArrow);
   }
 }

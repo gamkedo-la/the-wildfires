@@ -8,11 +8,9 @@ import { Debug } from "./scenes/debug-scene";
 import { GameScene as MainGame } from "./scenes/game-scene";
 
 import { Game, Types } from "phaser";
-import { UIScene } from "./scenes/ui-scene";
+import { GAME_HEIGHT, GAME_WIDTH } from "./consts";
 import { PauseScene } from "./scenes/pause-scene";
-
-export const GAME_WIDTH = 1024;
-export const GAME_HEIGHT = 768;
+import { UIScene } from "./scenes/ui-scene";
 
 const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,

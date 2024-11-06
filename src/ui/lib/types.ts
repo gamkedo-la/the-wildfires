@@ -1,6 +1,10 @@
 import { SignalValue, Signal } from "@game/state/lib/types";
 
 declare global {
+  interface Window {
+    currentScene: Phaser.Scene;
+  }
+
   namespace JSX {
     interface IntrinsicElements {
       container: ContainerElement;
@@ -26,7 +30,9 @@ export type RectangleElement =
   PhaserGameObjectProps<Phaser.GameObjects.Rectangle> & {
     width: SignalValue<number>;
     height: SignalValue<number>;
-    fillColor: SignalValue<number>;
+    fillColor?: SignalValue<number>;
+    strokeColor?: SignalValue<number>;
+    strokeWidth?: SignalValue<number>;
   };
 
 export type SpriteElement = PhaserGameObjectProps<Phaser.GameObjects.Sprite> & {
@@ -49,25 +55,34 @@ export type ZoneElement = PhaserGameObjectProps<Phaser.GameObjects.Zone> & {
   height: SignalValue<number>;
 };
 
+export type PhaserJsxElement =
+  | PhaserGameObjectProps<Phaser.GameObjects.GameObject>
+  | PhaserGameObjectProps<Phaser.GameObjects.GameObject>[];
+
 export interface PhaserGameObjectProps<
   T extends Phaser.GameObjects.GameObject
 > {
   // JSX children prop
-  children?: PhaserGameObjectProps<Phaser.GameObjects.GameObject>[];
+  children?: PhaserJsxElement;
 
   key?: string;
+  name?: string;
   active?: SignalValue<boolean>;
   visible?: SignalValue<boolean>;
 
   x?: SignalValue<number>;
   y?: SignalValue<number>;
+
+  width?: number;
+  height?: number;
+
   alpha?: SignalValue<number>;
   angle?: SignalValue<number>;
   scale?: SignalValue<number>;
   scaleX?: SignalValue<number>;
   scaleY?: SignalValue<number>;
 
-  origin?: SignalValue<number>;
+  origin?: SignalValue<number | { x: number; y: number }>;
   originX?: SignalValue<number>;
   originY?: SignalValue<number>;
 
@@ -77,11 +92,39 @@ export interface PhaserGameObjectProps<
   scrollFactorY?: SignalValue<number>;
 
   interactive?: SignalValue<boolean>;
-  onPointerdown?: (pointer: Phaser.Input.Pointer) => void;
-  onPointerup?: (pointer: Phaser.Input.Pointer) => void;
-  onPointerover?: (pointer: Phaser.Input.Pointer) => void;
-  onPointerout?: (pointer: Phaser.Input.Pointer) => void;
-  onPointermove?: (pointer: Phaser.Input.Pointer) => void;
+  onPointerdown?: (
+    self: T,
+    pointer: Phaser.Input.Pointer,
+    localX: number,
+    localY: number,
+    event: Phaser.Types.Input.EventData
+  ) => void;
+  onPointerup?: (
+    self: T,
+    pointer: Phaser.Input.Pointer,
+    localX: number,
+    localY: number,
+    event: Phaser.Types.Input.EventData
+  ) => void;
+  onPointerover?: (
+    self: T,
+    pointer: Phaser.Input.Pointer,
+    localX: number,
+    localY: number,
+    event: Phaser.Types.Input.EventData
+  ) => void;
+  onPointermove?: (
+    self: T,
+    pointer: Phaser.Input.Pointer,
+    localX: number,
+    localY: number,
+    event: Phaser.Types.Input.EventData
+  ) => void;
+  onPointerout?: (
+    self: T,
+    pointer: Phaser.Input.Pointer,
+    event: Phaser.Types.Input.EventData
+  ) => void;
 
   bind?: Record<string, Signal<any>>;
   ref?: (gameObject: T) => void;
