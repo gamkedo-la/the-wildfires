@@ -47,6 +47,7 @@ export class Preloader extends Scene {
       frameWidth: 125,
       frameHeight: 101,
     });
+
     this.load.spritesheet(
       "canadair-spritesheet",
       "assets/canadair-sprite.png",
@@ -55,6 +56,7 @@ export class Preloader extends Scene {
         frameHeight: 85,
       }
     );
+
     this.load.spritesheet(
       "skycrane-spritesheet",
       "assets/skycrane-sprite.png",
@@ -63,6 +65,11 @@ export class Preloader extends Scene {
         frameHeight: 83,
       }
     );
+
+    this.load.spritesheet("pin-spritesheet", "assets/pin.png", {
+      frameWidth: 90,
+      frameHeight: 44,
+    });
 
     // FIXME: perhaps we should access these urls via RESOURCES[]
     this.load.audio(

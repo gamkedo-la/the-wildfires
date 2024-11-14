@@ -10,6 +10,7 @@ export const RESOURCES = {
   "canadair-sprite": "canadair-sprite",
   "martin-sprite": "martin-sprite",
   "martin": "martin",
+  "pin": "pin",
   "plane-offscreen-pointer": "plane-offscreen-pointer",
   "skycrane-sprite": "skycrane-sprite",
   "smoke": "smoke",

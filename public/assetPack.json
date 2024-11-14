@@ -38,6 +38,11 @@
       },
       {
         "type": "image",
+        "key": "pin",
+        "url": "assets/pin.png"
+      },
+      {
+        "type": "image",
         "key": "plane-offscreen-pointer",
         "url": "assets/plane-offscreen-pointer.png"
       },

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="tilemap-large" tilewidth="24" tileheight="32" tilecount="100" columns="10">
+<tileset version="1.10" tiledversion="1.10.1" name="tilemap-large" tilewidth="24" tileheight="32" tilecount="130" columns="10">
  <tileoffset x="-4" y="0"/>
- <image source="../tiles/tilemap-test-3.png" width="240" height="320"/>
+ <image source="../tiles/tilemap-test-3.png" width="240" height="416"/>
  <tile id="0">
   <properties>
    <property name="burnRate" type="int" value="3"/>
@@ -261,11 +261,189 @@
    <property name="isWater" type="bool" value="true"/>
   </properties>
  </tile>
+ <tile id="71">
+  <properties>
+   <property name="burnRate" type="int" value="5"/>
+  </properties>
+ </tile>
+ <tile id="72">
+  <properties>
+   <property name="burnRate" type="int" value="5"/>
+  </properties>
+ </tile>
+ <tile id="73">
+  <properties>
+   <property name="burnRate" type="int" value="5"/>
+  </properties>
+ </tile>
+ <tile id="74">
+  <properties>
+   <property name="burnRate" type="int" value="5"/>
+  </properties>
+ </tile>
+ <tile id="75">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="80">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="81">
+  <properties>
+   <property name="burnRate" type="int" value="2"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
  <tile id="82">
   <properties>
-   <property name="addsDamage" type="bool" value="true"/>
+   <property name="burnRate" type="int" value="2"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="83">
+  <properties>
    <property name="burnRate" type="int" value="1"/>
-   <property name="burnedTileId" type="int" value="41"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="84">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="85">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="86">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="87">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="90">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="91">
+  <properties>
+   <property name="burnRate" type="int" value="2"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="92">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="93">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="94">
+  <properties>
+   <property name="burnRate" type="int" value="1"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="95">
+  <properties>
+   <property name="burnRate" type="int" value="2"/>
+   <property name="isBuilding" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="100">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="101">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="102">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="103">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="104">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="105">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="106">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="107">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="108">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="110">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="111">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="112">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="113">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="114">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="115">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
   </properties>
  </tile>
 </tileset>

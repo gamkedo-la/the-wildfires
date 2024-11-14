@@ -92,11 +92,14 @@ export abstract class GameMap {
           new PointOfInterest(
             this.scene,
             this,
-            obj.name,
+            obj.properties.find((prop: any) => prop.name === "name").value,
             obj.properties.find((prop: any) => prop.name === "duration").value +
               Phaser.Math.Between(-5, 5),
             obj.properties.find((prop: any) => prop.name === "delay").value +
               Phaser.Math.Between(-5, 5),
+            parseInt(
+              obj.properties.find((prop: any) => prop.name === "poi").value
+            ),
             obj.x!,
             obj.y!
           )
@@ -110,7 +113,7 @@ export abstract class GameMap {
     const tileData = this.map.tilesets[0].tileData;
 
     if (this.map.tilesets.length > 1) {
-      throw new Error("TODO: Add support for multiple tilesets");
+      //throw new Error("TODO: Add support for multiple tilesets");
     }
 
     // Tiles animation system from https://medium.com/@0xNicko/how-to-animate-your-tiles-in-a-phaser-3-game-scene-a2394bd7494b

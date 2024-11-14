@@ -42,6 +42,13 @@ const config = {
       args: "-b ${input} --sheet ${output}",
     },
     {
+      input: "tiles/poi-tokens.aseprite",
+      output: "tiles/poi-tokens.png",
+      outputFolder: "assets/",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
       input: "maps/test-island-16.tmx",
       output: "test-island-16.json",
       executable: "tiled",
@@ -69,6 +76,12 @@ const config = {
       output: "skycrane-sprite.png",
     },
     { input: "ui/the-wildfires-ui-sketch.png", output: "the-wildfires-ui.png" },
+    {
+      input: "ui/pin.aseprite",
+      output: "pin.png",
+      executable: "aseprite",
+      args: "-b ${input} --scale 2 --sheet ${output}",
+    },
   ],
 };
 
