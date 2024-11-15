@@ -3,3 +3,4 @@ export const GAME_HEIGHT = 768;
 
 // Events names
 export const EVENT_DROP_WATER = "drop-water";
+export const EVENT_FIRE_EXTINGUISHED = "fire-extinguished";

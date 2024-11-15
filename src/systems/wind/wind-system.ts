@@ -4,13 +4,13 @@ import { System } from "..";
 import { GameScene } from "../../scenes/game-scene";
 
 type AperiodicParams = {
-  factor1: number,
-  factorPi: number,
-  factorE: number,
-  factorTotal: number,
-  scale1: number,
-  scalePi: number,
-  scaleE: number
+  factor1: number;
+  factorPi: number;
+  factorE: number;
+  factorTotal: number;
+  scale1: number;
+  scalePi: number;
+  scaleE: number;
 };
 
 const defaultAperiodicParams = {
@@ -20,7 +20,7 @@ const defaultAperiodicParams = {
   factorTotal: 1,
   scale1: 1,
   scalePi: 1,
-  scaleE: 1
+  scaleE: 1,
 };
 
 // Idea taken from https://stackoverflow.com/a/60772438.
@@ -29,14 +29,15 @@ const defaultAperiodicParams = {
 //
 // https://www.geogebra.org/graphing/cvbketbq
 function aperiodicFunc(p: AperiodicParams): (x: number) => number {
-  return x => {
-    return p.factorTotal * (
-      p.factor1 * Math.sin(p.scale1 * x) -
-      p.factorE * Math.sin(p.scaleE * Math.E * x) +
-      p.factorPi * Math.sin(p.scalePi * Math.PI * x)
+  return (x) => {
+    return (
+      p.factorTotal *
+      (p.factor1 * Math.sin(p.scale1 * x) -
+        p.factorE * Math.sin(p.scaleE * Math.E * x) +
+        p.factorPi * Math.sin(p.scalePi * Math.PI * x))
     );
-  }
-};
+  };
+}
 
 // The aperiodic functions are defined in a way where
 // the value is always between -1 and 1 (basically, totalFactor
@@ -49,7 +50,7 @@ const speedFunc = aperiodicFunc({
   factorTotal: 0.159,
   scale1: -1.3,
   scaleE: -1.7,
-  scalePi: 0.7
+  scalePi: 0.7,
 });
 
 const dirFunc = aperiodicFunc({
@@ -57,7 +58,7 @@ const dirFunc = aperiodicFunc({
   factorTotal: 0.33,
   scale1: -0.9,
   scaleE: -0.4,
-  scalePi: -0.4
+  scalePi: -0.4,
 });
 
 export class WindSystem implements System {
@@ -89,7 +90,7 @@ export class WindSystem implements System {
     return {
       direction: this.direction,
       speed: this.speed,
-      angle: PMath.RadToDeg(this.direction.angle())
-    }
+      angle: PMath.RadToDeg(this.direction.angle()),
+    };
   }
 }

@@ -1,6 +1,6 @@
 import { Math as PMath, Tilemaps } from "phaser";
 import { System } from "..";
-import { EVENT_DROP_WATER } from "../../consts";
+import { EVENT_DROP_WATER, EVENT_FIRE_EXTINGUISHED } from "../../consts";
 import {
   FireLayerTile,
   MapLayerTile,
@@ -16,6 +16,8 @@ export class FireMapSystem implements System {
   windAngle: number;
   windSpeed: number;
   windDirection: PMath.Vector2;
+
+  fireStarted: boolean;
 
   map: GameMap;
 
@@ -55,6 +57,10 @@ export class FireMapSystem implements System {
 
     this.scene.time.delayedCall(200, () => {
       this.spreadFire();
+    });
+
+    this.scene.time.delayedCall(this.fireInterval * 2, () => {
+      this.fireStarted = true;
     });
   }
 
@@ -190,34 +196,37 @@ export class FireMapSystem implements System {
   }
 
   private burnTiles(delta: number) {
-    this.map.mapLayer
-      .filterTiles((t: MapLayerTile) => t.properties.isBurning)
-      .forEach((t: MapLayerTile) => {
-        t.properties.burnTimer += delta * 100;
+    let burningTiles = this.map.mapLayer.filterTiles(
+      (t: MapLayerTile) => t.properties.isBurning
+    );
 
-        if (
-          t.properties.burnTimer >=
-          this.burnInterval / t.properties.burnRate
-        ) {
-          t.properties.burnTimer = 0;
-          t.properties.fuel -= 1;
+    if (burningTiles.length === 0 && this.fireStarted) {
+      this.scene.events.emit(EVENT_FIRE_EXTINGUISHED);
+    }
 
-          // TODO: magic number
-          let spreadChance = Phaser.Math.Between(0, 10);
-          if (spreadChance < t.properties.burnRate) {
-            this.ignite(
-              t.x + Math.floor(Math.random() * 2) - 1,
-              t.y + Math.floor(Math.random() * 2) - 1
-            );
-          }
+    burningTiles.forEach((t: MapLayerTile) => {
+      t.properties.burnTimer += delta;
 
-          if (t.properties.fuel <= 0) {
-            t.index = t.properties.burnedTileId;
-            t.properties.burnRate = 0;
-            this.burnDown(t.x, t.y);
-          }
+      if (t.properties.burnTimer >= this.burnInterval / t.properties.burnRate) {
+        t.properties.burnTimer = 0;
+        t.properties.fuel -= 1;
+
+        // TODO: magic number
+        let spreadChance = Phaser.Math.Between(0, 10);
+        if (spreadChance < t.properties.burnRate) {
+          this.ignite(
+            t.x + Math.floor(Math.random() * 2) - 1,
+            t.y + Math.floor(Math.random() * 2) - 1
+          );
         }
-      });
+
+        if (t.properties.fuel <= 0) {
+          t.index = t.properties.burnedTileId;
+          t.properties.burnRate = 0;
+          this.burnDown(t.x, t.y);
+        }
+      }
+    });
   }
 
   private burnDown(tileX: number, tileY: number) {

@@ -1,3 +1,4 @@
+import { EVENT_FIRE_EXTINGUISHED } from "@game/consts";
 import { JSXScene } from ".";
 import { ContinentalMap } from "../entities/maps/Continental";
 import { GameMap } from "../entities/maps/GameMap";
@@ -72,6 +73,12 @@ export class GameScene extends JSXScene {
       gameScene: this,
     });
     this.scene.run("Debug");
+
+    this.events.on(EVENT_FIRE_EXTINGUISHED, () => {
+      this.scene.stop("UI");
+      this.scene.stop("Debug");
+      this.scene.start("Summary");
+    });
   }
 
   currentMap: GameMap;

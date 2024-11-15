@@ -11,6 +11,7 @@ import { Game, Types } from "phaser";
 import { GAME_HEIGHT, GAME_WIDTH } from "./consts";
 import { PauseScene } from "./scenes/pause-scene";
 import { UIScene } from "./scenes/ui-scene";
+import { SummaryScene } from "./scenes/summary-scene";
 
 const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -39,7 +40,7 @@ const config: Types.Core.GameConfig = {
       },
     ],
   },
-  scene: [Boot, Preloader, MainGame, UIScene, PauseScene, Debug],
+  scene: [Boot, Preloader, MainGame, UIScene, PauseScene, SummaryScene, Debug],
 };
 
 export default new Game(config);
