@@ -156,11 +156,17 @@ export abstract class Vehicle {
 
     if (!this.started) return;
 
-    if (this.scene.key_a.isDown || this.scene.key_left.isDown) {
+    if (
+      !this.scene.space_key.isDown &&
+      (this.scene.key_a.isDown || this.scene.key_left.isDown)
+    ) {
       this.turningState.update((value) =>
         Math.max(value - this.turningBias * deltaSeconds, 0)
       );
-    } else if (this.scene.key_d.isDown || this.scene.key_right.isDown) {
+    } else if (
+      !this.scene.space_key.isDown &&
+      (this.scene.key_d.isDown || this.scene.key_right.isDown)
+    ) {
       this.turningState.update((value) =>
         Math.min(value + this.turningBias * deltaSeconds, 100)
       );
@@ -237,18 +243,48 @@ export abstract class Vehicle {
     });
   }
 
+  // Canadair will drop water continuously until the tank is empty
+  tankWasOpen: boolean = false;
+
   useTank(_time: number, delta: number): void {
     const deltaSeconds = delta * 0.001;
 
-    if (
-      this.tankLevel > 5 &&
-      this.scene.currentMap.typeAtWorldXY(
-        this.position.get().x,
-        this.position.get().y
-      ) !== MapTileType.Water
-    ) {
+    if (this.scene.space_key.isDown) {
+      if (
+        this.tankLevel > 5 &&
+        this.scene.currentMap.typeAtWorldXY(
+          this.position.get().x,
+          this.position.get().y
+        ) !== MapTileType.Water
+      ) {
+        this.tankWasOpen = true;
+      }
+
+      if (
+        this.scene.currentMap.typeAtWorldXY(
+          this.position.get().x,
+          this.position.get().y
+        ) === MapTileType.Water
+      ) {
+        this.tankLevel += this.tankRefillRate * deltaSeconds;
+        this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
+        this.scene.bus.emit("water_level_changed", this.tankLevel);
+
+        // fade in the water tank filling sound
+        let newVolume = this.waterSound.volume + 0.5 * deltaSeconds;
+        if (newVolume > 0.25) newVolume = 0.25;
+        this.waterSound.setVolume(newVolume);
+      }
+    }
+
+    if (this.tankWasOpen) {
       this.tankLevel -= this.tankConsumptionRate * deltaSeconds;
       this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
+
+      if (this.tankLevel <= 1) {
+        this.tankWasOpen = false;
+      }
+
       this.scene.bus.emit("water_level_changed", this.tankLevel);
 
       this.scene.events.emit(EVENT_DROP_WATER, {
@@ -263,26 +299,6 @@ export abstract class Vehicle {
     } else {
       this.water.emitting = false;
     }
-
-    if (
-      this.scene.currentMap.typeAtWorldXY(
-        this.position.get().x,
-        this.position.get().y
-      ) === MapTileType.Water
-    ) {
-      this.tankLevel += this.tankRefillRate * deltaSeconds;
-      this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
-      this.scene.bus.emit("water_level_changed", this.tankLevel);
-
-      // fade in the water tank filling sound
-      let newVolume = this.waterSound.volume + 0.5 * deltaSeconds;
-      if (newVolume > 0.25) newVolume = 0.25;
-      this.waterSound.setVolume(newVolume);
-    }
-  }
-
-  closeTank() {
-    this.water.emitting = false;
   }
 
   destroy(): void {
