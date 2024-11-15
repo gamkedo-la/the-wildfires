@@ -264,21 +264,25 @@
  <tile id="71">
   <properties>
    <property name="burnRate" type="int" value="5"/>
+   <property name="burnedTileId" type="int" value="44"/>
   </properties>
  </tile>
  <tile id="72">
   <properties>
    <property name="burnRate" type="int" value="5"/>
+   <property name="burnedTileId" type="int" value="43"/>
   </properties>
  </tile>
  <tile id="73">
   <properties>
    <property name="burnRate" type="int" value="5"/>
+   <property name="burnedTileId" type="int" value="42"/>
   </properties>
  </tile>
  <tile id="74">
   <properties>
    <property name="burnRate" type="int" value="5"/>
+   <property name="burnedTileId" type="int" value="41"/>
   </properties>
  </tile>
  <tile id="75">

@@ -14,6 +14,14 @@ export interface FireLayerTile extends Phaser.Tilemaps.Tile {
   };
 }
 
+export interface StructuresLayerTile extends Phaser.Tilemaps.Tile {
+  properties: {
+    isBuilding: boolean;
+    burnRate: number;
+    isRoad: boolean;
+  };
+}
+
 export interface MapLayerTile extends Phaser.Tilemaps.Tile {
   properties: {
     fireDamage: number;

@@ -1,59 +1,107 @@
+import { computed, signal } from "@game/state/lib/signals";
 import { RESOURCES } from "../../assets";
 import { GameScene } from "../../scenes/game-scene";
 import { GameMap } from "../maps/GameMap";
+import { Signal } from "@game/state/lib/types";
 
 export class PointOfInterest {
   scene: GameScene;
   map: GameMap;
 
+  id: number;
   name: string;
   timeout: number;
 
   legend: Phaser.GameObjects.Text;
 
-  bar: Phaser.GameObjects.Rectangle;
   timer: Phaser.Time.TimerEvent;
-
-  pinNumber: number;
 
   position: Phaser.Math.Vector2;
   coordinates: Phaser.Math.Vector2;
 
+  maxTiles: Signal<number> = signal(1);
+  tilesLeft: Signal<number> = signal(0);
+  savedTiles: Signal<number> = signal(0);
+  damagedTiles: Signal<number> = signal(0);
+
   constructor(
     scene: GameScene,
     map: GameMap,
+    id: number,
     name: string,
     timeout: number,
     delay: number,
-    pinNumber: number,
     x: number,
     y: number
   ) {
     this.scene = scene;
     this.map = map;
-    this.pinNumber = pinNumber;
+    this.id = id;
 
     x = Math.floor(x);
-    y = Math.floor(y);
+    // TODO: magic number
+    y = Math.floor(y - 25);
 
     this.name = name;
     this.position = new Phaser.Math.Vector2(x, y);
     this.coordinates = map.map.worldToTileXY(x, y)!;
 
-    // 4
+    // TODO: magic number
+    const maxWidth = 53;
 
-    this.scene.add.rectangle(x, y + 4, 55, 6, 0x333333).setOrigin(0.5, 0);
-    // Create a horizontal bar
-    this.bar = this.scene.add.rectangle(x - 25, y + 4, 0, 6, 0xffffff);
-    this.bar.setOrigin(0.5, 0);
+    // TODO: Fix colors
+    const background = this.scene.add
+      .rectangle(x, y + 4, maxWidth, 6, 0xffffff)
+      .setOrigin(0.5, 0);
+
+    const savedHealthBar = (
+      <rectangle
+        x={x - maxWidth / 2}
+        y={y + 4}
+        width={computed(
+          () => (this.savedTiles.get() / this.maxTiles.get()) * maxWidth
+        )}
+        height={6}
+        fillColor={0x00ff00}
+      />
+    );
+    this.scene.add.existing(savedHealthBar);
+    savedHealthBar.setOrigin(0.5, 0);
+
+    const damageBar: Phaser.GameObjects.Rectangle = (
+      <rectangle
+        x={computed(
+          () =>
+            x +
+            maxWidth / 2 -
+            (this.damagedTiles.get() / this.maxTiles.get()) * maxWidth
+        )}
+        y={y + 4}
+        width={computed(
+          () => (this.damagedTiles.get() / this.maxTiles.get()) * maxWidth
+        )}
+        height={6}
+        fillColor={0xff0000}
+      />
+    );
+    this.scene.add.existing(damageBar);
+    damageBar.setOrigin(0.5, 0);
+
+    // TODO: Fix this on the map file. This is now how much one tile takes to be saved
+    this.timeout = 5;
+
+    this.timer = this.scene.time.addEvent({
+      delay: this.timeout * 1000,
+      callback: () => {
+        this.saveTile();
+      },
+      callbackScope: this,
+      paused: true,
+    });
 
     // Start the timer
     this.scene.time.delayedCall(delay * 1000, () => {
-      this.timer = this.scene.time.addEvent({
-        delay: this.timeout * 1000,
-        callback: this.onTimerComplete,
-        callbackScope: this,
-      });
+      this.timer.paused = false;
     });
 
     const pin: Phaser.GameObjects.Sprite = (
@@ -80,7 +128,7 @@ export class PointOfInterest {
       key: "pin-hide",
       frames: this.scene.anims.generateFrameNumbers("pin-spritesheet", {
         start: 0,
-        end: 7,
+        end: 6,
       }),
       frameRate: 16,
     });
@@ -88,7 +136,7 @@ export class PointOfInterest {
     this.scene.anims.create({
       key: "pin-flash",
       frames: this.scene.anims.generateFrameNumbers("pin-spritesheet", {
-        start: 7,
+        start: 6,
         end: 0,
       }),
       frameRate: 16,
@@ -105,7 +153,7 @@ export class PointOfInterest {
       .setOrigin(0.5, 1.1)
       .setVisible(false);
 
-    this.scene.time.delayedCall(100 * pinNumber, () => {
+    this.scene.time.delayedCall(100 * id, () => {
       pin.setVisible(true);
       pin.play("pin-flash");
       this.scene.time.delayedCall(300, () => {
@@ -117,34 +165,31 @@ export class PointOfInterest {
       this.legend.setVisible(false);
       pin.play("pin-hide");
     });
-
-    this.timeout = timeout;
-
-    // Update the bar every frame
-    this.scene.events.on("update", this.updateBar, this);
   }
 
-  updateBar() {
-    if (!this.timer) return;
-    const progress = this.timer.getProgress();
-    const width = 50 * progress; // Adjust 50 to change the max width of the bar
-    this.bar.width = width;
+  damageTile() {
+    const damage = 1;
 
-    // Gradually change color from white to green
-    const color = Phaser.Display.Color.Interpolate.ColorWithColor(
-      Phaser.Display.Color.ValueToColor(0xffffff),
-      Phaser.Display.Color.ValueToColor(0x00ff00),
-      100,
-      progress * 100
-    );
-    this.bar.fillColor = Phaser.Display.Color.GetColor(
-      color.r,
-      color.g,
-      color.b
-    );
+    if (this.tilesLeft.get() > 0) {
+      this.tilesLeft.update((value) => value - damage);
+      this.damagedTiles.update((value) => value + damage);
+      this.legend.setText(`${this.maxTiles.get() - this.damagedTiles.get()}%`);
+    }
   }
 
-  onTimerComplete() {
-    this.scene.events.off("update", this.updateBar, this);
+  saveTile() {
+    if (this.tilesLeft.get() > 0) {
+      this.tilesLeft.update((value) => value - 1);
+      this.savedTiles.update((value) => value + 1);
+    }
+  }
+
+  addTileCount(count: number) {
+    this.tilesLeft.update((value) => value + count);
+  }
+
+  setMaxTiles() {
+    this.maxTiles.set(this.tilesLeft.get());
+    this.timer.repeatCount = this.maxTiles.get();
   }
 }

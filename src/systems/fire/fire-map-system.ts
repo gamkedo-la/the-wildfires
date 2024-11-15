@@ -1,7 +1,11 @@
 import { Math as PMath, Tilemaps } from "phaser";
 import { System } from "..";
 import { EVENT_DROP_WATER } from "../../consts";
-import { FireLayerTile, MapLayerTile } from "../../entities/maps";
+import {
+  FireLayerTile,
+  MapLayerTile,
+  StructuresLayerTile,
+} from "../../entities/maps";
 import { GameMap } from "../../entities/maps/GameMap";
 import { GameScene } from "../../scenes/game-scene";
 
@@ -84,6 +88,16 @@ export class FireMapSystem implements System {
 
   private ignite(tileX: number, tileY: number) {
     let mapTile = this.map.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
+    let structuresTile = this.map.structuresLayer.getTileAt(
+      tileX,
+      tileY
+    ) as StructuresLayerTile;
+
+    if (structuresTile?.properties.isRoad && Phaser.Math.Between(0, 100) < 90) {
+      // TODO: magic number
+      // 10% chance to ignite road
+      return;
+    }
 
     if (mapTile?.properties.burnRate > 0 && !mapTile?.properties.isBurning) {
       mapTile.properties.isBurning = true;
@@ -103,6 +117,13 @@ export class FireMapSystem implements System {
       mapTile.properties.isBurning = false;
       let tile = this.map.removeFire(tileX, tileY);
       this.stopSmoke(tile);
+    }
+
+    const poi = this.map.pointsOfInterestLayer.getTileAt(tileX, tileY)?.index;
+    if (poi) {
+      this.map.causePointOfInterestDamage(
+        poi - this.map.pointsOfInterestLayer.startingIndex
+      );
     }
   }
 
@@ -139,11 +160,12 @@ export class FireMapSystem implements System {
           t.properties.burned += 1;
           t.properties.fuel -= 1;
 
-          let spreadChance = t.properties.fuel / t.properties.maxFuel;
-          if (spreadChance) {
+          // TODO: magic number
+          let spreadChance = Phaser.Math.Between(0, 10);
+          if (spreadChance < t.properties.burnRate) {
             this.ignite(
-              t.x + Math.floor(Math.random() * 3) - 1,
-              t.y + Math.floor(Math.random() * 3) - 1
+              t.x + Math.floor(Math.random() * 2) - 1,
+              t.y + Math.floor(Math.random() * 2) - 1
             );
           }
 

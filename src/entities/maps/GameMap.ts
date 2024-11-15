@@ -9,6 +9,10 @@ export abstract class GameMap {
   configurationObjects: Phaser.Tilemaps.ObjectLayer;
   fireLayer: Phaser.Tilemaps.TilemapLayer;
   mapLayer: Phaser.Tilemaps.TilemapLayer;
+  structuresLayer: Phaser.Tilemaps.TilemapLayer;
+  pointsOfInterestLayer: Phaser.Tilemaps.TilemapLayer & {
+    startingIndex: number;
+  };
 
   fireTileId: number;
   cameraPosition: Phaser.Math.Vector2;
@@ -92,19 +96,32 @@ export abstract class GameMap {
           new PointOfInterest(
             this.scene,
             this,
+            parseInt(
+              obj.properties.find((prop: any) => prop.name === "poi").value
+            ),
             obj.properties.find((prop: any) => prop.name === "name").value,
             obj.properties.find((prop: any) => prop.name === "duration").value +
               Phaser.Math.Between(-5, 5),
             obj.properties.find((prop: any) => prop.name === "delay").value +
               Phaser.Math.Between(-5, 5),
-            parseInt(
-              obj.properties.find((prop: any) => prop.name === "poi").value
-            ),
             obj.x!,
             obj.y!
           )
         );
       }
+    });
+
+    // Count the tiles for each POI
+    this.pointsOfInterestLayer.forEachTile((tile) => {
+      const poi = tile.index - this.pointsOfInterestLayer.startingIndex;
+      if (poi >= 0) {
+        this.updatePointOfInterestTileCount(poi);
+      }
+    });
+
+    // Now that we know how many tiles there are, we can set the max for each POI
+    this.pointsOfInterest.forEach((poi) => {
+      poi.setMaxTiles();
     });
   }
 
@@ -158,6 +175,16 @@ export abstract class GameMap {
     this.animatedTiles = this.animatedTiles.filter((t) => t.tile !== tile);
     this.fireLayer.removeTileAt(tile.x, tile.y);
     return tile;
+  }
+
+  causePointOfInterestDamage(poiId: number) {
+    const poi = this.pointsOfInterest.find((poi) => poi.id === poiId);
+    poi?.damageTile();
+  }
+
+  updatePointOfInterestTileCount(poiId: number) {
+    const poi = this.pointsOfInterest.find((poi) => poi.id === poiId);
+    poi?.addTileCount(1);
   }
 
   typeAtWorldXY(x: number, y: number) {

@@ -13,18 +13,23 @@ export class ContinentalMap extends GameMap {
 
     this.configurationObjects = this.map.getObjectLayer("configuration")!;
 
-    this.map.addTilesetImage(
+    const tileset = this.map.addTilesetImage(
       "tilemap-large",
       RESOURCES["tilemap-test-3"],
       24,
       32
     );
+
     this.mapLayer = this.map.createLayer("map", "tilemap-large")!;
-
+    this.structuresLayer = this.map.createLayer("structures", "tilemap-large")!;
     this.fireLayer = this.map.createLayer("fire", "tilemap-large")!;
+    this.pointsOfInterestLayer = this.map.createLayer(
+      "poi-areas",
+      "tilemap-large"
+    )! as Phaser.Tilemaps.TilemapLayer & { startingIndex: number };
 
-    //TODO: Might move all structures here (even forest)
-    this.map.createLayer("structures", "tilemap-large")!;
+    // TODO: magic number
+    this.pointsOfInterestLayer.startingIndex = tileset?.total! + 1;
 
     // Phaser <3
     this.mapLayer.tileset[0].tileOffset = new Phaser.Math.Vector2(4, 16);

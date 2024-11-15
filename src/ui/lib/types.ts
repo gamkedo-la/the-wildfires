@@ -73,8 +73,8 @@ export interface PhaserGameObjectProps<
   x?: SignalValue<number>;
   y?: SignalValue<number>;
 
-  width?: number;
-  height?: number;
+  width?: SignalValue<number>;
+  height?: SignalValue<number>;
 
   alpha?: SignalValue<number>;
   angle?: SignalValue<number>;
