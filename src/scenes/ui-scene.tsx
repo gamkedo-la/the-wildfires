@@ -35,10 +35,6 @@ export class UIScene extends JSXScene {
       this.waterDialSprite.angle = 225 + (90 * water_level) / 100;
     });
 
-    this.gamebus.on("damage_level_changed", (damage_level: number) => {
-      console.log("ui damage gauge changing: " + damage_level.toFixed(1));
-    });
-
     // the backdrop of the cockpit control panel
     this.add.image(512, 384, RESOURCES["the-wildfires-ui"]);
 

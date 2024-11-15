@@ -3,6 +3,7 @@ import { FolderApi, InputBindingApi, Pane, ButtonApi } from "tweakpane";
 import { GameScene } from "./game-scene";
 import { Vehicle } from "../entities/vehicles/Vehicle";
 import vehicles from "../entities/vehicles";
+import { MapLayerTile } from "../entities/maps";
 
 interface VehicleConfig {
   speed: number;
@@ -14,6 +15,7 @@ export const params = {
   fps: 0,
   windAngle: 0,
   windSpeed: 0,
+  burningTiles: 0,
 };
 
 export class Debug extends Scene {
@@ -41,16 +43,13 @@ export class Debug extends Scene {
       format: (v: number) => v.toFixed(1),
     });
 
+    this.pane.addBinding(params, "burningTiles", {
+      readonly: true,
+      format: (v: number) => v.toFixed(0),
+    });
+
     // Add bindings for damage and water levels
     const gameScene = this.scene.get("Game") as GameScene;
-
-    this.pane.addBinding(gameScene, "damageLevel", {
-      label: "Damage Level",
-      min: 0,
-      max: gameScene.maxDamageLevel,
-      step: 1,
-      disabled: true,
-    }) as InputBindingApi<number, number>;
 
     this.vehicleBindings = [];
     this.addVehicleControls(gameScene);
@@ -194,6 +193,9 @@ export class Debug extends Scene {
     params.fps = this.game.loop.actualFps;
     params.windAngle = angle;
     params.windSpeed = speed;
+    params.burningTiles = gameScene.currentMap.mapLayer.filterTiles(
+      (t: MapLayerTile) => t.properties.isBurning
+    ).length;
     this.pane.refresh();
   }
 }

@@ -26,15 +26,16 @@ export interface MapLayerTile extends Phaser.Tilemaps.Tile {
   properties: {
     fireDamage: number;
     isBurning: boolean;
-    burned: number;
+    wasBurning: boolean;
     burnTimer: number;
     burnRate: number;
     addsDamage: boolean;
     isWater: boolean;
     burnedTileId: number;
-    // TODO: Fuel can be killed by water?
     fuel: number;
     maxFuel: number;
+    isWatered: boolean;
+    waterTimer: number;
   };
 }
 

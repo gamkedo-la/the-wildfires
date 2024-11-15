@@ -89,9 +89,6 @@ export class GameScene extends JSXScene {
     this.windSystem = new WindSystem(this).create();
   }
 
-  damageLevel = 0;
-  maxDamageLevel = 1;
-
   update(time: number, delta: number) {
     this.vehiclesSystem.update(time, delta);
     this.fireMapSystem.update(time, delta);
@@ -101,11 +98,6 @@ export class GameScene extends JSXScene {
     if (this.key_p.isDown || this.key_esc.isDown) {
       this.doPause();
     }
-  }
-
-  increaseDamage(points: number) {
-    this.damageLevel += points;
-    this.bus.emit("damage_level_changed", this.damageLevel);
   }
 
   doPause() {
