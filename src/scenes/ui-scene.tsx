@@ -2,13 +2,9 @@ import { computed } from "@game/state/lib/signals";
 import { JSXScene } from ".";
 import { RESOURCES } from "../assets";
 import { GAME_HEIGHT, GAME_WIDTH } from "../consts";
-import PhaserGamebus from "../lib/gamebus";
 import { GameScene } from "./game-scene";
 
 export class UIScene extends JSXScene {
-  declare bus: Phaser.Events.EventEmitter;
-  declare gamebus: PhaserGamebus;
-
   gameScene: GameScene;
 
   constructor() {
