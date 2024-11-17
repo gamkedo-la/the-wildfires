@@ -240,7 +240,7 @@ export class FireMapSystem implements System {
 
     const poi = this.map.pointsOfInterestLayer.getTileAt(tileX, tileY)?.index;
     if (poi) {
-      this.map.causePointOfInterestDamage(
+      this.map.scene.gameState.causePointOfInterestDamage(
         poi - this.map.pointsOfInterestLayer.startingIndex
       );
     }

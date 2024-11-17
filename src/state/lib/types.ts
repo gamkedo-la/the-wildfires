@@ -18,5 +18,10 @@ export interface Signal<T> {
 }
 
 export interface MutableSignal<T> extends Signal<T> {
+  /**
+   * Mutate the value and notify subscribers if the value has changed
+   *
+   * @param fn - Function to mutate the value, return true if the value has changed
+   */
   mutate(fn: (value: T) => boolean): void;
 }

@@ -12,6 +12,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "./consts";
 import { PauseScene } from "./scenes/pause-scene";
 import { UIScene } from "./scenes/ui-scene";
 import { SummaryScene } from "./scenes/summary-scene";
+import { GameStateManager } from "./state/game-state";
 
 const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -30,6 +31,11 @@ const config: Types.Core.GameConfig = {
         plugin: PhaserGamebus,
         start: true,
         mapping: "gamebus",
+      },
+      {
+        key: "GameStateManager",
+        plugin: GameStateManager,
+        mapping: "gameState",
       },
     ],
     scene: [

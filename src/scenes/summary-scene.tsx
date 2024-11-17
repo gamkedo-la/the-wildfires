@@ -1,3 +1,4 @@
+import { GameStateManager } from "@game/state/game-state";
 import { JSXScene } from ".";
 
 export class SummaryScene extends JSXScene {
@@ -20,7 +21,17 @@ export class SummaryScene extends JSXScene {
       })
       .setOrigin(0.5);
 
-    // TODO: Access to the POI
+    const run = this.gameState.currentRun.get();
+
+    const poi = (
+      <text
+        x={width / 2}
+        y={height / 2 - 100}
+        text={`${run?.poi.length} POI`}
+      />
+    );
+    this.add.existing(poi);
+
     // TODO: Vehicle
     // TODO: Map
 

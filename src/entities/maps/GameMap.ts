@@ -17,7 +17,6 @@ export abstract class GameMap {
   fireTileId: number;
   cameraPosition: Phaser.Math.Vector2;
   aircraftStartPosition: Phaser.Math.Vector2;
-  pointsOfInterest: PointOfInterest[];
 
   animatedTiles: any[];
 
@@ -84,15 +83,13 @@ export abstract class GameMap {
   }
 
   registerPointsOfInterest() {
-    this.pointsOfInterest = [];
-
     this.configurationObjects.objects.forEach((obj) => {
       if (
         obj.properties &&
         obj.properties.some((prop: any) => prop.name === "duration") &&
         obj.properties.some((prop: any) => prop.name === "delay")
       ) {
-        this.pointsOfInterest.push(
+        this.scene.gameState.addPointOfInterest(
           new PointOfInterest(
             this.scene,
             this,
@@ -115,14 +112,12 @@ export abstract class GameMap {
     this.pointsOfInterestLayer.forEachTile((tile) => {
       const poi = tile.index - this.pointsOfInterestLayer.startingIndex;
       if (poi >= 0) {
-        this.updatePointOfInterestTileCount(poi);
+        this.scene.gameState.updatePointOfInterestTileCount(poi);
       }
     });
 
     // Now that we know how many tiles there are, we can set the max for each POI
-    this.pointsOfInterest.forEach((poi) => {
-      poi.setMaxTiles();
-    });
+    this.scene.gameState.setMaxTiles();
   }
 
   registerAnimatedTiles() {
@@ -175,16 +170,6 @@ export abstract class GameMap {
     this.animatedTiles = this.animatedTiles.filter((t) => t.tile !== tile);
     this.fireLayer.removeTileAt(tile.x, tile.y);
     return tile;
-  }
-
-  causePointOfInterestDamage(poiId: number) {
-    const poi = this.pointsOfInterest.find((poi) => poi.id === poiId);
-    poi?.damageTile();
-  }
-
-  updatePointOfInterestTileCount(poiId: number) {
-    const poi = this.pointsOfInterest.find((poi) => poi.id === poiId);
-    poi?.addTileCount(1);
   }
 
   typeAtWorldXY(x: number, y: number) {
