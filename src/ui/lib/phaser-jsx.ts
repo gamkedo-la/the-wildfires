@@ -108,7 +108,7 @@ export function setupGameObject<T extends Phaser.GameObjects.GameObject>(
   type: string,
   props: PhaserGameObjectProps<T>
 ) {
-  const scene = (window as any).currentScene as Phaser.Scene;
+  const scene = window.currentScene;
 
   if (!scene) {
     throw new Error("No scene found");
@@ -247,6 +247,16 @@ export function setupGameObject<T extends Phaser.GameObjects.GameObject>(
         },
         false
       );
+
+      container.setSize(
+        containerProps.width instanceof SignalImpl
+          ? containerProps.width.get()
+          : containerProps.width,
+        containerProps.height instanceof SignalImpl
+          ? containerProps.height.get()
+          : containerProps.height
+      );
+
       gameObject = container as unknown as T;
       break;
 

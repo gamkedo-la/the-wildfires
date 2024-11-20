@@ -93,4 +93,8 @@ export class WindSystem implements System {
       angle: PMath.RadToDeg(this.direction.angle()),
     };
   }
+
+  destroy(): void {
+    console.log("WindSystem destroy");
+  }
 }

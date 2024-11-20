@@ -326,4 +326,8 @@ export class FireMapSystem implements System {
   private stopSmoke(tile: FireLayerTile) {
     tile.properties.smoke?.stop();
   }
+
+  destroy(): void {
+    console.log("FireMapSystem destroy");
+  }
 }

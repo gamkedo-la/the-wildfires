@@ -67,6 +67,8 @@ export class GameScene extends JSXScene {
     this.camera.scrollX = Math.floor(this.currentMap.cameraPosition.x);
     this.camera.scrollY = Math.floor(this.currentMap.cameraPosition.y);
 
+    this.gameState.startRun();
+
     this.registerSystems();
 
     this.scene.run("UI", {
@@ -105,6 +107,15 @@ export class GameScene extends JSXScene {
     if (this.key_p.isDown || this.key_esc.isDown) {
       this.doPause();
     }
+  }
+
+  shutdown() {
+    this.scene.stop("Debug");
+    this.scene.stop("UI");
+
+    this.vehiclesSystem.destroy();
+    this.fireMapSystem.destroy();
+    this.windSystem.destroy();
   }
 
   doPause() {

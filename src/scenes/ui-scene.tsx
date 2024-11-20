@@ -3,7 +3,6 @@ import { JSXScene } from ".";
 import { RESOURCES } from "../assets";
 import { GAME_HEIGHT, GAME_WIDTH } from "../consts";
 import { GameScene } from "./game-scene";
-import { GameStateManager } from "@game/state/game-state";
 
 export class UIScene extends JSXScene {
   gameScene: GameScene;
@@ -130,4 +129,6 @@ export class UIScene extends JSXScene {
     );
     this.add.existing(poi);
   }
+
+  shutdown() {}
 }

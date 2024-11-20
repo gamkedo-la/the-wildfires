@@ -4,6 +4,7 @@ import { GameScene } from "./game-scene";
 import { Vehicle } from "../entities/vehicles/Vehicle";
 import vehicles from "../entities/vehicles";
 import { MapLayerTile } from "../entities/maps";
+import { JSXScene } from ".";
 
 interface VehicleConfig {
   speed: number;
@@ -18,7 +19,7 @@ export const params = {
   burningTiles: 0,
 };
 
-export class Debug extends Scene {
+export class Debug extends JSXScene {
   declare pane: Pane;
   declare vehicleBindings: (InputBindingApi<any, any> | ButtonApi)[];
 
@@ -197,5 +198,9 @@ export class Debug extends Scene {
       (t: MapLayerTile) => t.properties.isBurning
     ).length;
     this.pane.refresh();
+  }
+
+  shutdown() {
+    this.pane.dispose();
   }
 }

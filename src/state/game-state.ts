@@ -17,7 +17,7 @@ interface Run {
   poi: PointOfInterest[];
   time: number;
   score: number;
-  endReason: (typeof END_REASONS)[keyof typeof END_REASONS];
+  endReason?: (typeof END_REASONS)[keyof typeof END_REASONS];
 }
 
 interface GameState {
@@ -34,15 +34,15 @@ export class GameStateManager
 
   constructor(pluginManager: Phaser.Plugins.PluginManager) {
     super(pluginManager);
+  }
 
-    // TODO: When we will have a menu, we will create a new run there
+  startRun() {
     this.currentRun.set({
       vehicle: undefined,
       map: undefined,
       poi: [],
       time: 0,
       score: 0,
-      endReason: END_REASONS.FIRE_EXTINGUISHED,
     });
   }
 

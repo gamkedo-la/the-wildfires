@@ -302,6 +302,16 @@ export abstract class Vehicle {
   }
 
   destroy(): void {
+    this.position.dispose();
+    this.direction.dispose();
+    this.velocity.dispose();
+    this.acceleration.dispose();
+    this.turningState.dispose();
+
+    this.engineSound.destroy();
+    this.waterSound.destroy();
+    this.splashSound.destroy();
+
     this.water.destroy();
   }
 }

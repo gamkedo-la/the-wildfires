@@ -42,4 +42,8 @@ export class VehicleSystem implements System {
       console.warn(`Vehicle type ${type} not found`);
     }
   }
+
+  destroy(): void {
+    this.vehicle.destroy();
+  }
 }
