@@ -1,23 +1,24 @@
 import { EVENT_FIRE_EXTINGUISHED } from "@game/consts";
-import { JSXScene } from ".";
-import { ContinentalMap } from "../entities/maps/Continental";
-import { GameMap } from "../entities/maps/GameMap";
-import PhaserGamebus from "../lib/gamebus";
-import { FireMapSystem } from "../systems/fire/fire-map-system";
-import { VehicleSystem } from "../systems/vehicle/vehicle-system";
-import { WindSystem } from "../systems/wind/wind-system";
+import { AbstractScene } from "..";
+import { ContinentalMap } from "../../entities/maps/Continental";
+import { GameMap } from "../../entities/maps/GameMap";
+import PhaserGamebus from "../../lib/gamebus";
+import { FireMapSystem } from "../../systems/fire/fire-map-system";
+import { VehicleSystem } from "../../systems/vehicle/vehicle-system";
+import { WindSystem } from "../../systems/wind/wind-system";
+import { SCENES } from "../consts";
 
 const FIRE_INTERVAL_MS = 8000;
 const BURN_INTERVAL_MS = 5000;
 
-export class GameScene extends JSXScene {
+export class MapScene extends AbstractScene {
   declare bus: Phaser.Events.EventEmitter;
   declare gamebus: PhaserGamebus;
 
   camera: Phaser.Cameras.Scene2D.Camera;
 
   constructor() {
-    super("Game");
+    super(SCENES.MAP);
   }
 
   space_key!: Phaser.Input.Keyboard.Key;
@@ -62,24 +63,24 @@ export class GameScene extends JSXScene {
       Phaser.Input.Keyboard.KeyCodes.ESC
     );
 
+    this.gameState.startRun();
+
     this.currentMap = new ContinentalMap(this);
 
     this.camera.scrollX = Math.floor(this.currentMap.cameraPosition.x);
     this.camera.scrollY = Math.floor(this.currentMap.cameraPosition.y);
 
-    this.gameState.startRun();
-
     this.registerSystems();
 
-    this.scene.run("UI", {
+    this.scene.run(SCENES.HUD, {
       gameScene: this,
     });
-    this.scene.run("Debug");
+    this.scene.run(SCENES.DEBUG);
 
     this.events.on(EVENT_FIRE_EXTINGUISHED, () => {
-      this.scene.stop("UI");
-      this.scene.stop("Debug");
-      this.scene.start("Summary");
+      this.scene.stop(SCENES.HUD);
+      this.scene.stop(SCENES.DEBUG);
+      this.scene.start(SCENES.UI_SUMMARY);
     });
   }
 
@@ -110,8 +111,8 @@ export class GameScene extends JSXScene {
   }
 
   shutdown() {
-    this.scene.stop("Debug");
-    this.scene.stop("UI");
+    this.scene.stop(SCENES.DEBUG);
+    this.scene.stop(SCENES.HUD);
 
     this.vehiclesSystem.destroy();
     this.fireMapSystem.destroy();
@@ -120,6 +121,6 @@ export class GameScene extends JSXScene {
 
   doPause() {
     this.scene.pause();
-    this.scene.launch("Pause");
+    this.scene.launch(SCENES.UI_PAUSE);
   }
 }

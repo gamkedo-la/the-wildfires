@@ -1,14 +1,15 @@
 import { computed } from "@game/state/lib/signals";
-import { JSXScene } from ".";
-import { RESOURCES } from "../assets";
-import { GAME_HEIGHT, GAME_WIDTH } from "../consts";
-import { GameScene } from "./game-scene";
+import { AbstractScene } from "..";
+import { RESOURCES } from "../../assets";
+import { GAME_HEIGHT, GAME_WIDTH } from "../../consts";
+import { MapScene } from "./map-scene";
+import { SCENES } from "../consts";
 
-export class UIScene extends JSXScene {
-  gameScene: GameScene;
+export class HUDScene extends AbstractScene {
+  gameScene: MapScene;
 
   constructor() {
-    super("UI");
+    super(SCENES.HUD);
   }
 
   water_level: Phaser.GameObjects.Rectangle;
@@ -18,7 +19,7 @@ export class UIScene extends JSXScene {
   offscreenArrow: Phaser.GameObjects.Image;
   knotsTXT: Phaser.GameObjects.Text;
 
-  create({ gameScene }: { gameScene: GameScene }) {
+  create({ gameScene }: { gameScene: MapScene }) {
     this.gameScene = gameScene;
     this.bus = this.gamebus.getBus();
 

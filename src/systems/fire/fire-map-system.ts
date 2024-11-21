@@ -7,10 +7,10 @@ import {
   StructuresLayerTile,
 } from "../../entities/maps";
 import { GameMap } from "../../entities/maps/GameMap";
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 
 export class FireMapSystem implements System {
-  scene: GameScene;
+  scene: MapScene;
   fireInterval: number;
   burnInterval: number;
   windAngle: number;
@@ -21,7 +21,7 @@ export class FireMapSystem implements System {
 
   map: GameMap;
 
-  constructor(scene: GameScene, fireInterval: number, burnInterval: number) {
+  constructor(scene: MapScene, fireInterval: number, burnInterval: number) {
     this.scene = scene;
     this.map = scene.currentMap;
 

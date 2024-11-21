@@ -2,11 +2,11 @@ import { computed, mutable, signal } from "@game/state/lib/signals";
 import { MutableSignal, Signal } from "@game/state/lib/types";
 import { Math as PMath } from "phaser";
 import { EVENT_DROP_WATER, GAME_HEIGHT, GAME_WIDTH } from "../../consts";
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 import { MapTileType } from "../maps";
 
 export abstract class Vehicle {
-  scene: GameScene;
+  scene: MapScene;
 
   sprite: Phaser.GameObjects.Image;
 
@@ -45,7 +45,7 @@ export abstract class Vehicle {
   straightBias: number;
 
   constructor(
-    scene: GameScene,
+    scene: MapScene,
     x: number,
     y: number,
     texture: string,

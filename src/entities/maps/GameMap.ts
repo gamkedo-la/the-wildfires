@@ -1,9 +1,9 @@
 import { MapLayerTile, MapTileType, MapWithProperties } from ".";
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 import { PointOfInterest } from "../point-of-interest/PointOfInterest";
 
 export abstract class GameMap {
-  scene: GameScene;
+  scene: MapScene;
   map: MapWithProperties;
 
   configurationObjects: Phaser.Tilemaps.ObjectLayer;

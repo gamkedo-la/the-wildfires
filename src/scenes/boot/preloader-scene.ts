@@ -1,6 +1,8 @@
 import { GAME_WIDTH } from "@game/consts";
 import { Scene } from "phaser";
 import { RESOURCES } from "../../assets";
+import { SCENES } from "../consts";
+import { HomeScene } from "../ui/home-scene";
 
 export const RESOURCES_INDEX = Object.keys(RESOURCES).reduce(
   (acc, key, index) => ({ ...acc, [key]: index }),
@@ -13,7 +15,7 @@ declare var WebFont: any;
 
 export class Preloader extends Scene {
   constructor() {
-    super("Preloader");
+    super(SCENES.PRELOADER);
   }
 
   init() {
@@ -99,7 +101,7 @@ export class Preloader extends Scene {
         });
 
         this.input.once("pointerdown", () => {
-          this.scene.start("Game");
+          this.scene.start(SCENES.MAP);
         });
       },
     });

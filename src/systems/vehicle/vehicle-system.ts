@@ -2,14 +2,14 @@ import { System } from "..";
 import vehicles from "../../entities/vehicles";
 import { Canadair } from "../../entities/vehicles/Canadair";
 import { Vehicle } from "../../entities/vehicles/Vehicle";
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 
 export class VehicleSystem implements System {
-  scene: GameScene;
+  scene: MapScene;
   vehicle: Vehicle;
   vehicleType: string;
 
-  constructor(scene: GameScene, vehicleType: string = "canadair") {
+  constructor(scene: MapScene, vehicleType: string = "canadair") {
     this.scene = scene;
     this.vehicleType = vehicleType;
 
@@ -32,6 +32,7 @@ export class VehicleSystem implements System {
 
   changeVehicle(type: string): void {
     const position = this.vehicle.position;
+
     this.vehicle.destroy();
 
     const VehicleClass = vehicles[type as keyof typeof vehicles];

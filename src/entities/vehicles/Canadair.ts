@@ -1,8 +1,8 @@
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 import { Vehicle } from "./Vehicle";
 
 export class Canadair extends Vehicle {
-  constructor(scene: GameScene, x: number, y: number) {
+  constructor(scene: MapScene, x: number, y: number) {
     super(scene, x, y, "canadair-spritesheet", 0.4);
 
     this.maxSpeed = 60;

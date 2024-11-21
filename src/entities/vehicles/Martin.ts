@@ -1,8 +1,8 @@
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 import { Vehicle } from "./Vehicle";
 
 export class Martin extends Vehicle {
-  constructor(scene: GameScene, x: number, y: number) {
+  constructor(scene: MapScene, x: number, y: number) {
     super(scene, x, y, "martin-spritesheet");
 
     this.maxSpeed = 50;

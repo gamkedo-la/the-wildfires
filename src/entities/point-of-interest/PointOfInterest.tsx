@@ -1,11 +1,11 @@
 import { computed, signal } from "@game/state/lib/signals";
 import { RESOURCES } from "../../assets";
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 import { GameMap } from "../maps/GameMap";
 import { Signal } from "@game/state/lib/types";
 
 export class PointOfInterest {
-  scene: GameScene;
+  scene: MapScene;
   map: GameMap;
 
   id: number;
@@ -25,7 +25,7 @@ export class PointOfInterest {
   damagedTiles: Signal<number> = signal(0);
 
   constructor(
-    scene: GameScene,
+    scene: MapScene,
     map: GameMap,
     id: number,
     name: string,

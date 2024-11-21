@@ -3,15 +3,15 @@ import { RexUIPlugin } from "./lib/rexui";
 
 import { Boot } from "./scenes/boot/boot-scene";
 import { Preloader } from "./scenes/boot/preloader-scene";
-import { Debug } from "./scenes/debug-scene";
+import { Debug } from "./scenes/game/debug-scene";
 
-import { GameScene as MainGame } from "./scenes/game-scene";
+import { MapScene as MainGame } from "./scenes/game/map-scene";
 
 import { Game, Types } from "phaser";
 import { GAME_HEIGHT, GAME_WIDTH } from "./consts";
-import { PauseScene } from "./scenes/pause-scene";
-import { UIScene } from "./scenes/ui-scene";
-import { SummaryScene } from "./scenes/summary-scene";
+import { PauseScene } from "./scenes/ui/pause-scene";
+import { HUDScene } from "./scenes/game/hud-scene";
+import { SummaryScene } from "./scenes/ui/summary-scene";
 import { GameStateManager } from "./state/game-state";
 
 const config: Types.Core.GameConfig = {
@@ -46,7 +46,15 @@ const config: Types.Core.GameConfig = {
       },
     ],
   },
-  scene: [Boot, Preloader, MainGame, UIScene, PauseScene, SummaryScene, Debug],
+  scene: [
+    Boot,
+    Preloader,
+    MainGame,
+    HUDScene,
+    PauseScene,
+    SummaryScene,
+    Debug,
+  ],
 };
 
 export default new Game(config);

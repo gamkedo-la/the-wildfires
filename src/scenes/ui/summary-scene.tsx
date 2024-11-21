@@ -1,9 +1,9 @@
-import { GameStateManager } from "@game/state/game-state";
-import { JSXScene } from ".";
+import { AbstractScene } from "..";
+import { SCENES } from "../consts";
 
-export class SummaryScene extends JSXScene {
+export class SummaryScene extends AbstractScene {
   constructor() {
-    super("Summary");
+    super(SCENES.UI_SUMMARY);
   }
 
   key_esc!: Phaser.Input.Keyboard.Key;
@@ -23,15 +23,6 @@ export class SummaryScene extends JSXScene {
 
     const run = this.gameState.currentRun.get();
 
-    const poi = (
-      <text
-        x={width / 2}
-        y={height / 2 - 100}
-        text={`${run?.poi.length} POI`}
-      />
-    );
-    this.add.existing(poi);
-
     // TODO: Vehicle
     // TODO: Map
 
@@ -44,7 +35,9 @@ export class SummaryScene extends JSXScene {
       .setInteractive();
 
     restartButton.on("pointerdown", () => {
-      this.scene.start("Game");
+      this.scene.start(SCENES.UI_HOME);
     });
   }
+
+  shutdown() {}
 }

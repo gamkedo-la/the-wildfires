@@ -1,7 +1,7 @@
 import { Math as PMath } from "phaser";
 
 import { System } from "..";
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 
 type AperiodicParams = {
   factor1: number;
@@ -62,11 +62,11 @@ const dirFunc = aperiodicFunc({
 });
 
 export class WindSystem implements System {
-  scene: GameScene;
+  scene: MapScene;
   direction: PMath.Vector2;
   speed: number;
 
-  constructor(scene: GameScene) {
+  constructor(scene: MapScene) {
     this.scene = scene;
   }
 

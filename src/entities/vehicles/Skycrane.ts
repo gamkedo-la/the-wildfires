@@ -1,6 +1,6 @@
 import { Math as PMath } from "phaser";
 
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 import { Vehicle } from "./Vehicle";
 
 export class Skycrane extends Vehicle {
@@ -9,7 +9,7 @@ export class Skycrane extends Vehicle {
   bodyTurnRate: number;
   dragRate: number;
 
-  constructor(scene: GameScene, x: number, y: number) {
+  constructor(scene: MapScene, x: number, y: number) {
     super(scene, x, y, "skycrane-spritesheet", 0.5);
 
     this.sprite.setOrigin(0.5, 0.3);

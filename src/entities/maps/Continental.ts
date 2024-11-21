@@ -1,10 +1,10 @@
 import { RESOURCES } from "../../assets";
-import { GameScene } from "../../scenes/game-scene";
+import { MapScene } from "../../scenes/game/map-scene";
 import { GameMap } from "./GameMap";
 import { MapWithProperties } from "./index";
 
 export class ContinentalMap extends GameMap {
-  constructor(scene: GameScene) {
+  constructor(scene: MapScene) {
     super();
 
     this.scene = scene;

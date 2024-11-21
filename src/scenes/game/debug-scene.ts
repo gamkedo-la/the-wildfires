@@ -1,10 +1,10 @@
-import { Scene } from "phaser";
-import { FolderApi, InputBindingApi, Pane, ButtonApi } from "tweakpane";
-import { GameScene } from "./game-scene";
-import { Vehicle } from "../entities/vehicles/Vehicle";
-import vehicles from "../entities/vehicles";
-import { MapLayerTile } from "../entities/maps";
-import { JSXScene } from ".";
+import { ButtonApi, FolderApi, InputBindingApi, Pane } from "tweakpane";
+import { AbstractScene } from "..";
+import { MapLayerTile } from "../../entities/maps";
+import vehicles from "../../entities/vehicles";
+import { Vehicle } from "../../entities/vehicles/Vehicle";
+import { SCENES } from "../consts";
+import { MapScene } from "./map-scene";
 
 interface VehicleConfig {
   speed: number;
@@ -19,12 +19,12 @@ export const params = {
   burningTiles: 0,
 };
 
-export class Debug extends JSXScene {
+export class Debug extends AbstractScene {
   declare pane: Pane;
   declare vehicleBindings: (InputBindingApi<any, any> | ButtonApi)[];
 
   constructor() {
-    super("Debug");
+    super(SCENES.DEBUG);
   }
 
   vehicleConfig: any = {};
@@ -50,16 +50,16 @@ export class Debug extends JSXScene {
     });
 
     // Add bindings for damage and water levels
-    const gameScene = this.scene.get("Game") as GameScene;
+    const gameScene = this.scene.get(SCENES.MAP) as MapScene;
 
     this.vehicleBindings = [];
     this.addVehicleControls(gameScene);
   }
 
-  addVehicleControls(gameScene: GameScene) {
+  addVehicleControls(gameScene: MapScene) {
     const vehicleFolder = this.pane.addFolder({
       title: "Vehicle",
-      expanded: false,
+      expanded: true,
     });
 
     vehicleFolder
@@ -79,7 +79,7 @@ export class Debug extends JSXScene {
     this.addVehicleParameters(vehicleFolder, gameScene.vehiclesSystem.vehicle);
   }
 
-  changeVehicle(gameScene: GameScene, type: string, vehicleFolder: FolderApi) {
+  changeVehicle(gameScene: MapScene, type: string, vehicleFolder: FolderApi) {
     gameScene.vehiclesSystem.changeVehicle(type);
     this.removeVehicleParameters();
     this.addVehicleParameters(vehicleFolder, gameScene.vehiclesSystem.vehicle);
@@ -189,7 +189,7 @@ export class Debug extends JSXScene {
   }
 
   update() {
-    const gameScene = this.scene.get("Game") as GameScene;
+    const gameScene = this.scene.get(SCENES.MAP) as MapScene;
     const { angle, speed } = gameScene.windSystem.get();
     params.fps = this.game.loop.actualFps;
     params.windAngle = angle;
