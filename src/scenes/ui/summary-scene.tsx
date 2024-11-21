@@ -1,4 +1,5 @@
 import { AbstractScene } from "..";
+import { Stack } from "../../ui/components/Stack";
 import { SCENES } from "../consts";
 
 export class SummaryScene extends AbstractScene {
@@ -22,6 +23,28 @@ export class SummaryScene extends AbstractScene {
       .setOrigin(0.5);
 
     const run = this.gameState.currentRun.get();
+
+    const poi = run?.poi || [];
+
+    const stack = (
+      <Stack direction="vertical" spacing={10} x={800} y={100}>
+        {poi.map((item) => (
+          <container width={100} height={50}>
+            <rectangle
+              origin={0}
+              width={100}
+              height={50}
+              strokeColor={
+                Phaser.Display.Color.HexStringToColor("#ffffff").color
+              }
+            />
+            <text x={0} y={0} text={item.name} />
+          </container>
+        ))}
+      </Stack>
+    );
+
+    this.add.existing(stack);
 
     // TODO: Vehicle
     // TODO: Map

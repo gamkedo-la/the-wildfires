@@ -4,6 +4,7 @@ import {
   EqualityFn,
   MutableSignal,
   Signal,
+  SignalValue,
   Subscriber,
 } from "./types";
 
@@ -214,4 +215,12 @@ export function effect(fn: Effect, displayName: string = ""): Cleanup {
   const signal = new EffectSignal(fn);
   signal.displayName = displayName;
   return () => signal.dispose();
+}
+
+export function isSignal(value: any): boolean {
+  return value instanceof SignalImpl;
+}
+
+export function getSignalValue<T>(value: SignalValue<T>): T {
+  return isSignal(value) ? (value as Signal<T>).get() : (value as T);
 }
