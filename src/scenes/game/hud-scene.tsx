@@ -117,18 +117,6 @@ export class HUDScene extends AbstractScene {
     );
 
     this.add.existing(this.offscreenArrow);
-
-    const poi = (
-      <text
-        x={100}
-        y={100}
-        text={computed(() => {
-          const poi = this.gameState.currentRun.get()?.poi.length;
-          return `${poi} POI`;
-        })}
-      />
-    );
-    this.add.existing(poi);
   }
 
   shutdown() {}

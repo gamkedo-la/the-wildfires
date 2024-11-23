@@ -1,6 +1,7 @@
 import { EVENT_FIRE_EXTINGUISHED } from "@game/consts";
+import { MAPS } from "@game/entities/maps/index";
+import { END_REASONS } from "@game/state/game-state";
 import { AbstractScene } from "..";
-import { ContinentalMap } from "../../entities/maps/Continental";
 import { GameMap } from "../../entities/maps/GameMap";
 import PhaserGamebus from "../../lib/gamebus";
 import { FireMapSystem } from "../../systems/fire/fire-map-system";
@@ -63,25 +64,18 @@ export class MapScene extends AbstractScene {
       Phaser.Input.Keyboard.KeyCodes.ESC
     );
 
-    this.gameState.startRun();
-
-    this.currentMap = new ContinentalMap(this);
+    this.currentMap = new MAPS[this.gameState.currentRun.get().map](this);
 
     this.camera.scrollX = Math.floor(this.currentMap.cameraPosition.x);
     this.camera.scrollY = Math.floor(this.currentMap.cameraPosition.y);
 
     this.registerSystems();
+    this.registerGameEndedListener();
 
     this.scene.run(SCENES.HUD, {
       gameScene: this,
     });
     this.scene.run(SCENES.DEBUG);
-
-    this.events.on(EVENT_FIRE_EXTINGUISHED, () => {
-      this.scene.stop(SCENES.HUD);
-      this.scene.stop(SCENES.DEBUG);
-      this.scene.start(SCENES.UI_SUMMARY);
-    });
   }
 
   currentMap: GameMap;
@@ -90,7 +84,10 @@ export class MapScene extends AbstractScene {
   windSystem: WindSystem;
 
   registerSystems() {
-    this.vehiclesSystem = new VehicleSystem(this).create();
+    this.vehiclesSystem = new VehicleSystem(
+      this,
+      this.gameState.currentRun.get().vehicle
+    ).create();
     this.fireMapSystem = new FireMapSystem(
       this,
       FIRE_INTERVAL_MS,
@@ -110,6 +107,18 @@ export class MapScene extends AbstractScene {
     }
   }
 
+  registerGameEndedListener() {
+    // We need to call events like this so we can remove them later
+    this.events.once(EVENT_FIRE_EXTINGUISHED, this.endGame, this);
+  }
+
+  endGame() {
+    this.gameState.endRun(END_REASONS.FIRE_EXTINGUISHED);
+    this.scene.stop(SCENES.HUD);
+    this.scene.stop(SCENES.DEBUG);
+    this.scene.start(SCENES.UI_SUMMARY);
+  }
+
   shutdown() {
     this.scene.stop(SCENES.DEBUG);
     this.scene.stop(SCENES.HUD);
@@ -117,6 +126,8 @@ export class MapScene extends AbstractScene {
     this.vehiclesSystem.destroy();
     this.fireMapSystem.destroy();
     this.windSystem.destroy();
+
+    this.events.removeListener(EVENT_FIRE_EXTINGUISHED, this.endGame, this);
   }
 
   doPause() {

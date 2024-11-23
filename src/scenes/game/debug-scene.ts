@@ -1,7 +1,7 @@
 import { ButtonApi, FolderApi, InputBindingApi, Pane } from "tweakpane";
 import { AbstractScene } from "..";
 import { MapLayerTile } from "../../entities/maps";
-import vehicles from "../../entities/vehicles";
+import { VEHICLES, VehicleType } from "../../entities/vehicles";
 import { Vehicle } from "../../entities/vehicles/Vehicle";
 import { SCENES } from "../consts";
 import { MapScene } from "./map-scene";
@@ -64,7 +64,7 @@ export class Debug extends AbstractScene {
 
     vehicleFolder
       .addBinding(gameScene.vehiclesSystem, "vehicleType", {
-        options: Object.keys(vehicles).reduce(
+        options: Object.keys(VEHICLES).reduce(
           (acc: Record<string, string>, key) => {
             acc[key] = key;
             return acc;
@@ -80,7 +80,7 @@ export class Debug extends AbstractScene {
   }
 
   changeVehicle(gameScene: MapScene, type: string, vehicleFolder: FolderApi) {
-    gameScene.vehiclesSystem.changeVehicle(type);
+    gameScene.vehiclesSystem.changeVehicle(type as VehicleType);
     this.removeVehicleParameters();
     this.addVehicleParameters(vehicleFolder, gameScene.vehiclesSystem.vehicle);
   }

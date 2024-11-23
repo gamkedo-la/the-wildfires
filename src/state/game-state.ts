@@ -1,26 +1,25 @@
-import { GameMap } from "@game/entities/maps/GameMap";
-
+import MAPS, { MapType } from "../entities/maps";
 import { PointOfInterest } from "../entities/point-of-interest/PointOfInterest";
-import { Vehicle } from "../entities/vehicles/Vehicle";
+import { VEHICLES, VehicleType } from "../entities/vehicles";
 import { mutable } from "./lib/signals";
-import { MutableSignal } from "./lib/types";
+import { MutableSignal, Signal } from "./lib/types";
 
-const END_REASONS = {
+export const END_REASONS = {
   FIRE_EXTINGUISHED: "fire-extinguished",
   POI_SAVED: "poi-saved",
   POI_DESTROYED: "poi-destroyed",
 } as const;
 
-interface Run {
-  vehicle?: Vehicle;
-  map?: GameMap;
+export interface Run {
+  vehicle: VehicleType;
+  map: MapType;
   poi: PointOfInterest[];
   time: number;
   score: number;
   endReason?: (typeof END_REASONS)[keyof typeof END_REASONS];
 }
 
-interface GameState {
+export interface GameState {
   currentRun: MutableSignal<Run | null>;
   runs: Run[];
 }
@@ -29,43 +28,95 @@ export class GameStateManager
   extends Phaser.Plugins.BasePlugin
   implements GameState
 {
-  currentRun: MutableSignal<Run | null> = mutable(null);
   runs: Run[] = [];
+
+  currentRun: MutableSignal<Run> = mutable(this.getEmptyRun());
+  runCount: Signal<number> = mutable(0);
 
   constructor(pluginManager: Phaser.Plugins.PluginManager) {
     super(pluginManager);
   }
 
-  startRun() {
-    this.currentRun.set({
-      vehicle: undefined,
-      map: undefined,
-      poi: [],
-      time: 0,
-      score: 0,
+  private mutateRun(mutation: (run: Run) => boolean): void {
+    const run = this.currentRun.get();
+    if (!run) {
+      throw new Error("Run not started");
+    }
+
+    this.currentRun.mutate(() => {
+      return mutation(run);
     });
   }
 
-  addPointOfInterest(poi: PointOfInterest) {
-    this.currentRun.mutate((run) => {
-      run?.poi.push(poi);
+  getEmptyRun(): Run {
+    return {
+      vehicle: "CANADAIR",
+      map: "CONTINENTAL",
+      poi: [],
+      time: 0,
+      score: 0,
+    };
+  }
+
+  startRun(runConfiguration: Run) {
+    if (this.runCount.get() !== this.runs.length && this.currentRun.get()) {
+      throw new Error("Run already started");
+    }
+
+    this.currentRun.set(runConfiguration);
+    this.runCount.update((count) => count + 1);
+  }
+
+  endRun(reason: (typeof END_REASONS)[keyof typeof END_REASONS]) {
+    this.mutateRun((run) => {
+      run.endReason = reason;
+      this.runs.push(run);
+      return true;
+    });
+  }
+
+  setVehicle(vehicle: VehicleType) {
+    this.mutateRun((run) => {
+      run.vehicle = vehicle;
+      return true;
+    });
+  }
+
+  setMap(map: MapType) {
+    this.mutateRun((run) => {
+      run.map = map;
       return true;
     });
   }
 
   setMaxTiles() {
-    this.currentRun.get()?.poi.forEach((poi) => {
-      poi.setMaxTiles();
+    this.mutateRun((run) => {
+      run.poi.forEach((poi) => {
+        poi.setMaxTiles();
+      });
+      return true;
+    });
+  }
+
+  addPointOfInterest(poi: PointOfInterest) {
+    this.mutateRun((run) => {
+      run.poi.push(poi);
+      return true;
     });
   }
 
   causePointOfInterestDamage(poiId: number) {
-    const poi = this.currentRun.get()?.poi.find((poi) => poi.id === poiId);
-    poi?.damageTile();
+    this.mutateRun((run) => {
+      run.poi.find((poi) => poi.id === poiId)?.damageTile();
+      return true;
+    });
   }
 
   updatePointOfInterestTileCount(poiId: number) {
-    const poi = this.currentRun.get()?.poi.find((poi) => poi.id === poiId);
-    poi?.addTileCount(1);
+    this.mutateRun((run) => {
+      const poi = run.poi.find((poi) => poi.id === poiId);
+      poi?.addTileCount(1);
+      return true;
+    });
   }
 }

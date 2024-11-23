@@ -164,20 +164,26 @@ export class FireMapSystem implements System {
   }
   // Extinguish in a '+' shape pattern
   private dropCrossWater(worldX: number, worldY: number, range: number) {
-    const { x: tileX, y: tileY } = this.map.mapLayer.worldToTileXY(
-      worldX,
-      worldY,
-      true
-    );
+    try {
+      // this.map is dangerous to keep as a reference, the scene can be destroyed amid the event
+      const { x: tileX, y: tileY } = this.map.mapLayer.worldToTileXY(
+        worldX,
+        worldY,
+        true
+      );
 
-    for (let x = tileX - range; x <= tileX + range; x++) {
-      this.dropWater(x, tileY);
-    }
-    for (let y = tileY - range; y <= tileY + range; y++) {
-      if (y !== tileY) {
-        // Avoid double-extinguishing the center tile
-        this.dropWater(tileX, y);
+      for (let x = tileX - range; x <= tileX + range; x++) {
+        this.dropWater(x, tileY);
       }
+      for (let y = tileY - range; y <= tileY + range; y++) {
+        if (y !== tileY) {
+          // Avoid double-extinguishing the center tile
+          this.dropWater(tileX, y);
+        }
+      }
+    } catch (e) {
+      // TODO: Something is off with this function and I couldn't fix on a first check with the debugger. The try catch is a workaround
+      console.error(e);
     }
   }
 

@@ -1,7 +1,8 @@
 import { GAME_WIDTH } from "@game/consts";
-import { Scene } from "phaser";
+import { AbstractScene } from "..";
 import { RESOURCES } from "../../assets";
 import { SCENES } from "../consts";
+import { MapScene } from "../game/map-scene";
 import { HomeScene } from "../ui/home-scene";
 
 export const RESOURCES_INDEX = Object.keys(RESOURCES).reduce(
@@ -13,7 +14,7 @@ export const RESOURCES_LIST = Object.values(RESOURCES);
 
 declare var WebFont: any;
 
-export class Preloader extends Scene {
+export class Preloader extends AbstractScene {
   constructor() {
     super(SCENES.PRELOADER);
   }
@@ -92,7 +93,22 @@ export class Preloader extends Scene {
         // We start the game right away in dev mode
         if (import.meta.env.VITE_DEBUG) {
           this.scene.add(SCENES.UI_HOME, HomeScene);
+
           return this.scene.start(SCENES.UI_HOME);
+          /*
+          // Quick devloop
+          const runConfiguration = this.gameState.getEmptyRun();
+          runConfiguration.map = "CONTINENTAL";
+          runConfiguration.vehicle = "MARTIN";
+          this.gameState.startRun(runConfiguration);
+          this.scene.start(SCENES.MAP);
+          this.scene.get(SCENES.MAP).time.addEvent({
+            delay: 2000,
+            callback: () => {
+              this.scene.get(SCENES.MAP).endGame();
+            },
+          });
+          */
         }
 
         // Otherwise we await for user input so the sound works correctly
@@ -107,4 +123,6 @@ export class Preloader extends Scene {
       },
     });
   }
+
+  shutdown() {}
 }

@@ -34,7 +34,11 @@ function setGameObjectProperty(
       (gameObject as any).setScrollFactor(value);
     }
   } else if (property === "interactive") {
-    gameObject.setInteractive();
+    if (value) {
+      gameObject.setInteractive();
+    } else {
+      gameObject.disableInteractive();
+    }
   } else if (property === "onPointerdown") {
     gameObject.on(
       "pointerdown",
