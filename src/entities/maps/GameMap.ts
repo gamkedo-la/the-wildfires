@@ -1,4 +1,4 @@
-import { MapLayerTile, MapTileType, MapWithProperties } from ".";
+import { MapLayerTile, MapTileType, MapWithProperties, PoiProperties } from ".";
 import { MapScene } from "../../scenes/game/map-scene";
 import { PointOfInterest } from "../point-of-interest/PointOfInterest";
 
@@ -82,29 +82,92 @@ export abstract class GameMap {
     });
   }
 
+  private validatePoiProperties(
+    obj: Phaser.Types.Tilemaps.TiledObject
+  ): PoiProperties {
+    if (!obj.properties) {
+      throw new Error(
+        `Point of Interest at (${obj.x}, ${obj.y}) is missing required properties`
+      );
+    }
+
+    const getProperty = (name: string) => {
+      const prop = obj.properties!.find((p: any) => p.name === name);
+      if (!prop) {
+        throw new Error(
+          `Point of Interest at (${obj.x}, ${obj.y}) is missing required property: ${name}`
+        );
+      }
+      return prop.value;
+    };
+
+    // Validate all required properties
+    const properties: PoiProperties = {
+      poi: parseInt(getProperty("poi")),
+      name: getProperty("name"),
+      duration: getProperty("duration"),
+      delay: getProperty("delay"),
+    };
+
+    // Additional validation
+    if (isNaN(properties.poi)) {
+      throw new Error(
+        `Point of Interest at (${obj.x}, ${obj.y}) has invalid 'poi' value: ${properties.poi}`
+      );
+    }
+
+    if (typeof properties.name !== "string" || properties.name.trim() === "") {
+      throw new Error(
+        `Point of Interest at (${obj.x}, ${obj.y}) has invalid 'name' value`
+      );
+    }
+
+    if (typeof properties.duration !== "number" || properties.duration <= 0) {
+      throw new Error(
+        `Point of Interest at (${obj.x}, ${obj.y}) has invalid 'duration' value: ${properties.duration}`
+      );
+    }
+
+    if (typeof properties.delay !== "number" || properties.delay < 0) {
+      throw new Error(
+        `Point of Interest at (${obj.x}, ${obj.y}) has invalid 'delay' value: ${properties.delay}`
+      );
+    }
+
+    return properties;
+  }
+
   registerPointsOfInterest() {
     this.configurationObjects.objects.forEach((obj) => {
+      // Only validate if we have properties that look like a POI
       if (
-        obj.properties &&
-        obj.properties.some((prop: any) => prop.name === "duration") &&
-        obj.properties.some((prop: any) => prop.name === "delay")
+        obj.properties?.some((prop: any) =>
+          ["duration", "delay"].includes(prop.name)
+        )
       ) {
-        this.scene.gameState.addPointOfInterest(
-          new PointOfInterest(
-            this.scene,
-            this,
-            parseInt(
-              obj.properties.find((prop: any) => prop.name === "poi").value
-            ),
-            obj.properties.find((prop: any) => prop.name === "name").value,
-            obj.properties.find((prop: any) => prop.name === "duration").value +
-              Phaser.Math.Between(-5, 5),
-            obj.properties.find((prop: any) => prop.name === "delay").value +
-              Phaser.Math.Between(-5, 5),
-            obj.x!,
-            obj.y!
-          )
-        );
+        try {
+          const props = this.validatePoiProperties(obj);
+
+          this.scene.gameState.addPointOfInterest(
+            new PointOfInterest(
+              this.scene,
+              this,
+              props.poi,
+              props.name,
+              props.duration + Phaser.Math.Between(-5, 5),
+              props.delay + Phaser.Math.Between(-5, 5),
+              obj.x!,
+              obj.y!
+            )
+          );
+        } catch (error) {
+          if (process.env.NODE_ENV === "development") {
+            console.error(error);
+          } else {
+            // In production, skip invalid POIs silently
+            console.warn("Skipped invalid Point of Interest:", error);
+          }
+        }
       }
     });
 

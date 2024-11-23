@@ -122,6 +122,24 @@ export class Preloader extends AbstractScene {
         });
       },
     });
+
+    this.anims.create({
+      key: "pin-hide",
+      frames: this.anims.generateFrameNumbers("pin-spritesheet", {
+        start: 0,
+        end: 6,
+      }),
+      frameRate: 16,
+    });
+
+    this.anims.create({
+      key: "pin-flash",
+      frames: this.anims.generateFrameNumbers("pin-spritesheet", {
+        start: 6,
+        end: 0,
+      }),
+      frameRate: 16,
+    });
   }
 
   shutdown() {}

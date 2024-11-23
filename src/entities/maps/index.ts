@@ -7,6 +7,13 @@ export interface MapWithProperties extends Phaser.Tilemaps.Tilemap {
   }>;
 }
 
+export interface PoiProperties {
+  poi: number;
+  name: string;
+  duration: number;
+  delay: number;
+}
+
 export interface FireLayerTile extends Phaser.Tilemaps.Tile {
   properties: {
     smoke: Phaser.GameObjects.Particles.ParticleEmitter;

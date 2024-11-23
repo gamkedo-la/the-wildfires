@@ -124,24 +124,6 @@ export class PointOfInterest {
 
     this.scene.add.existing(pin);
 
-    this.scene.anims.create({
-      key: "pin-hide",
-      frames: this.scene.anims.generateFrameNumbers("pin-spritesheet", {
-        start: 0,
-        end: 6,
-      }),
-      frameRate: 16,
-    });
-
-    this.scene.anims.create({
-      key: "pin-flash",
-      frames: this.scene.anims.generateFrameNumbers("pin-spritesheet", {
-        start: 6,
-        end: 0,
-      }),
-      frameRate: 16,
-    });
-
     pin.setVisible(false);
 
     this.legend = this.scene.add
