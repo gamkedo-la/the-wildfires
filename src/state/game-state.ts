@@ -1,7 +1,7 @@
-import MAPS, { MapType } from "../entities/maps";
+import { MapType } from "../entities/maps";
 import { PointOfInterest } from "../entities/point-of-interest/PointOfInterest";
-import { VEHICLES, VehicleType } from "../entities/vehicles";
-import { mutable } from "./lib/signals";
+import { VehicleType } from "../entities/vehicles";
+import { mutable, signal } from "./lib/signals";
 import { MutableSignal, Signal } from "./lib/types";
 
 export const END_REASONS = {
@@ -10,10 +10,17 @@ export const END_REASONS = {
   POI_DESTROYED: "poi-destroyed",
 } as const;
 
+export const RunState = {
+  LOADING: "loading",
+  RUNNING: "running",
+  ENDED: "ended",
+} as const;
+
 export interface Run {
   vehicle: VehicleType;
   map: MapType;
   poi: PointOfInterest[];
+  state: (typeof RunState)[keyof typeof RunState];
   time: number;
   score: number;
   endReason?: (typeof END_REASONS)[keyof typeof END_REASONS];
@@ -52,6 +59,7 @@ export class GameStateManager
     return {
       vehicle: "CANADAIR",
       map: "CONTINENTAL",
+      state: RunState.LOADING,
       poi: [],
       time: 0,
       score: 0,
@@ -69,6 +77,7 @@ export class GameStateManager
 
   endRun(reason: (typeof END_REASONS)[keyof typeof END_REASONS]) {
     this.mutateRun((run) => {
+      run.state = RunState.ENDED;
       run.endReason = reason;
       this.runs.push(run);
       return true;
@@ -85,6 +94,13 @@ export class GameStateManager
   setMap(map: MapType) {
     this.mutateRun((run) => {
       run.map = map;
+      return true;
+    });
+  }
+
+  setRunState(state: (typeof RunState)[keyof typeof RunState]) {
+    this.mutateRun((run) => {
+      run.state = state;
       return true;
     });
   }

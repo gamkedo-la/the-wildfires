@@ -1,8 +1,10 @@
 import { EVENT_FIRE_EXTINGUISHED } from "@game/consts";
 import { MAPS } from "@game/entities/maps/index";
-import { END_REASONS } from "@game/state/game-state";
+import { END_REASONS, RunState } from "@game/state/game-state";
+import { effect } from "@game/state/lib/signals";
 import { AbstractScene } from "..";
 import { GameMap } from "../../entities/maps/GameMap";
+import { POI_STATE } from "../../entities/point-of-interest/PointOfInterest";
 import PhaserGamebus from "../../lib/gamebus";
 import { FireMapSystem } from "../../systems/fire/fire-map-system";
 import { VehicleSystem } from "../../systems/vehicle/vehicle-system";
@@ -76,6 +78,8 @@ export class MapScene extends AbstractScene {
       gameScene: this,
     });
     this.scene.run(SCENES.DEBUG);
+
+    this.gameState.setRunState(RunState.RUNNING);
   }
 
   currentMap: GameMap;
@@ -109,14 +113,43 @@ export class MapScene extends AbstractScene {
 
   registerGameEndedListener() {
     // We need to call events like this so we can remove them later
-    this.events.once(EVENT_FIRE_EXTINGUISHED, this.endGame, this);
+    this.events.once(
+      EVENT_FIRE_EXTINGUISHED,
+      this.endGameFireExtinguished,
+      this
+    );
+
+    effect(() => {
+      const run = this.gameState.currentRun.get();
+      if (run.state === RunState.RUNNING) {
+        const allSaved = run.poi.every(
+          (poi) => poi.state.get() === POI_STATE.SAVED
+        );
+        const allDamaged = run.poi.every(
+          (poi) =>
+            poi.state.get() === POI_STATE.DAMAGED ||
+            poi.state.get() === POI_STATE.PARTIALLY_SAVED
+        );
+        if (allSaved) {
+          this.endGame(END_REASONS.POI_SAVED);
+        } else if (allDamaged) {
+          this.endGame(END_REASONS.POI_DESTROYED);
+        }
+      }
+    });
   }
 
-  endGame() {
-    this.gameState.endRun(END_REASONS.FIRE_EXTINGUISHED);
+  // We need a stable reference for this function
+  endGameFireExtinguished() {
+    this.endGame(END_REASONS.FIRE_EXTINGUISHED);
+  }
+
+  endGame(endReason: (typeof END_REASONS)[keyof typeof END_REASONS]) {
+    this.gameState.endRun(endReason);
     this.scene.stop(SCENES.HUD);
     this.scene.stop(SCENES.DEBUG);
-    this.scene.start(SCENES.UI_SUMMARY);
+    this.scene.pause();
+    this.scene.run(SCENES.UI_SUMMARY);
   }
 
   shutdown() {
@@ -127,7 +160,11 @@ export class MapScene extends AbstractScene {
     this.fireMapSystem.destroy();
     this.windSystem.destroy();
 
-    this.events.removeListener(EVENT_FIRE_EXTINGUISHED, this.endGame, this);
+    this.events.removeListener(
+      EVENT_FIRE_EXTINGUISHED,
+      this.endGameFireExtinguished,
+      this
+    );
   }
 
   doPause() {

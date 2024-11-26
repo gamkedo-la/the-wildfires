@@ -2,6 +2,10 @@ import { TEXT_STYLE } from "@game/consts";
 import { AbstractScene } from "..";
 import { Stack } from "../../ui/components/Stack";
 import { SCENES } from "../consts";
+import { RESOURCES } from "@game/assets";
+import { POI_STATE } from "../../entities/point-of-interest/PointOfInterest";
+import { Parallel, Sequence, Step } from "../../ui/animation/animation";
+import { END_REASONS } from "@game/state/game-state";
 
 export class SummaryScene extends AbstractScene {
   constructor() {
@@ -9,59 +13,167 @@ export class SummaryScene extends AbstractScene {
   }
 
   create() {
-    const { width, height } = this.scale;
+    const run = this.gameState.currentRun.get();
+    const poi = run?.poi || [];
 
-    const title = (
+    const { width, height } = this.scale;
+    this.add.rectangle(0, 0, width, height, 0x000000, 0.6).setOrigin(0);
+
+    this.add.existing(
       <text
         x={100}
-        y={height / 2 - 50}
-        text="Game ended"
-        style={{ ...TEXT_STYLE, fontSize: "64px", color: "#ffffff" }}
+        y={100}
+        text={`${
+          run?.endReason === END_REASONS.POI_SAVED
+            ? "Everyone is safe!"
+            : run?.endReason === END_REASONS.POI_DESTROYED
+            ? "Disaster!"
+            : "Fire extinguished!"
+        }`}
+        style={{
+          ...TEXT_STYLE,
+          fontSize: "48px",
+          color:
+            run?.endReason === END_REASONS.POI_DESTROYED
+              ? "#ffbbbb"
+              : "#bbffbb",
+        }}
       />
     );
-    this.add.existing(title);
-
-    const run = this.gameState.currentRun.get();
-
-    const poi = run?.poi || [];
 
     this.add.existing(
       <text
         text={`Points of interest`}
         x={600}
-        y={20}
+        y={50}
         style={{ ...TEXT_STYLE }}
       />
     );
 
-    const stack = (
-      <Stack direction="vertical" spacing={10} x={600} y={50}>
-        {poi.map((item) => (
-          <container width={200} height={100}>
-            <rectangle
-              origin={0}
-              width={200}
-              height={100}
-              strokeColor={
-                Phaser.Display.Color.HexStringToColor("#ffffff").color
+    const poiList = poi.map((item) => (
+      <container width={200} height={80} visible={false} scale={1.5}>
+        <nineslice
+          texture={RESOURCES["poi-results-nine-slice"]}
+          origin={0}
+          width={100}
+          height={40}
+          scale={2}
+          leftWidth={7}
+          rightWidth={7}
+          topHeight={16}
+          bottomHeight={6}
+          tint={
+            item.finalState.get() === POI_STATE.SAVED
+              ? 0xbbffbb
+              : item.finalState.get() === POI_STATE.DAMAGED
+              ? 0xffbbbb
+              : 0xffffbb
+          }
+        />
+        <Stack direction="vertical" spacing={10} x={10} y={0}>
+          <container width={20} height={20}>
+            <image
+              texture={RESOURCES["poi-status-icons"]}
+              frame={
+                item.finalState.get() === POI_STATE.SAVED
+                  ? 1
+                  : item.finalState.get() === POI_STATE.DAMAGED
+                  ? 0
+                  : 2
+              }
+              x={10}
+              y={5}
+              width={20}
+              height={20}
+            />
+            <text
+              x={25}
+              y={0}
+              text={item.name}
+              style={{ ...TEXT_STYLE, fontSize: "16px", color: "#2a1d0d" }}
+            />
+          </container>
+          <container width={200} height={30}>
+            <container x={3} y={0} width={20} height={20}>
+              <image
+                texture={RESOURCES["poi-tiles-icons"]}
+                x={20}
+                y={5}
+                width={20}
+                height={20}
+                frame={0}
+              />
+              <text
+                x={40}
+                y={0}
+                text={item.savedTiles.get().toString()}
+                style={{
+                  ...TEXT_STYLE,
+                  fontSize: "16px",
+                  color: "#2a1d0d",
+                }}
+              />
+              <image
+                texture={RESOURCES["poi-tiles-icons"]}
+                x={80}
+                y={5}
+                width={20}
+                height={20}
+                frame={1}
+              />
+              <text
+                x={98}
+                y={0}
+                text={item.damagedTiles.get().toString()}
+                style={{
+                  ...TEXT_STYLE,
+                  fontSize: "16px",
+                  color: "#2a1d0d",
+                }}
+              />
+              <image
+                texture={RESOURCES["poi-tiles-icons"]}
+                x={135}
+                y={5}
+                width={20}
+                height={20}
+                frame={2}
+              />
+              <text
+                x={150}
+                y={0}
+                text={`${item.maxTiles.get()}`}
+                style={{
+                  ...TEXT_STYLE,
+                  fontSize: "16px",
+                  color: "#2a1d0d",
+                }}
+              />
+            </container>
+          </container>
+        </Stack>
+      </container>
+    ));
+
+    this.animationEngine.run(
+      <Sequence>
+        {poiList.map((item) => (
+          <Parallel>
+            <Step
+              duration={100}
+              action={() =>
+                this.tweens.add({ targets: item, scale: 1, duration: 100 })
               }
             />
-            <Stack direction="vertical" spacing={10} x={10} y={10}>
-              <text x={10} y={10} text={item.name} />
-              {/* not sure what these numbers are being set to */}
-              <text
-                x={10}
-                y={30}
-                text={`${item.savedTiles.get()} / ${item.damagedTiles.get()}`}
-              />
-              <text
-                x={10}
-                y={50}
-                text={`${item.tilesLeft.get()} / ${item.maxTiles.get()}`}
-              />
-            </Stack>
-          </container>
+            <Step duration={200} action={() => item.setVisible(true)} />
+          </Parallel>
         ))}
+      </Sequence>
+    );
+
+    const stack = (
+      <Stack direction="vertical" spacing={10} x={640} y={100}>
+        {poiList}
       </Stack>
     );
 
@@ -91,6 +203,7 @@ export class SummaryScene extends AbstractScene {
         height={80}
         interactive
         onPointerdown={() => {
+          this.scene.stop(SCENES.MAP);
           this.scene.start(SCENES.UI_HOME);
         }}
       >
