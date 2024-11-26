@@ -215,6 +215,16 @@ export class PointOfInterest {
     // Start the timer
     this.scene.time.delayedCall(delay * 1000, () => {
       this.timer.paused = false;
+      this.scene.time.delayedCall(300 + this.timeout * 1000, () => {
+        this.open.set(true);
+        pin.play("pin-vertical-flash");
+        this.legend.setVisible(true);
+      });
+      this.scene.time.delayedCall(1000 + this.timeout * 1000, () => {
+        this.legend.setVisible(false);
+        pin.play("pin-vertical-hide");
+        this.open.set(false);
+      });
     });
 
     const pin: Phaser.GameObjects.Sprite = (

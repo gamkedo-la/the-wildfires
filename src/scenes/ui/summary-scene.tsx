@@ -1,11 +1,11 @@
-import { TEXT_STYLE } from "@game/consts";
-import { AbstractScene } from "..";
-import { Stack } from "../../ui/components/Stack";
-import { SCENES } from "../consts";
 import { RESOURCES } from "@game/assets";
+import { TEXT_STYLE } from "@game/consts";
+import { END_REASONS } from "@game/state/game-state";
+import { AbstractScene } from "..";
 import { POI_STATE } from "../../entities/point-of-interest/PointOfInterest";
 import { Parallel, Sequence, Step } from "../../ui/animation/animation";
-import { END_REASONS } from "@game/state/game-state";
+import { Stack } from "../../ui/components/Stack";
+import { SCENES } from "../consts";
 
 export class SummaryScene extends AbstractScene {
   constructor() {
@@ -15,9 +15,6 @@ export class SummaryScene extends AbstractScene {
   create() {
     const run = this.gameState.currentRun.get();
     const poi = run?.poi || [];
-
-    const { width, height } = this.scale;
-    this.add.rectangle(0, 0, width, height, 0x000000, 0.6).setOrigin(0);
 
     this.add.existing(
       <text

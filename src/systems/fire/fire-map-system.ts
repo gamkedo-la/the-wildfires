@@ -1,6 +1,7 @@
+import { END_REASONS } from "@game/state/game-state";
 import { Math as PMath, Tilemaps } from "phaser";
 import { System } from "..";
-import { EVENT_DROP_WATER, EVENT_FIRE_EXTINGUISHED } from "../../consts";
+import { EVENT_DROP_WATER } from "../../consts";
 import {
   FireLayerTile,
   MapLayerTile,
@@ -207,7 +208,7 @@ export class FireMapSystem implements System {
     );
 
     if (burningTiles.length === 0 && this.fireStarted) {
-      this.scene.events.emit(EVENT_FIRE_EXTINGUISHED);
+      this.scene.endGame(END_REASONS.FIRE_EXTINGUISHED);
     }
 
     burningTiles.forEach((t: MapLayerTile) => {

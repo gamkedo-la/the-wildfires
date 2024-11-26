@@ -1,4 +1,3 @@
-import { EVENT_FIRE_EXTINGUISHED } from "@game/consts";
 import { MAPS } from "@game/entities/maps/index";
 import { END_REASONS, RunState } from "@game/state/game-state";
 import { effect } from "@game/state/lib/signals";
@@ -9,6 +8,11 @@ import PhaserGamebus from "../../lib/gamebus";
 import { FireMapSystem } from "../../systems/fire/fire-map-system";
 import { VehicleSystem } from "../../systems/vehicle/vehicle-system";
 import { WindSystem } from "../../systems/wind/wind-system";
+import {
+  createTransitionSignal,
+  Sequence,
+  Transition,
+} from "../../ui/animation/animation";
 import { SCENES } from "../consts";
 
 const FIRE_INTERVAL_MS = 8000;
@@ -35,6 +39,8 @@ export class MapScene extends AbstractScene {
   key_down!: Phaser.Input.Keyboard.Key;
   key_p!: Phaser.Input.Keyboard.Key;
   key_esc!: Phaser.Input.Keyboard.Key;
+
+  gameEnding: boolean;
 
   create() {
     this.bus = this.gamebus.getBus();
@@ -66,6 +72,7 @@ export class MapScene extends AbstractScene {
       Phaser.Input.Keyboard.KeyCodes.ESC
     );
 
+    this.gameEnding = false;
     this.currentMap = new MAPS[this.gameState.currentRun.get().map](this);
 
     this.camera.scrollX = Math.floor(this.currentMap.cameraPosition.x);
@@ -112,13 +119,6 @@ export class MapScene extends AbstractScene {
   }
 
   registerGameEndedListener() {
-    // We need to call events like this so we can remove them later
-    this.events.once(
-      EVENT_FIRE_EXTINGUISHED,
-      this.endGameFireExtinguished,
-      this
-    );
-
     effect(() => {
       const run = this.gameState.currentRun.get();
       if (run.state === RunState.RUNNING) {
@@ -145,11 +145,45 @@ export class MapScene extends AbstractScene {
   }
 
   endGame(endReason: (typeof END_REASONS)[keyof typeof END_REASONS]) {
-    this.gameState.endRun(endReason);
-    this.scene.stop(SCENES.HUD);
-    this.scene.stop(SCENES.DEBUG);
-    this.scene.pause();
-    this.scene.run(SCENES.UI_SUMMARY);
+    if (this.gameEnding) return;
+    this.gameEnding = true;
+
+    const backgroundAlpha = createTransitionSignal(0);
+
+    const { width, height } = this.scale;
+
+    const rect: Phaser.GameObjects.Rectangle = this.add.existing(
+      <rectangle
+        x={0}
+        y={0}
+        width={width * 1.2}
+        height={height * 1.2}
+        fillColor={0x000000}
+        origin={0}
+        alpha={backgroundAlpha}
+      />
+    );
+
+    rect.setDepth(1);
+
+    this.animationEngine.run(
+      <Sequence>
+        <Transition
+          from={0}
+          to={0.6}
+          duration={5000}
+          signal={backgroundAlpha}
+        />
+      </Sequence>
+    );
+
+    this.time.delayedCall(5000, () => {
+      this.gameState.endRun(endReason);
+      this.scene.stop(SCENES.HUD);
+      this.scene.stop(SCENES.DEBUG);
+      this.scene.pause();
+      this.scene.run(SCENES.UI_SUMMARY);
+    });
   }
 
   shutdown() {
@@ -159,12 +193,6 @@ export class MapScene extends AbstractScene {
     this.vehiclesSystem.destroy();
     this.fireMapSystem.destroy();
     this.windSystem.destroy();
-
-    this.events.removeListener(
-      EVENT_FIRE_EXTINGUISHED,
-      this.endGameFireExtinguished,
-      this
-    );
   }
 
   doPause() {
