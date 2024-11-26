@@ -74,11 +74,31 @@ export class Preloader extends AbstractScene {
       frameHeight: 44,
     });
 
+    this.load.spritesheet(
+      "pin-vertical-spritesheet",
+      "assets/pin-vertical.png",
+      {
+        frameWidth: 90,
+        frameHeight: 44,
+      }
+    );
+
+    this.load.spritesheet("poi-status-icons", "assets/poi-status-icons.png", {
+      frameWidth: 24,
+      frameHeight: 24,
+    });
+
+    this.load.spritesheet("poi-tiles-icons", "assets/poi-tiles-icons.png", {
+      frameWidth: 28,
+      frameHeight: 28,
+    });
+
     // FIXME: perhaps we should access these urls via RESOURCES[]
     this.load.audio(
       "airplane-propeller-loop",
       "assets/airplane-propeller-loop.mp3"
     );
+
     this.load.audio("fire-extinguished", "assets/fire-extinguished.mp3");
     this.load.audio("fire-loop", "assets/fire-loop.mp3");
     this.load.audio("water-loop", "assets/water-loop.mp3");
@@ -91,17 +111,23 @@ export class Preloader extends AbstractScene {
       },
       active: () => {
         // We start the game right away in dev mode
-        if (import.meta.env.VITE_DEBUG) {
-          this.scene.add(SCENES.UI_HOME, HomeScene);
+        //this.scene.start(SCENES.TEST);
+        //  return;
+        this.scene.add(SCENES.UI_HOME, HomeScene);
 
-          return this.scene.start(SCENES.UI_HOME);
-          /*
-          // Quick devloop
+        if (import.meta.env.VITE_DEBUG) {
+          // Normal game
+          // return this.scene.start(SCENES.UI_HOME);
+
+          // Quick game start
           const runConfiguration = this.gameState.getEmptyRun();
           runConfiguration.map = "CONTINENTAL";
           runConfiguration.vehicle = "MARTIN";
           this.gameState.startRun(runConfiguration);
           this.scene.start(SCENES.MAP);
+
+          /**
+          // Quick summary screen
           this.scene.get(SCENES.MAP).time.addEvent({
             delay: 2000,
             callback: () => {
@@ -118,7 +144,7 @@ export class Preloader extends AbstractScene {
         });
 
         this.input.once("pointerdown", () => {
-          this.scene.start(SCENES.MAP);
+          this.scene.start(SCENES.UI_HOME);
         });
       },
     });
@@ -136,6 +162,24 @@ export class Preloader extends AbstractScene {
       key: "pin-flash",
       frames: this.anims.generateFrameNumbers("pin-spritesheet", {
         start: 6,
+        end: 0,
+      }),
+      frameRate: 16,
+    });
+
+    this.anims.create({
+      key: "pin-vertical-hide",
+      frames: this.anims.generateFrameNumbers("pin-vertical-spritesheet", {
+        start: 0,
+        end: 6,
+      }),
+      frameRate: 16,
+    });
+
+    this.anims.create({
+      key: "pin-vertical-flash",
+      frames: this.anims.generateFrameNumbers("pin-vertical-spritesheet", {
+        start: 3,
         end: 0,
       }),
       frameRate: 16,

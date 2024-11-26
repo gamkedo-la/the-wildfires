@@ -82,6 +82,30 @@ const config = {
       executable: "aseprite",
       args: "-b ${input} --scale 2 --sheet ${output}",
     },
+    {
+      input: "ui/pin-vertical.aseprite",
+      output: "pin-vertical.png",
+      executable: "aseprite",
+      args: "-b ${input} --scale 2 --sheet ${output}",
+    },
+    {
+      input: "ui/poi-results-nine-slice.aseprite",
+      output: "poi-results-nine-slice.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
+      input: "ui/poi-status-icons.aseprite",
+      output: "poi-status-icons.png",
+      executable: "aseprite",
+      args: "-b ${input} --scale 2 --sheet ${output}",
+    },
+    {
+      input: "ui/poi-tiles-icons.aseprite",
+      output: "poi-tiles-icons.png",
+      executable: "aseprite",
+      args: "-b ${input} --scale 2 --sheet ${output}",
+    },
   ],
 };
 

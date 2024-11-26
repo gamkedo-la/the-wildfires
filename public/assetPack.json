@@ -38,6 +38,11 @@
       },
       {
         "type": "image",
+        "key": "pin-vertical",
+        "url": "assets/pin-vertical.png"
+      },
+      {
+        "type": "image",
         "key": "pin",
         "url": "assets/pin.png"
       },
@@ -45,6 +50,21 @@
         "type": "image",
         "key": "plane-offscreen-pointer",
         "url": "assets/plane-offscreen-pointer.png"
+      },
+      {
+        "type": "image",
+        "key": "poi-results-nine-slice",
+        "url": "assets/poi-results-nine-slice.png"
+      },
+      {
+        "type": "image",
+        "key": "poi-status-icons",
+        "url": "assets/poi-status-icons.png"
+      },
+      {
+        "type": "image",
+        "key": "poi-tiles-icons",
+        "url": "assets/poi-tiles-icons.png"
       },
       {
         "type": "image",
