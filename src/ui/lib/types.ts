@@ -14,6 +14,7 @@ declare global {
       image: ImageElement;
       circle: CircleElement;
       zone: ZoneElement;
+      nineslice: NineSliceElement;
     }
   }
 }
@@ -28,8 +29,6 @@ export type TextElement = PhaserGameObjectProps<Phaser.GameObjects.Text> & {
 
 export type RectangleElement =
   PhaserGameObjectProps<Phaser.GameObjects.Rectangle> & {
-    width: SignalValue<number>;
-    height: SignalValue<number>;
     fillColor?: SignalValue<number>;
     strokeColor?: SignalValue<number>;
     strokeWidth?: SignalValue<number>;
@@ -55,6 +54,17 @@ export type ZoneElement = PhaserGameObjectProps<Phaser.GameObjects.Zone> & {
   height: SignalValue<number>;
 };
 
+export type NineSliceElement =
+  PhaserGameObjectProps<Phaser.GameObjects.NineSlice> & {
+    texture: SignalValue<string>;
+    frame?: SignalValue<string | number>;
+
+    leftWidth: number;
+    rightWidth: number;
+    topHeight: number;
+    bottomHeight: number;
+  };
+
 export type PhaserJsxElement =
   | PhaserGameObjectProps<Phaser.GameObjects.GameObject>
   | PhaserGameObjectProps<Phaser.GameObjects.GameObject>[];
@@ -77,6 +87,8 @@ export interface PhaserGameObjectProps<
   height?: SignalValue<number>;
 
   alpha?: SignalValue<number>;
+  tint?: SignalValue<number>;
+
   angle?: SignalValue<number>;
   scale?: SignalValue<number>;
   scaleX?: SignalValue<number>;

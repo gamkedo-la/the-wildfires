@@ -5,6 +5,7 @@ import {
   cleanupSymbol,
   ContainerElement,
   ImageElement,
+  NineSliceElement,
   PhaserGameObjectProps,
   RectangleElement,
   SignalCleanup,
@@ -226,6 +227,44 @@ export function setupGameObject<T extends Phaser.GameObjects.GameObject>(
         );
       }
 
+      break;
+
+    case "nineslice":
+      const nineSliceProps = props as NineSliceElement;
+
+      gameObject = scene.make.nineslice(
+        {
+          x:
+            nineSliceProps.x instanceof SignalImpl
+              ? nineSliceProps.x.get()
+              : nineSliceProps.x || 0,
+          y:
+            nineSliceProps.y instanceof SignalImpl
+              ? nineSliceProps.y.get()
+              : nineSliceProps.y || 0,
+          width:
+            nineSliceProps.width instanceof SignalImpl
+              ? nineSliceProps.width.get()
+              : nineSliceProps.width,
+          height:
+            nineSliceProps.height instanceof SignalImpl
+              ? nineSliceProps.height.get()
+              : nineSliceProps.height,
+          key:
+            nineSliceProps.texture instanceof SignalImpl
+              ? nineSliceProps.texture.get()
+              : nineSliceProps.texture,
+          frame:
+            nineSliceProps.frame instanceof SignalImpl
+              ? nineSliceProps.frame.get()
+              : nineSliceProps.frame,
+          leftWidth: nineSliceProps.leftWidth,
+          rightWidth: nineSliceProps.rightWidth,
+          topHeight: nineSliceProps.topHeight,
+          bottomHeight: nineSliceProps.bottomHeight,
+        },
+        false
+      ) as unknown as T;
       break;
 
     case "container":
