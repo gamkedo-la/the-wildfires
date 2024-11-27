@@ -60,6 +60,12 @@ const config = {
       executable: "tiled",
       args: "--export-map json --embed-tilesets ${input} ${output}",
     },
+    {
+      input: "maps/continental-test.tmx",
+      output: "continental-test.json",
+      executable: "tiled",
+      args: "--export-map json --embed-tilesets ${input} ${output}",
+    },
     { input: "airplane/martin.png", output: "martin.png" },
     {
       input: "sounds/airplane-propeller-loop.mp3",

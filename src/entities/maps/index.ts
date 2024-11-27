@@ -1,4 +1,5 @@
 import { ContinentalMap } from "./Continental";
+import { ContinentalTestMap } from "./ContinentalTest";
 
 export interface MapWithProperties extends Phaser.Tilemaps.Tilemap {
   properties: Array<{
@@ -52,6 +53,7 @@ export enum MapTileType {
 
 export const MAPS = {
   CONTINENTAL: ContinentalMap,
+  CONTINENTAL_TEST: ContinentalTestMap,
 };
 
 export type MapType = keyof typeof MAPS;

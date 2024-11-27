@@ -108,6 +108,11 @@
       },
       {
         "type": "tilemapTiledJSON",
+        "key": "continental-test",
+        "url": "assets/continental-test.json"
+      },
+      {
+        "type": "tilemapTiledJSON",
         "key": "continental",
         "url": "assets/continental.json"
       },

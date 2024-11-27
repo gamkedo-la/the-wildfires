@@ -38,15 +38,6 @@ export class SummaryScene extends AbstractScene {
       />
     );
 
-    this.add.existing(
-      <text
-        text={`Points of interest`}
-        x={600}
-        y={50}
-        style={{ ...TEXT_STYLE }}
-      />
-    );
-
     const poiList = poi.map((item) => (
       <container width={200} height={80} visible={false} scale={1.5}>
         <nineslice
@@ -169,7 +160,7 @@ export class SummaryScene extends AbstractScene {
     );
 
     const stack = (
-      <Stack direction="vertical" spacing={10} x={640} y={100}>
+      <Stack direction="vertical" spacing={10} x={640} y={20}>
         {poiList}
       </Stack>
     );
