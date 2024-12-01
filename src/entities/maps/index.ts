@@ -26,6 +26,7 @@ export interface StructuresLayerTile extends Phaser.Tilemaps.Tile {
     isBuilding: boolean;
     burnRate: number;
     isRoad: boolean;
+    burnedTileId: number;
   };
 }
 

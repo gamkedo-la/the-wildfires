@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.1" name="tilemap-large" tilewidth="24" tileheight="32" tilecount="130" columns="10">
+<tileset version="1.10" tiledversion="1.10.1" name="tilemap-large" tilewidth="24" tileheight="32" tilecount="260" columns="10">
  <tileoffset x="-4" y="0"/>
- <image source="../tiles/tilemap-test-3.png" width="240" height="416"/>
+ <image source="../tiles/tilemap-test-3.png" width="240" height="832"/>
  <tile id="0">
   <properties>
    <property name="burnRate" type="int" value="3"/>
@@ -11,7 +11,7 @@
  <tile id="1">
   <properties>
    <property name="burnRate" type="int" value="3"/>
-   <property name="burnedTileId" type="int" value="41"/>
+   <property name="burnedTileId" type="int" value="234"/>
   </properties>
  </tile>
  <tile id="2">
@@ -23,13 +23,13 @@
  <tile id="3">
   <properties>
    <property name="burnRate" type="int" value="3"/>
-   <property name="burnedTileId" type="int" value="41"/>
+   <property name="burnedTileId" type="int" value="231"/>
   </properties>
  </tile>
  <tile id="4">
   <properties>
    <property name="burnRate" type="int" value="3"/>
-   <property name="burnedTileId" type="int" value="41"/>
+   <property name="burnedTileId" type="int" value="231"/>
   </properties>
  </tile>
  <tile id="5">
@@ -41,7 +41,7 @@
  <tile id="6">
   <properties>
    <property name="burnRate" type="int" value="3"/>
-   <property name="burnedTileId" type="int" value="42"/>
+   <property name="burnedTileId" type="int" value="232"/>
   </properties>
  </tile>
  <tile id="7">
@@ -71,7 +71,7 @@
  <tile id="11">
   <properties>
    <property name="burnRate" type="int" value="3"/>
-   <property name="burnedTileId" type="int" value="43"/>
+   <property name="burnedTileId" type="int" value="234"/>
   </properties>
  </tile>
  <tile id="12">
@@ -83,13 +83,13 @@
  <tile id="13">
   <properties>
    <property name="burnRate" type="int" value="3"/>
-   <property name="burnedTileId" type="int" value="43"/>
+   <property name="burnedTileId" type="int" value="231"/>
   </properties>
  </tile>
  <tile id="14">
   <properties>
    <property name="burnRate" type="int" value="3"/>
-   <property name="burnedTileId" type="int" value="43"/>
+   <property name="burnedTileId" type="int" value="231"/>
   </properties>
  </tile>
  <tile id="15">
@@ -101,7 +101,7 @@
  <tile id="16">
   <properties>
    <property name="burnRate" type="int" value="3"/>
-   <property name="burnedTileId" type="int" value="44"/>
+   <property name="burnedTileId" type="int" value="232"/>
   </properties>
  </tile>
  <tile id="17">
@@ -119,43 +119,43 @@
  <tile id="20">
   <properties>
    <property name="burnRate" type="int" value="1"/>
-   <property name="burnedTileId" type="int" value="41"/>
+   <property name="burnedTileId" type="int" value="46"/>
   </properties>
  </tile>
  <tile id="21">
   <properties>
    <property name="burnRate" type="int" value="1"/>
-   <property name="burnedTileId" type="int" value="41"/>
+   <property name="burnedTileId" type="int" value="46"/>
   </properties>
  </tile>
  <tile id="22">
   <properties>
    <property name="burnRate" type="int" value="1"/>
-   <property name="burnedTileId" type="int" value="42"/>
+   <property name="burnedTileId" type="int" value="46"/>
   </properties>
  </tile>
  <tile id="23">
   <properties>
    <property name="burnRate" type="int" value="1"/>
-   <property name="burnedTileId" type="int" value="42"/>
+   <property name="burnedTileId" type="int" value="47"/>
   </properties>
  </tile>
  <tile id="24">
   <properties>
    <property name="burnRate" type="int" value="1"/>
-   <property name="burnedTileId" type="int" value="43"/>
+   <property name="burnedTileId" type="int" value="47"/>
   </properties>
  </tile>
  <tile id="25">
   <properties>
    <property name="burnRate" type="int" value="1"/>
-   <property name="burnedTileId" type="int" value="43"/>
+   <property name="burnedTileId" type="int" value="47"/>
   </properties>
  </tile>
  <tile id="26">
   <properties>
    <property name="burnRate" type="int" value="1"/>
-   <property name="burnedTileId" type="int" value="44"/>
+   <property name="burnedTileId" type="int" value="45"/>
   </properties>
  </tile>
  <tile id="30">
@@ -288,90 +288,105 @@
  <tile id="75">
   <properties>
    <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="80"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="80">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="78"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="81">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="79"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="82">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="80"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="83">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="78"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="84">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="89"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="85">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="89"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="86">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="90"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="87">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="90"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="90">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="100"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="91">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="99"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="92">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="97"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="93">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="98"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="94">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="99"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="95">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="99"/>
    <property name="isBuilding" type="bool" value="true"/>
   </properties>
  </tile>
@@ -448,6 +463,354 @@
  <tile id="115">
   <properties>
    <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="116">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="117">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="118">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="119">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="128">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="129">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="130">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="131">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="132">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="133">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="134">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="135">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="136">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="137">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="138">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="139">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="140">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="141">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="142">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="143">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="144">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="145">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="146">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="147">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="148">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="150">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="151">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="152">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="153">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="154">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="155">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="156">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="157">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="158">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="159">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="160">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="161">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="162">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="163">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="164">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="170">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="171">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="172">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="173">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="174">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="166"/>
+  </properties>
+ </tile>
+ <tile id="175">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="176">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="177">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="178">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="179">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="167"/>
+  </properties>
+ </tile>
+ <tile id="180">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="181">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="182">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="183">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="184">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="168"/>
+  </properties>
+ </tile>
+ <tile id="185">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="186">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="187">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="188">
+  <properties>
+   <property name="burnRate" type="int" value="3"/>
+   <property name="burnedTileId" type="int" value="169"/>
   </properties>
  </tile>
 </tileset>

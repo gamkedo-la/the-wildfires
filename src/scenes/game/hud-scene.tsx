@@ -43,6 +43,7 @@ export class HUDScene extends AbstractScene {
         angle={computed(
           () => 270 + (90 * vehicle.velocity.get().length()) / vehicle.maxSpeed
         )}
+        alpha={0}
       />
     );
 
@@ -63,6 +64,7 @@ export class HUDScene extends AbstractScene {
           fontSize: 12,
           color: "#efd8a1",
         }}
+        alpha={0}
       />
     );
 
@@ -71,6 +73,7 @@ export class HUDScene extends AbstractScene {
     // q) why was this not being added to assets.ts as expected?
     // a) you need to stop vite and re-run it (npm run dev) to refresh
     this.waterDialSprite = this.add.image(264, 745, RESOURCES["water-dial"]);
+    this.waterDialSprite.alpha = 0;
     this.waterDialSprite.angle = 225;
 
     // the arrow that appears when you fly off-screen

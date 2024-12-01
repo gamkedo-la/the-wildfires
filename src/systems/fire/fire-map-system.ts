@@ -245,6 +245,15 @@ export class FireMapSystem implements System {
       this.stopSmoke(tile);
     }
 
+    let structuresTile = this.map.structuresLayer.getTileAt(
+      tileX,
+      tileY
+    ) as StructuresLayerTile;
+
+    if (structuresTile?.properties.isBuilding) {
+      structuresTile.index = structuresTile.properties.burnedTileId;
+    }
+
     const poi = this.map.pointsOfInterestLayer.getTileAt(tileX, tileY)?.index;
     if (poi) {
       this.map.scene.gameState.causePointOfInterestDamage(
