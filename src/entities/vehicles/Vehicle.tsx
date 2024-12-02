@@ -44,12 +44,19 @@ export abstract class Vehicle {
   turningBias: number;
   straightBias: number;
 
+  readonly maxImageScale: number = 0.25;
+  readonly startImageScale: number = 0.05;
+  readonly imageScaleSteps: number = 25;
+  readonly imageScaleUnit = this.maxImageScale / this.imageScaleSteps;
+  imageScale: number;
+  imageScaleGoal: number;
+
   constructor(
     scene: MapScene,
     x: number,
     y: number,
     texture: string,
-    imageScale: number = 0.25
+    imageScale: number = this.startImageScale
   ) {
     this.scene = scene;
     this.position = mutable(new PMath.Vector2(x, y));
@@ -58,6 +65,7 @@ export abstract class Vehicle {
     this.acceleration = mutable(new PMath.Vector2(0, 0));
     this.initSounds();
     this.started = false;
+    this.imageScaleGoal = this.maxImageScale;
 
     this.water = this.initWaterFX();
 
@@ -88,9 +96,7 @@ export abstract class Vehicle {
       />
     );
 
-    // Not handled yet
     this.sprite.setScale(imageScale);
-
     this.scene.add.existing(this.sprite);
   }
 
@@ -145,10 +151,24 @@ export abstract class Vehicle {
     this.engineSound.setRate(0.2 + this.velocity.get().length() / 200);
   }
 
+  updateScale(dt: number) {
+    // using scaleX() because assuming uniform vehicle image scaling
+    if (this.imageScaleGoal > 0 && this.imageScaleUnit > 0) {
+      const scale: number = this.sprite.scaleX;
+      const currentStep: number = scale / this.imageScaleUnit;
+      const goalStep: number = this.imageScaleGoal / this.imageScaleUnit;
+      const stepDiff: number = goalStep - currentStep;
+      const goUpOrDown = stepDiff > 0 ? dt : (stepDiff < 0 ? -dt : 0);
+      const newScale = scale + (goUpOrDown * this.imageScaleUnit); 
+      this.sprite.setScale(newScale);
+    }
+  }
+
   update(_time: number, delta: number): void {
     const deltaSeconds = delta * 0.001;
 
     this.updateSounds(deltaSeconds);
+    this.updateScale(deltaSeconds);
 
     if (this.scene.key_w.isDown || this.scene.key_up.isDown) {
       this.started = true;
