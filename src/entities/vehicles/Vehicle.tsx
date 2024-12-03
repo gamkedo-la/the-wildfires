@@ -131,7 +131,7 @@ export abstract class Vehicle {
           return Math.max(0, Math.min(4, currentFrame));
         })}
         scale={computed(() => {
-          return this.imageScale?.get();
+          return this.imageScale.get();
         })}
       />
     );
@@ -197,7 +197,7 @@ export abstract class Vehicle {
       const goalStep: number = this.imageScaleGoal / this.imageScaleUnit;
       const stepDiff: number = goalStep - currentStep;
       const goUpOrDown: number  = stepDiff > 0 ? dt : stepDiff < 0 ? -dt : 0;
-      this.imageScale = signal(currentScale + goUpOrDown * this.imageScaleUnit);
+      this.imageScale.set(currentScale + goUpOrDown * this.imageScaleUnit);
     }
   }
 
@@ -206,8 +206,6 @@ export abstract class Vehicle {
 
     this.updateSounds(deltaSeconds);
     this.updateScale(deltaSeconds);
-    this.shadow.scale = this.imageScale.get();
-    this.sprite.scale = this.imageScale.get();
 
     if (this.scene.key_w.isDown || this.scene.key_up.isDown) {
       this.started = true;
