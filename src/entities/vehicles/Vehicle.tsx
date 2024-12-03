@@ -9,6 +9,7 @@ export abstract class Vehicle {
   scene: MapScene;
 
   sprite: Phaser.GameObjects.Image;
+  shadow: Phaser.GameObjects.Image;
 
   engineSound:
     | Phaser.Sound.HTML5AudioSound
@@ -70,6 +71,39 @@ export abstract class Vehicle {
     this.water = this.initWaterFX();
 
     this.turningState = signal(0);
+
+    this.shadow = (
+      <image
+        x={computed(() => {
+          // const x = this.sprite.x; // can't access sprite from here?
+          const x = this.position.get().x;
+          if (x < 70) return 120;
+          if (x > GAME_WIDTH) return GAME_WIDTH - 20;
+          return x;
+        })}
+        y={computed(() => {
+          const y = this.position.get().y;
+          if (y < 70) return 100;
+          if (y > GAME_HEIGHT) return GAME_HEIGHT - 40;
+          // shadow is far below the plane when faster,
+          // and directly underneath when stopped
+          let altitudeFromSpeed = this.velocity.get().length() / 2;
+          return y + altitudeFromSpeed;
+        })}
+        texture={texture} // same as plane sprite
+        alpha={0.2}
+        tint={0x000000} // except tinted black and mostly transparent
+        angle={computed(
+          () => PMath.RadToDeg(this.direction.get().angle()) - 90
+        )}
+        frame={computed(() => {
+          const currentFrame = Math.floor(this.turningState.get() / 20);
+          return Math.max(0, Math.min(4, currentFrame));
+        })}
+      />
+    );
+    this.scene.add.existing(this.shadow);
+    this.shadow.setScale(0.25);
 
     this.sprite = (
       <image
