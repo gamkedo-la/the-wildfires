@@ -47,9 +47,9 @@ export abstract class Vehicle {
 
   readonly maxImageScale: number = 0.25;
   readonly startImageScale: number = 0.05;
-  readonly imageScaleSteps: number = 25;
+  readonly imageScaleSteps: number = 10;
   readonly imageScaleUnit = this.maxImageScale / this.imageScaleSteps;
-  imageScale: number;
+  imageScale: Signal<number>;
   imageScaleGoal: number;
 
   constructor(
@@ -71,6 +71,7 @@ export abstract class Vehicle {
     this.water = this.initWaterFX();
 
     this.turningState = signal(0);
+    this.imageScale = signal(imageScale);
 
     this.shadow = (
       <image
@@ -100,10 +101,12 @@ export abstract class Vehicle {
           const currentFrame = Math.floor(this.turningState.get() / 20);
           return Math.max(0, Math.min(4, currentFrame));
         })}
+        scale={computed(() => {
+          return this.imageScale?.get();
+        })}
       />
     );
     this.scene.add.existing(this.shadow);
-    this.shadow.setScale(0.25);
 
     this.sprite = (
       <image
@@ -127,10 +130,12 @@ export abstract class Vehicle {
           const currentFrame = Math.floor(this.turningState.get() / 20);
           return Math.max(0, Math.min(4, currentFrame));
         })}
+        scale={computed(() => {
+          return this.imageScale?.get();
+        })}
       />
     );
 
-    this.sprite.setScale(imageScale);
     this.scene.add.existing(this.sprite);
   }
 
@@ -186,15 +191,13 @@ export abstract class Vehicle {
   }
 
   updateScale(dt: number) {
-    // using scaleX() because assuming uniform vehicle image scaling
     if (this.imageScaleGoal > 0 && this.imageScaleUnit > 0) {
-      const scale: number = this.sprite.scaleX;
-      const currentStep: number = scale / this.imageScaleUnit;
+      const currentScale: number = this.imageScale.get();
+      const currentStep: number = currentScale / this.imageScaleUnit;
       const goalStep: number = this.imageScaleGoal / this.imageScaleUnit;
       const stepDiff: number = goalStep - currentStep;
-      const goUpOrDown = stepDiff > 0 ? dt : stepDiff < 0 ? -dt : 0;
-      const newScale = scale + goUpOrDown * this.imageScaleUnit;
-      this.sprite.setScale(newScale);
+      const goUpOrDown: number  = stepDiff > 0 ? dt : stepDiff < 0 ? -dt : 0;
+      this.imageScale = signal(currentScale + goUpOrDown * this.imageScaleUnit);
     }
   }
 
@@ -203,6 +206,8 @@ export abstract class Vehicle {
 
     this.updateSounds(deltaSeconds);
     this.updateScale(deltaSeconds);
+    this.shadow.scale = this.imageScale.get();
+    this.sprite.scale = this.imageScale.get();
 
     if (this.scene.key_w.isDown || this.scene.key_up.isDown) {
       this.started = true;
