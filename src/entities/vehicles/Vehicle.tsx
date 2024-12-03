@@ -34,7 +34,7 @@ export abstract class Vehicle {
   slowingRate: number = 3;
   turnRate: number;
   tankCapacity: number;
-  tankLevel: number;
+  tankLevel: Signal<number>;
   tankConsumptionRate: number;
   tankRefillRate: number;
 
@@ -158,8 +158,8 @@ export abstract class Vehicle {
       const currentStep: number = scale / this.imageScaleUnit;
       const goalStep: number = this.imageScaleGoal / this.imageScaleUnit;
       const stepDiff: number = goalStep - currentStep;
-      const goUpOrDown = stepDiff > 0 ? dt : (stepDiff < 0 ? -dt : 0);
-      const newScale = scale + (goUpOrDown * this.imageScaleUnit); 
+      const goUpOrDown = stepDiff > 0 ? dt : stepDiff < 0 ? -dt : 0;
+      const newScale = scale + goUpOrDown * this.imageScaleUnit;
       this.sprite.setScale(newScale);
     }
   }
@@ -271,7 +271,7 @@ export abstract class Vehicle {
 
     if (this.scene.space_key.isDown) {
       if (
-        this.tankLevel > 5 &&
+        this.tankLevel.get() > 5 &&
         this.scene.currentMap.typeAtWorldXY(
           this.position.get().x,
           this.position.get().y
@@ -286,9 +286,13 @@ export abstract class Vehicle {
           this.position.get().y
         ) === MapTileType.Water
       ) {
-        this.tankLevel += this.tankRefillRate * deltaSeconds;
-        this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
-        this.scene.bus.emit("water_level_changed", this.tankLevel);
+        this.tankLevel.update((value) =>
+          PMath.Clamp(
+            value + this.tankRefillRate * deltaSeconds,
+            1,
+            this.tankCapacity
+          )
+        );
 
         // fade in the water tank filling sound
         let newVolume = this.waterSound.volume + 0.5 * deltaSeconds;
@@ -298,14 +302,17 @@ export abstract class Vehicle {
     }
 
     if (this.tankWasOpen) {
-      this.tankLevel -= this.tankConsumptionRate * deltaSeconds;
-      this.tankLevel = PMath.Clamp(this.tankLevel, 1, this.tankCapacity);
+      this.tankLevel.update((value) =>
+        PMath.Clamp(
+          value - this.tankConsumptionRate * deltaSeconds,
+          1,
+          this.tankCapacity
+        )
+      );
 
-      if (this.tankLevel <= 1) {
+      if (this.tankLevel.get() <= 1) {
         this.tankWasOpen = false;
       }
-
-      this.scene.bus.emit("water_level_changed", this.tankLevel);
 
       this.scene.events.emit(EVENT_DROP_WATER, {
         x: this.position.get().x,

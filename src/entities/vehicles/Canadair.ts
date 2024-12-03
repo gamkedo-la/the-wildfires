@@ -1,3 +1,4 @@
+import { signal } from "@game/state/lib/signals";
 import { MapScene } from "../../scenes/game/map-scene";
 import { Vehicle } from "./Vehicle";
 
@@ -10,7 +11,7 @@ export class Canadair extends Vehicle {
     this.turnRate = Math.PI * 0.75;
 
     this.tankCapacity = 200;
-    this.tankLevel = 0;
+    this.tankLevel = signal(0);
     this.tankConsumptionRate = 130;
     this.tankRefillRate = 150;
 

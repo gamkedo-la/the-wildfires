@@ -81,7 +81,42 @@ const config = {
       input: "skycrane/skycrane_export.png",
       output: "skycrane-sprite.png",
     },
-    { input: "ui/the-wildfires-ui-sketch.png", output: "the-wildfires-ui.png" },
+    {
+      input: "ui/the-wildfires-planes-hud.aseprite",
+      output: "planes-hud.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
+      input: "ui/tanks-overlay.aseprite",
+      output: "tanks-overlay.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
+      input: "ui/torque-pin.aseprite",
+      output: "torque-pin.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
+      input: "ui/velocity-pin.aseprite",
+      output: "velocity-pin.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
+      input: "ui/wind-direction-pin.aseprite",
+      output: "wind-direction-pin.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
+      input: "ui/payload-picker.aseprite",
+      output: "payload-picker.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
     {
       input: "ui/pin.aseprite",
       output: "pin.png",

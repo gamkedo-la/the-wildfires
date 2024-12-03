@@ -2,6 +2,7 @@ import { Math as PMath } from "phaser";
 
 import { MapScene } from "../../scenes/game/map-scene";
 import { Vehicle } from "./Vehicle";
+import { signal } from "@game/state/lib/signals";
 
 export class Skycrane extends Vehicle {
   bodyDirection: PMath.Vector2;
@@ -29,7 +30,7 @@ export class Skycrane extends Vehicle {
 
     // Water tank
     this.tankCapacity = 100;
-    this.tankLevel = 0;
+    this.tankLevel = signal(0);
     this.tankConsumptionRate = 130;
     this.tankRefillRate = 150;
   }

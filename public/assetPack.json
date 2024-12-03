@@ -38,6 +38,11 @@
       },
       {
         "type": "image",
+        "key": "payload-picker",
+        "url": "assets/payload-picker.png"
+      },
+      {
+        "type": "image",
         "key": "pin-vertical",
         "url": "assets/pin-vertical.png"
       },
@@ -50,6 +55,11 @@
         "type": "image",
         "key": "plane-offscreen-pointer",
         "url": "assets/plane-offscreen-pointer.png"
+      },
+      {
+        "type": "image",
+        "key": "planes-hud",
+        "url": "assets/planes-hud.png"
       },
       {
         "type": "image",
@@ -78,8 +88,8 @@
       },
       {
         "type": "image",
-        "key": "the-wildfires-ui",
-        "url": "assets/the-wildfires-ui.png"
+        "key": "tanks-overlay",
+        "url": "assets/tanks-overlay.png"
       },
       {
         "type": "image",
@@ -98,13 +108,23 @@
       },
       {
         "type": "image",
-        "key": "water-dial",
-        "url": "assets/water-dial.png"
+        "key": "torque-pin",
+        "url": "assets/torque-pin.png"
+      },
+      {
+        "type": "image",
+        "key": "velocity-pin",
+        "url": "assets/velocity-pin.png"
       },
       {
         "type": "image",
         "key": "water",
         "url": "assets/water.png"
+      },
+      {
+        "type": "image",
+        "key": "wind-direction-pin",
+        "url": "assets/wind-direction-pin.png"
       },
       {
         "type": "tilemapTiledJSON",
