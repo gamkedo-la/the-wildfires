@@ -93,6 +93,11 @@ export class Preloader extends AbstractScene {
       frameHeight: 28,
     });
 
+    this.load.spritesheet("smoke-spritesheet", "assets/smoke.png", {
+      frameWidth: 8,
+      frameHeight: 8,
+    });
+
     // FIXME: perhaps we should access these urls via RESOURCES[]
     this.load.audio(
       "airplane-propeller-loop",
@@ -177,6 +182,15 @@ export class Preloader extends AbstractScene {
     });
 
     this.anims.create({
+      key: "smoke-out",
+      frames: this.anims.generateFrameNumbers("smoke-spritesheet", {
+        start: 0,
+        end: 3,
+      }),
+      frameRate: 0.5,
+    });
+
+    this.anims.create({
       key: "pin-vertical-flash",
       frames: this.anims.generateFrameNumbers("pin-vertical-spritesheet", {
         start: 3,
@@ -184,6 +198,12 @@ export class Preloader extends AbstractScene {
       }),
       frameRate: 16,
     });
+
+    const graphics = this.add.graphics();
+    graphics.fillStyle(0xffffff);
+    graphics.fillCircle(1, 1, 1);
+    graphics.generateTexture("wind_particle", 1, 1);
+    graphics.destroy();
   }
 
   shutdown() {}
