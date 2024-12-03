@@ -15,7 +15,8 @@ import {
 } from "../../ui/animation/animation";
 import { SCENES } from "../consts";
 
-const FIRE_INTERVAL_MS = 8000;
+// TODO: this will probably vary by map
+const FIRE_INTERVAL_MS = 5000;
 const BURN_INTERVAL_MS = 5000;
 
 export class MapScene extends AbstractScene {
@@ -79,6 +80,7 @@ export class MapScene extends AbstractScene {
     this.camera.scrollY = Math.floor(this.currentMap.cameraPosition.y);
 
     this.registerSystems();
+    this.setupWindParticles();
     this.registerGameEndedListener();
 
     this.scene.run(SCENES.HUD, {
@@ -105,6 +107,33 @@ export class MapScene extends AbstractScene {
       BURN_INTERVAL_MS
     ).create();
     this.windSystem = new WindSystem(this).create();
+  }
+
+  windParticles: Phaser.GameObjects.Particles.ParticleEmitter;
+
+  setupWindParticles() {
+    const { width, height } = this.scale;
+
+    this.windParticles = this.add.particles(0, 0, "wind_particle", {
+      frequency: 100,
+      lifespan: 4000,
+      quantity: 10,
+      speedX: 0,
+      speedY: 0,
+      emitZone: {
+        type: "random",
+        source: new Phaser.Geom.Rectangle(0, 0, width, height),
+      } as Phaser.Types.GameObjects.Particles.ParticleEmitterConfig["emitZone"],
+    });
+
+    this.windParticles.speedX = -20;
+    this.windParticles.speedY = 20;
+
+    effect(() => {
+      const windVector = this.windSystem.windVector.get();
+      this.windParticles.speedX = windVector.x * 20;
+      this.windParticles.speedY = windVector.y * 20;
+    });
   }
 
   update(time: number, delta: number) {
@@ -193,6 +222,7 @@ export class MapScene extends AbstractScene {
     this.vehiclesSystem.destroy();
     this.fireMapSystem.destroy();
     this.windSystem.destroy();
+    this.windParticles.destroy();
   }
 
   doPause() {

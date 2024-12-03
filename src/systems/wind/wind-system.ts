@@ -2,6 +2,8 @@ import { Math as PMath } from "phaser";
 
 import { System } from "..";
 import { MapScene } from "../../scenes/game/map-scene";
+import { MutableSignal } from "@game/state/lib/types";
+import { mutable } from "@game/state/lib/signals";
 
 type AperiodicParams = {
   factor1: number;
@@ -66,6 +68,8 @@ export class WindSystem implements System {
   direction: PMath.Vector2;
   speed: number;
 
+  windVector: MutableSignal<PMath.Vector2>;
+
   constructor(scene: MapScene) {
     this.scene = scene;
   }
@@ -73,6 +77,7 @@ export class WindSystem implements System {
   create(): this {
     this.direction = PMath.Vector2.UP;
     this.speed = 2;
+    this.windVector = mutable(this.direction.clone());
 
     return this;
   }
@@ -83,7 +88,13 @@ export class WindSystem implements System {
     const scaledTime = time / 5000;
 
     this.direction.setAngle((dirFunc(scaledTime) + 1) * Math.PI);
+
     this.speed = (speedFunc(scaledTime) + 1) * 5;
+
+    this.windVector.mutate((vec) => {
+      vec.set(this.direction.x, this.direction.y).scale(this.speed);
+      return true;
+    });
   }
 
   get() {

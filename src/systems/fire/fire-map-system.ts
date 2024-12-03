@@ -10,6 +10,9 @@ import {
 import { GameMap } from "../../entities/maps/GameMap";
 import { MapScene } from "../../scenes/game/map-scene";
 
+const burnedTilesIds = [41, 42, 43, 44, 166, 167, 168, 169, 231, 232, 233, 234];
+const doNotChangeBurnedTiles = [45, 46, 47];
+
 export class FireMapSystem implements System {
   scene: MapScene;
   fireInterval: number;
@@ -228,7 +231,13 @@ export class FireMapSystem implements System {
         }
 
         if (t.properties.fuel <= 0) {
-          t.index = t.properties.burnedTileId;
+          // TODO: Absolute hack, not sure it's worth the visual "improvement"
+          if (doNotChangeBurnedTiles.includes(t.properties.burnedTileId)) {
+            t.index = t.properties.burnedTileId;
+          } else {
+            t.index =
+              burnedTilesIds[Phaser.Math.Between(0, burnedTilesIds.length - 1)];
+          }
           t.properties.burnRate = 0;
           this.burnDown(t.x, t.y);
         }
@@ -316,22 +325,31 @@ export class FireMapSystem implements System {
   }
 
   private emitSmoke(tile: FireLayerTile) {
-    if (Phaser.Math.Between(0, 100) < 50) return;
+    if (Phaser.Math.Between(0, 100) < 70) return;
+
+    const tint = [
+      [0x664433, 0x927e6a, 0xefd8a1, 0x927e6a],
+      [0x434033, 0xefd8a1, 0x927e6a],
+      [0x3f4033, 0x927e6a, 0xefd8a1],
+      [0x504033, 0xefd8a1],
+    ];
 
     if (tile.properties.smoke === undefined) {
       tile.properties.smoke = this.scene.add.particles(
         tile.pixelX,
         tile.pixelY,
-        "smoke",
+        "smoke-spritesheet",
         {
-          x: { random: [0, tile.width] },
-          y: { random: [0, tile.height] },
+          x: { random: [-tile.width / 3, tile.width / 3] },
+          y: { random: [-tile.height / 3, tile.height / 3] },
+          color: PMath.RND.pick(tint),
+          anim: "smoke-out",
           quantity: 1,
           angle: () =>
             PMath.RND.between(this.windAngle - 15, this.windAngle + 15),
-          speed: () => 4 + this.windSpeed,
-          frequency: 80,
-          lifespan: 2000,
+          speed: () => 15 + this.windSpeed,
+          frequency: PMath.RND.between(10, 50),
+          lifespan: PMath.RND.between(500, 10000),
         }
       );
     } else {
