@@ -46,7 +46,6 @@ export abstract class Vehicle {
   turningBias: number;
   straightBias: number;
 
-  readonly imageScaleSteps: number = 2;
   startImageScale: number = 0.05;
   imageScaleUnit: number;
   imageScale: Signal<number>;
@@ -72,8 +71,7 @@ export abstract class Vehicle {
 
     this.startImageScale = imageScale * 0.5;
     this.imageScaleGoal = this.maxImageScale;
-    this.imageScaleUnit =
-      (this.maxImageScale - this.startImageScale) / this.imageScaleSteps;
+    this.imageScaleUnit = this.maxImageScale - this.startImageScale;
 
     this.imageScale = signal(this.startImageScale);
 
@@ -288,7 +286,7 @@ export abstract class Vehicle {
 
     if (this.isCollectingWater && this.tankLevel.get() < this.tankCapacity) {
       const slowProportionally =
-        (this.slowingRate / 3) *
+        (this.slowingRate / 3.3) *
         (this.accelerationRate + this.velocity.get().length());
       const slowVector = this.velocity
         .get()
@@ -348,7 +346,7 @@ export abstract class Vehicle {
   // Vehicles will drop water continuously until the tank is empty
   // Water is collected when space is pressed until it's pressed again
   tankWasOpen: boolean = false;
-  tankWasOpenTime: number = 0;
+  spacePressedTime: number = 0;
   isCollectingWater: boolean = false;
 
   useTank(_time: number, delta: number): void {
@@ -363,9 +361,10 @@ export abstract class Vehicle {
           ) === MapTileType.Water
         ) {
           this.isCollectingWater = true;
+          this.spacePressedTime = _time;
         } else if (this.tankLevel.get() > 5) {
           this.tankWasOpen = true;
-          this.tankWasOpenTime = _time;
+          this.spacePressedTime = _time;
         }
       }
 
@@ -390,7 +389,9 @@ export abstract class Vehicle {
         let newVolume = this.waterSound.volume + 0.5 * deltaSeconds;
         if (newVolume > 0.25) newVolume = 0.25;
         this.waterSound.setVolume(newVolume);
-        this.waterCollection.emitting = true;
+        if (_time - this.spacePressedTime > 250) {
+          this.waterCollection.emitting = true;
+        }
         this.imageScaleGoal = this.maxImageScale * 0.8;
       } else {
         this.waterCollection.emitting = false;
@@ -428,7 +429,7 @@ export abstract class Vehicle {
       }
 
       // Water takes time to reach the ground
-      if (_time - this.tankWasOpenTime > 300) {
+      if (_time - this.spacePressedTime > 300) {
         const positionBehind = this.position
           .get()
           .clone()
