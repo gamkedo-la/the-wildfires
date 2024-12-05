@@ -67,9 +67,13 @@ export class HUDScene extends AbstractScene {
         x={225}
         y={730}
         texture={RESOURCES["velocity-pin"]}
-        angle={computed(
-          () => (90 * vehicle.velocity.get().length()) / vehicle.maxSpeed
-        )}
+        angle={computed(() => {
+          const vel = vehicle.velocity.get().length();
+          return vehicle.isCollectingWater &&
+            vehicle.tankLevel.get() < vehicle.tankCapacity
+            ? (90 * vel) / (vehicle.maxSpeed + (vehicle.maxSpeed - vel) * 100)
+            : (90 * vel) / vehicle.maxSpeed;
+        })}
       />
     );
 
@@ -79,12 +83,17 @@ export class HUDScene extends AbstractScene {
       <text
         x={185}
         y={710}
-        text={computed(
-          () =>
-            ` ${Math.round(7.5 * vehicle.velocity.get().length())
-              .toString()
-              .padStart(3, "0")} ft`
-        )}
+        text={computed(() => {
+          const vel = vehicle.velocity.get().length();
+          return ` ${Math.round(
+            vehicle.isCollectingWater &&
+              vehicle.tankLevel.get() < vehicle.tankCapacity
+              ? (7.5 * vel) / (vehicle.maxSpeed - vel) + 0.001
+              : 7.5 * vel
+          )
+            .toString()
+            .padStart(3, "0")} ft`;
+        })}
         style={{
           ...TEXT_STYLE,
           fontSize: 10,

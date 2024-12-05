@@ -23,7 +23,8 @@ export abstract class Vehicle {
     | Phaser.Sound.HTML5AudioSound
     | Phaser.Sound.WebAudioSound
     | Phaser.Sound.NoAudioSound;
-  water: Phaser.GameObjects.Particles.ParticleEmitter;
+  waterDrop: Phaser.GameObjects.Particles.ParticleEmitter;
+  waterCollection: Phaser.GameObjects.Particles.ParticleEmitter;
 
   position: MutableSignal<PMath.Vector2>;
   direction: MutableSignal<PMath.Vector2>;
@@ -45,19 +46,19 @@ export abstract class Vehicle {
   turningBias: number;
   straightBias: number;
 
-  readonly maxImageScale: number = 0.25;
-  readonly startImageScale: number = 0.05;
-  readonly imageScaleSteps: number = 10;
-  readonly imageScaleUnit = this.maxImageScale / this.imageScaleSteps;
+  readonly imageScaleSteps: number = 2;
+  startImageScale: number = 0.05;
+  imageScaleUnit: number;
   imageScale: Signal<number>;
   imageScaleGoal: number;
+  maxImageScale: number;
 
   constructor(
     scene: MapScene,
     x: number,
     y: number,
     texture: string,
-    imageScale: number = this.startImageScale
+    imageScale: number
   ) {
     this.scene = scene;
     this.position = mutable(new PMath.Vector2(x, y));
@@ -66,12 +67,20 @@ export abstract class Vehicle {
     this.acceleration = mutable(new PMath.Vector2(0, 0));
     this.initSounds();
     this.started = false;
-    this.imageScaleGoal = this.maxImageScale;
 
-    this.water = this.initWaterFX();
+    this.maxImageScale = imageScale;
+
+    this.startImageScale = imageScale * 0.5;
+    this.imageScaleGoal = this.maxImageScale;
+    this.imageScaleUnit =
+      (this.maxImageScale - this.startImageScale) / this.imageScaleSteps;
+
+    this.imageScale = signal(this.startImageScale);
+
+    this.waterDrop = this.initWaterFX();
+    this.waterCollection = this.initWaterCollectionFX();
 
     this.turningState = signal(0);
-    this.imageScale = signal(imageScale);
 
     this.shadow = (
       <image
@@ -89,6 +98,14 @@ export abstract class Vehicle {
           // shadow is far below the plane when faster,
           // and directly underneath when stopped
           let altitudeFromSpeed = this.velocity.get().length() / 2;
+
+          if (
+            this.isCollectingWater &&
+            this.tankLevel.get() < this.tankCapacity
+          ) {
+            altitudeFromSpeed /= this.maxSpeed - this.velocity.get().length();
+          }
+
           return y + altitudeFromSpeed;
         })}
         texture={texture} // same as plane sprite
@@ -101,9 +118,7 @@ export abstract class Vehicle {
           const currentFrame = Math.floor(this.turningState.get() / 20);
           return Math.max(0, Math.min(4, currentFrame));
         })}
-        scale={computed(() => {
-          return this.imageScale?.get();
-        })}
+        scale={this.imageScale}
       />
     );
     this.scene.add.existing(this.shadow);
@@ -130,9 +145,7 @@ export abstract class Vehicle {
           const currentFrame = Math.floor(this.turningState.get() / 20);
           return Math.max(0, Math.min(4, currentFrame));
         })}
-        scale={computed(() => {
-          return this.imageScale.get();
-        })}
+        scale={this.imageScale}
       />
     );
 
@@ -141,19 +154,26 @@ export abstract class Vehicle {
 
   initWaterFX() {
     return this.scene.add.particles(0, 0, "water", {
-      x: { random: [0, 8] },
-      y: { random: [0, 8] },
-      quantity: 4,
-      angle: () => {
-        const directionAngle =
-          PMath.RadToDeg(this.direction.get().angle()) + 180;
-        return PMath.RND.between(directionAngle - 60, directionAngle + 60);
-      },
-      // TODO this is not subscribing or anything, it will not work
+      quantity: 10,
       follow: this.position.get(),
-      speed: 12,
-      frequency: 20,
-      lifespan: 800,
+      speedX: { random: [-20, 20] },
+      speedY: { random: [-20, 20] },
+      gravityY: 50,
+      frequency: 10,
+      lifespan: 500,
+      emitting: false,
+    });
+  }
+
+  initWaterCollectionFX() {
+    return this.scene.add.particles(0, 0, "water", {
+      quantity: 10,
+      blendMode: Phaser.BlendModes.SCREEN,
+      follow: this.position.get(),
+      speedX: { random: [-30, 30] },
+      speedY: { random: [-30, 30] },
+      frequency: 10,
+      lifespan: 500,
       emitting: false,
     });
   }
@@ -192,12 +212,16 @@ export abstract class Vehicle {
 
   updateScale(dt: number) {
     if (this.imageScaleGoal > 0 && this.imageScaleUnit > 0) {
-      const currentScale: number = this.imageScale.get();
-      const currentStep: number = currentScale / this.imageScaleUnit;
-      const goalStep: number = this.imageScaleGoal / this.imageScaleUnit;
-      const stepDiff: number = goalStep - currentStep;
-      const goUpOrDown: number  = stepDiff > 0 ? dt : stepDiff < 0 ? -dt : 0;
-      this.imageScale.set(currentScale + goUpOrDown * this.imageScaleUnit);
+      this.imageScale.update((currentScale) => {
+        const currentStep: number =
+          (currentScale - this.startImageScale) / this.imageScaleUnit;
+        const goalStep: number =
+          (this.imageScaleGoal - this.startImageScale) / this.imageScaleUnit;
+        const stepDiff: number = goalStep - currentStep;
+        const goUpOrDown: number = stepDiff > 0 ? dt : stepDiff < 0 ? -dt : 0;
+
+        return currentScale + goUpOrDown * this.imageScaleUnit;
+      });
     }
   }
 
@@ -205,13 +229,14 @@ export abstract class Vehicle {
     const deltaSeconds = delta * 0.001;
 
     this.updateSounds(deltaSeconds);
-    this.updateScale(deltaSeconds);
 
     if (this.scene.key_w.isDown || this.scene.key_up.isDown) {
       this.started = true;
     }
 
     if (!this.started) return;
+
+    this.updateScale(deltaSeconds);
 
     if (
       !this.scene.space_key.isDown &&
@@ -261,7 +286,27 @@ export abstract class Vehicle {
       });
     }
 
-    if (this.scene.key_s.isDown || this.scene.key_down.isDown) {
+    if (this.isCollectingWater && this.tankLevel.get() < this.tankCapacity) {
+      const slowProportionally =
+        (this.slowingRate / 3) *
+        (this.accelerationRate + this.velocity.get().length());
+      const slowVector = this.velocity
+        .get()
+        .clone()
+        .normalize()
+        .scale(slowProportionally * deltaSeconds);
+      this.velocity.mutate((velocity) => {
+        velocity.subtract(slowVector);
+        velocity.scale(1 - (slowProportionally * deltaSeconds) / this.maxSpeed);
+
+        // to avoid going backwards or stalling
+        if (velocity.dot(this.direction.get()) < 0) {
+          velocity.setLength(0);
+        }
+
+        return true;
+      });
+    } else if (this.scene.key_s.isDown || this.scene.key_down.isDown) {
       const slowProportionally =
         this.slowingRate *
         (this.accelerationRate + this.velocity.get().length());
@@ -300,24 +345,34 @@ export abstract class Vehicle {
     });
   }
 
-  // Canadair will drop water continuously until the tank is empty
+  // Vehicles will drop water continuously until the tank is empty
+  // Water is collected when space is pressed until it's pressed again
   tankWasOpen: boolean = false;
+  tankWasOpenTime: number = 0;
+  isCollectingWater: boolean = false;
 
   useTank(_time: number, delta: number): void {
     const deltaSeconds = delta * 0.001;
 
     if (this.scene.space_key.isDown) {
-      if (
-        this.tankLevel.get() > 5 &&
-        this.scene.currentMap.typeAtWorldXY(
-          this.position.get().x,
-          this.position.get().y
-        ) !== MapTileType.Water
-      ) {
-        this.tankWasOpen = true;
+      if (!this.isCollectingWater && !this.tankWasOpen) {
+        if (
+          this.scene.currentMap.typeAtWorldXY(
+            this.position.get().x,
+            this.position.get().y
+          ) === MapTileType.Water
+        ) {
+          this.isCollectingWater = true;
+        } else if (this.tankLevel.get() > 5) {
+          this.tankWasOpen = true;
+          this.tankWasOpenTime = _time;
+        }
       }
 
+      // Collect water when space is pressed
       if (
+        this.tankLevel.get() < this.tankCapacity &&
+        this.isCollectingWater &&
         this.scene.currentMap.typeAtWorldXY(
           this.position.get().x,
           this.position.get().y
@@ -335,8 +390,29 @@ export abstract class Vehicle {
         let newVolume = this.waterSound.volume + 0.5 * deltaSeconds;
         if (newVolume > 0.25) newVolume = 0.25;
         this.waterSound.setVolume(newVolume);
+        this.waterCollection.emitting = true;
+        this.imageScaleGoal = this.maxImageScale * 0.8;
+      } else {
+        this.waterCollection.emitting = false;
+        this.imageScaleGoal = this.maxImageScale;
       }
     }
+
+    // Stop collecting water when raise the space
+    if (this.isCollectingWater && !this.scene.space_key.isDown) {
+      this.isCollectingWater = false;
+      this.waterCollection.emitting = false;
+      this.imageScaleGoal = this.maxImageScale;
+    }
+
+    /** DEBUGGING STATES 
+    if (this.isCollectingWater) {
+      this.sprite.tint = 0x00ffff;
+    } else if (this.tankWasOpen) {
+      this.sprite.tint = 0xff0000;
+    } else {
+      this.sprite.tint = 0xffffff;
+    } */
 
     if (this.tankWasOpen) {
       this.tankLevel.update((value) =>
@@ -351,17 +427,25 @@ export abstract class Vehicle {
         this.tankWasOpen = false;
       }
 
-      this.scene.events.emit(EVENT_DROP_WATER, {
-        x: this.position.get().x,
-        y: this.position.get().y,
-        range: 1,
-      });
+      // Water takes time to reach the ground
+      if (_time - this.tankWasOpenTime > 300) {
+        const positionBehind = this.position
+          .get()
+          .clone()
+          .subtract(this.direction.get().clone().scale(5));
 
-      this.water.emitting = true;
+        this.scene.events.emit(EVENT_DROP_WATER, {
+          x: positionBehind.x,
+          y: positionBehind.y + 15,
+          range: 1,
+        });
+      }
+
+      this.waterDrop.emitting = true;
 
       if (!this.splashSound.isPlaying) this.splashSound.play(); // sound effect
     } else {
-      this.water.emitting = false;
+      this.waterDrop.emitting = false;
     }
   }
 
@@ -376,6 +460,6 @@ export abstract class Vehicle {
     this.waterSound.destroy();
     this.splashSound.destroy();
 
-    this.water.destroy();
+    this.waterDrop.destroy();
   }
 }

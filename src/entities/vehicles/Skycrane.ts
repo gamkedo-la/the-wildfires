@@ -33,10 +33,15 @@ export class Skycrane extends Vehicle {
     this.tankLevel = signal(0);
     this.tankConsumptionRate = 130;
     this.tankRefillRate = 150;
+
+    // Hack to avoid the effect that works well for airplanes
+    this.waterCollection.setQuantity(2);
   }
 
   update(_time: number, delta: number): void {
     const deltaSeconds = delta * 0.001;
+
+    this.updateScale(deltaSeconds);
 
     if (this.scene.key_a.isDown || this.scene.key_left.isDown) {
       this.bodyDirection.rotate(-this.bodyTurnRate * deltaSeconds);
@@ -84,11 +89,17 @@ export class Skycrane extends Vehicle {
       this.bodyDirection.y
     );
 
-    this.sprite.setRotation(rads - PMath.TAU);
-
     this.position.mutate((position) => {
       position.add(this.velocity.get().clone().scale(deltaSeconds));
       return true;
     });
+
+    this.direction.mutate((direction) => {
+      direction.setAngle(rads - PMath.PI2);
+      return true;
+    });
+
+    // Hack to avoid the auto scaling from the other two aircraft
+    this.shadow.setY(this.sprite.y + this.maxSpeed / 2);
   }
 }
