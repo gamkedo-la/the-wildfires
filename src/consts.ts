@@ -8,4 +8,5 @@ export const TEXT_STYLE = {
 
 // Events names
 export const EVENT_DROP_WATER = "drop-water";
+export const EVENT_DROP_RETARDANT = "drop-retardant";
 export const EVENT_FIRE_EXTINGUISHED = "fire-extinguished";

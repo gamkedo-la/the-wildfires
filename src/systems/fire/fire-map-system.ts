@@ -1,7 +1,7 @@
 import { END_REASONS } from "@game/state/game-state";
 import { Math as PMath, Tilemaps } from "phaser";
 import { System } from "..";
-import { EVENT_DROP_WATER } from "../../consts";
+import { EVENT_DROP_RETARDANT, EVENT_DROP_WATER } from "../../consts";
 import {
   FireLayerTile,
   MapLayerTile,
@@ -83,6 +83,13 @@ export class FireMapSystem implements System {
         this.dropCrossWater(x, y, range);
       }
     );
+
+    this.scene.events.on(
+      EVENT_DROP_RETARDANT,
+      ({ x, y, range }: { x: number; y: number; range: number }) => {
+        this.dropCrossRetardant(x, y, range);
+      }
+    );
   }
 
   private updateWindParameters() {
@@ -158,8 +165,6 @@ export class FireMapSystem implements System {
     mapTile.properties.isWatered = true;
     mapTile.tint = 0xaaaaff;
 
-    mapTile.properties.fuel += 10;
-
     if (mapTile?.properties.isBurning) {
       mapTile.properties.isBurning = false;
       let tile = this.map.removeFire(tileX, tileY);
@@ -187,6 +192,48 @@ export class FireMapSystem implements System {
       }
     } catch (e) {
       // TODO: Something is off with this function and I couldn't fix on a first check with the debugger. The try catch is a workaround
+      console.error(e);
+    }
+  }
+
+  private dropRetardant(tileX: number, tileY: number) {
+    let mapTile = this.map.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
+
+    if (!mapTile || mapTile.properties.isWater) return;
+
+    mapTile.properties.waterTimer = 45000;
+
+    if (mapTile?.properties.isWatered) {
+      return;
+    }
+
+    mapTile.properties.isWatered = true;
+    mapTile.tint = 0xff6b6b;
+
+    if (mapTile?.properties.isBurning) {
+      let tile = this.map.fireLayer.getTileAt(tileX, tileY);
+      this.stopSmoke(tile);
+    }
+  }
+
+  private dropCrossRetardant(worldX: number, worldY: number, range: number) {
+    try {
+      // this.map is dangerous to keep as a reference, the scene can be destroyed amid the event
+      const { x: tileX, y: tileY } = this.map.mapLayer.worldToTileXY(
+        worldX,
+        worldY,
+        true
+      );
+
+      for (let x = tileX - range; x <= tileX + range; x++) {
+        this.dropRetardant(x, tileY);
+      }
+      for (let y = tileY - range; y <= tileY + range; y++) {
+        if (y !== tileY) {
+          this.dropRetardant(tileX, y);
+        }
+      }
+    } catch (e) {
       console.error(e);
     }
   }

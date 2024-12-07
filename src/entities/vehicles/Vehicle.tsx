@@ -1,7 +1,12 @@
 import { computed, mutable, signal } from "@game/state/lib/signals";
 import { MutableSignal, Signal } from "@game/state/lib/types";
 import { Math as PMath } from "phaser";
-import { EVENT_DROP_WATER, GAME_HEIGHT, GAME_WIDTH } from "../../consts";
+import {
+  EVENT_DROP_RETARDANT,
+  EVENT_DROP_WATER,
+  GAME_HEIGHT,
+  GAME_WIDTH,
+} from "../../consts";
 import { MapScene } from "../../scenes/game/map-scene";
 import { MapTileType } from "../maps";
 
@@ -35,10 +40,18 @@ export abstract class Vehicle {
   accelerationRate: number;
   slowingRate: number = 3;
   turnRate: number;
-  tankCapacity: number;
-  tankLevel: Signal<number>;
-  tankConsumptionRate: number;
-  tankRefillRate: number;
+
+  waterTankCapacity: number;
+  waterTankConsumptionRate: number;
+  waterTankRefillRate: number;
+  waterTankLevel: Signal<number>;
+
+  retardantTankCapacity: number = 99;
+  retardantChargeSize: number = 33;
+  retardantTankConsumptionRate: number = 38;
+  retardantTankLevel: Signal<number>;
+
+  selectedTank: Signal<"water" | "retardant">;
 
   started: boolean;
 
@@ -80,6 +93,8 @@ export abstract class Vehicle {
 
     this.turningState = signal(0);
 
+    this.selectedTank = signal("water");
+
     this.shadow = (
       <image
         x={computed(() => {
@@ -99,7 +114,7 @@ export abstract class Vehicle {
 
           if (
             this.isCollectingWater &&
-            this.tankLevel.get() < this.tankCapacity
+            this.waterTankLevel.get() < this.waterTankCapacity
           ) {
             altitudeFromSpeed /= this.maxSpeed - this.velocity.get().length();
           }
@@ -232,6 +247,12 @@ export abstract class Vehicle {
       this.started = true;
     }
 
+    if (this.scene.key_one.isDown) {
+      this.selectedTank.set("water");
+    } else if (this.scene.key_two.isDown) {
+      this.selectedTank.set("retardant");
+    }
+
     if (!this.started) return;
 
     this.updateScale(deltaSeconds);
@@ -284,7 +305,10 @@ export abstract class Vehicle {
       });
     }
 
-    if (this.isCollectingWater && this.tankLevel.get() < this.tankCapacity) {
+    if (
+      this.isCollectingWater &&
+      this.waterTankLevel.get() < this.waterTankCapacity
+    ) {
       const slowProportionally =
         (this.slowingRate / 3.3) *
         (this.accelerationRate + this.velocity.get().length());
@@ -345,7 +369,7 @@ export abstract class Vehicle {
 
   // Vehicles will drop water continuously until the tank is empty
   // Water is collected when space is pressed until it's pressed again
-  tankWasOpen: boolean = false;
+  tankWasOpen: "water" | "retardant" | null = null;
   spacePressedTime: number = 0;
   isCollectingWater: boolean = false;
 
@@ -362,26 +386,35 @@ export abstract class Vehicle {
         ) {
           this.isCollectingWater = true;
           this.spacePressedTime = _time;
-        } else if (this.tankLevel.get() > 5) {
-          this.tankWasOpen = true;
+        } else if (
+          this.selectedTank.get() === "water" &&
+          this.waterTankLevel.get() > 5
+        ) {
+          this.tankWasOpen = "water";
+          this.spacePressedTime = _time;
+        } else if (
+          this.selectedTank.get() === "retardant" &&
+          this.retardantTankLevel.get() > this.retardantChargeSize
+        ) {
+          this.tankWasOpen = "retardant";
           this.spacePressedTime = _time;
         }
       }
 
       // Collect water when space is pressed
       if (
-        this.tankLevel.get() < this.tankCapacity &&
+        this.waterTankLevel.get() < this.waterTankCapacity &&
         this.isCollectingWater &&
         this.scene.currentMap.typeAtWorldXY(
           this.position.get().x,
           this.position.get().y
         ) === MapTileType.Water
       ) {
-        this.tankLevel.update((value) =>
+        this.waterTankLevel.update((value) =>
           PMath.Clamp(
-            value + this.tankRefillRate * deltaSeconds,
+            value + this.waterTankRefillRate * deltaSeconds,
             1,
-            this.tankCapacity
+            this.waterTankCapacity
           )
         );
 
@@ -415,17 +448,17 @@ export abstract class Vehicle {
       this.sprite.tint = 0xffffff;
     } */
 
-    if (this.tankWasOpen) {
-      this.tankLevel.update((value) =>
+    if (this.tankWasOpen === "water") {
+      this.waterTankLevel.update((value) =>
         PMath.Clamp(
-          value - this.tankConsumptionRate * deltaSeconds,
+          value - this.waterTankConsumptionRate * deltaSeconds,
           1,
-          this.tankCapacity
+          this.waterTankCapacity
         )
       );
 
-      if (this.tankLevel.get() <= 1) {
-        this.tankWasOpen = false;
+      if (this.waterTankLevel.get() <= 1) {
+        this.tankWasOpen = null;
       }
 
       // Water takes time to reach the ground
@@ -443,10 +476,56 @@ export abstract class Vehicle {
       }
 
       this.waterDrop.emitting = true;
+      this.waterDrop.particleTint = 0xffffff;
+
+      if (!this.splashSound.isPlaying) this.splashSound.play(); // sound effect
+    } else if (this.tankWasOpen === "retardant") {
+      const minClamp =
+        this.retardantTankLevel.get() -
+        (this.retardantTankLevel.get() % this.retardantChargeSize) -
+        1;
+      this.retardantTankLevel.update((value) =>
+        PMath.Clamp(
+          value - this.retardantTankConsumptionRate * deltaSeconds,
+          minClamp,
+          this.retardantTankCapacity
+        )
+      );
+
+      const currentLevel = this.retardantTankLevel.get();
+      if (currentLevel <= 1 || currentLevel % this.retardantChargeSize < 1) {
+        this.tankWasOpen = null;
+      }
+
+      // Water takes time to reach the ground
+      if (_time - this.spacePressedTime > 300) {
+        const positionBehind = this.position
+          .get()
+          .clone()
+          .subtract(this.direction.get().clone().scale(5));
+
+        this.scene.events.emit(EVENT_DROP_RETARDANT, {
+          x: positionBehind.x,
+          y: positionBehind.y + 15,
+          range: 1,
+        });
+      }
+
+      this.waterDrop.emitting = true;
+      this.waterDrop.particleTint = 0xff3333;
 
       if (!this.splashSound.isPlaying) this.splashSound.play(); // sound effect
     } else {
       this.waterDrop.emitting = false;
+
+      // DEBUG
+      this.retardantTankLevel.update((value) =>
+        PMath.Clamp(
+          value + (this.retardantTankConsumptionRate * deltaSeconds) / 100,
+          1,
+          this.retardantTankCapacity
+        )
+      );
     }
   }
 

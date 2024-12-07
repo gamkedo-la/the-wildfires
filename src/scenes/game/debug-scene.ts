@@ -182,7 +182,7 @@ export class Debug extends AbstractScene {
         title: "Refill Water",
       })
       .on("click", () => {
-        vehicle.tankLevel = vehicle.tankCapacity;
+        vehicle.waterTankLevel = vehicle.waterTankCapacity;
       });
 
     this.vehicleBindings.push(refillWaterButton);

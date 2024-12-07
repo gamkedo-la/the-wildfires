@@ -29,10 +29,12 @@ export class Skycrane extends Vehicle {
     this.straightBias = 200;
 
     // Water tank
-    this.tankCapacity = 100;
-    this.tankLevel = signal(0);
-    this.tankConsumptionRate = 130;
-    this.tankRefillRate = 150;
+    this.waterTankCapacity = 100;
+    this.waterTankConsumptionRate = 130;
+    this.waterTankRefillRate = 150;
+
+    this.waterTankLevel = signal(0);
+    this.retardantTankLevel = signal(0);
 
     // Hack to avoid the effect that works well for airplanes
     this.waterCollection.setQuantity(2);

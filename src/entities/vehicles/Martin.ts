@@ -10,10 +10,12 @@ export class Martin extends Vehicle {
     this.accelerationRate = 1;
     this.turnRate = Math.PI * 0.35;
 
-    this.tankCapacity = 600;
-    this.tankLevel = signal(0);
-    this.tankConsumptionRate = 130;
-    this.tankRefillRate = 150;
+    this.waterTankCapacity = 600;
+    this.waterTankConsumptionRate = 130;
+    this.waterTankRefillRate = 150;
+
+    this.waterTankLevel = signal(0);
+    this.retardantTankLevel = signal(0);
 
     this.turningState.set(50);
     this.turningBias = 120;

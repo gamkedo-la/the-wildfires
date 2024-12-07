@@ -38,6 +38,8 @@ export class MapScene extends AbstractScene {
   key_right!: Phaser.Input.Keyboard.Key;
   key_s!: Phaser.Input.Keyboard.Key;
   key_down!: Phaser.Input.Keyboard.Key;
+  key_one!: Phaser.Input.Keyboard.Key;
+  key_two!: Phaser.Input.Keyboard.Key;
   key_p!: Phaser.Input.Keyboard.Key;
   key_esc!: Phaser.Input.Keyboard.Key;
 
@@ -67,6 +69,12 @@ export class MapScene extends AbstractScene {
     this.key_s = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.key_down = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.DOWN
+    );
+    this.key_one = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.ONE
+    );
+    this.key_two = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.TWO
     );
     this.key_p = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     this.key_esc = this.input.keyboard!.addKey(
