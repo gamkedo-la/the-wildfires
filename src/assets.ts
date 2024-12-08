@@ -14,6 +14,7 @@ export const RESOURCES = {
   "pin-vertical": "pin-vertical",
   "pin": "pin",
   "plane-offscreen-pointer": "plane-offscreen-pointer",
+  "plane-position-pointer": "plane-position-pointer",
   "planes-hud": "planes-hud",
   "poi-results-nine-slice": "poi-results-nine-slice",
   "poi-status-icons": "poi-status-icons",

@@ -58,6 +58,11 @@
       },
       {
         "type": "image",
+        "key": "plane-position-pointer",
+        "url": "assets/plane-position-pointer.png"
+      },
+      {
+        "type": "image",
         "key": "planes-hud",
         "url": "assets/planes-hud.png"
       },

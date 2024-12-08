@@ -21,6 +21,7 @@ export class HUDScene extends AbstractScene {
   damage_level: Phaser.GameObjects.Rectangle;
   speedDialSprite: Phaser.GameObjects.Image;
   offscreenArrow: Phaser.GameObjects.Image;
+  vehiclePositionArrow: Phaser.GameObjects.Image;
   knotsTXT: Phaser.GameObjects.Text;
 
   create({ gameScene }: { gameScene: MapScene }) {
@@ -331,7 +332,19 @@ export class HUDScene extends AbstractScene {
     );
 
     this.add.existing(this.offscreenArrow);
+
+    this.vehiclePositionArrow = Object.create(this.offscreenArrow);
+    this.vehiclePositionArrow.setTexture(RESOURCES["plane-position-pointer"])
+    computed(() =>
+      vehicle.velocity.get().x === 0 &&
+      vehicle.velocity.get().y === 0
+    ).subscribe(isStopped => {
+      this.vehiclePositionArrow.visible = isStopped;
+    });
+
+
+    this.add.existing(this.vehiclePositionArrow);
   }
 
-  shutdown() {}
+  shutdown() { }
 }
