@@ -1094,6 +1094,16 @@
                          "name":"burnRate",
                          "type":"int",
                          "value":1
+                        }, 
+                        {
+                         "name":"burnedTileId",
+                         "type":"int",
+                         "value":77
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1108,6 +1118,11 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":46
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1122,6 +1137,11 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":46
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1136,6 +1156,11 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":46
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1150,6 +1175,11 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":47
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1164,6 +1194,11 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":47
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1178,6 +1213,11 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":47
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1192,6 +1232,11 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":45
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1206,6 +1251,11 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":42
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1215,6 +1265,16 @@
                          "name":"burnRate",
                          "type":"int",
                          "value":1
+                        }, 
+                        {
+                         "name":"burnedTileId",
+                         "type":"int",
+                         "value":77
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1224,6 +1284,16 @@
                          "name":"burnRate",
                          "type":"int",
                          "value":1
+                        }, 
+                        {
+                         "name":"burnedTileId",
+                         "type":"int",
+                         "value":77
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1273,6 +1343,16 @@
                          "name":"burnRate",
                          "type":"int",
                          "value":2
+                        }, 
+                        {
+                         "name":"burnedTileId",
+                         "type":"int",
+                         "value":77
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1282,6 +1362,16 @@
                          "name":"burnRate",
                          "type":"int",
                          "value":2
+                        }, 
+                        {
+                         "name":"burnedTileId",
+                         "type":"int",
+                         "value":77
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1291,6 +1381,16 @@
                          "name":"burnRate",
                          "type":"int",
                          "value":2
+                        }, 
+                        {
+                         "name":"burnedTileId",
+                         "type":"int",
+                         "value":77
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1300,6 +1400,16 @@
                          "name":"burnRate",
                          "type":"int",
                          "value":2
+                        }, 
+                        {
+                         "name":"burnedTileId",
+                         "type":"int",
+                         "value":77
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
@@ -1309,24 +1419,34 @@
                          "name":"burnRate",
                          "type":"int",
                          "value":2
+                        }, 
+                        {
+                         "name":"burnedTileId",
+                         "type":"int",
+                         "value":77
+                        }, 
+                        {
+                         "name":"isVegetation",
+                         "type":"bool",
+                         "value":false
                         }]
                 }, 
                 {
                  "animation":[
                         {
-                         "duration":1500,
+                         "duration":2700,
                          "tileid":47
                         }, 
                         {
-                         "duration":1500,
+                         "duration":2700,
                          "tileid":48
                         }, 
                         {
-                         "duration":1500,
+                         "duration":2700,
                          "tileid":49
                         }, 
                         {
-                         "duration":1500,
+                         "duration":2700,
                          "tileid":59
                         }, 
                         {
@@ -1344,19 +1464,19 @@
                 {
                  "animation":[
                         {
-                         "duration":1500,
+                         "duration":1300,
                          "tileid":48
                         }, 
                         {
-                         "duration":1500,
+                         "duration":2300,
                          "tileid":49
                         }, 
                         {
-                         "duration":1500,
+                         "duration":2900,
                          "tileid":59
                         }, 
                         {
-                         "duration":1500,
+                         "duration":3100,
                          "tileid":47
                         }, 
                         {
@@ -1374,19 +1494,19 @@
                 {
                  "animation":[
                         {
-                         "duration":900,
+                         "duration":4100,
                          "tileid":49
                         }, 
                         {
-                         "duration":900,
+                         "duration":3500,
                          "tileid":59
                         }, 
                         {
-                         "duration":900,
+                         "duration":3500,
                          "tileid":48
                         }, 
                         {
-                         "duration":3500,
+                         "duration":8000,
                          "tileid":69
                         }],
                  "id":49,
@@ -1633,19 +1753,19 @@
                 {
                  "animation":[
                         {
-                         "duration":1300,
+                         "duration":2900,
                          "tileid":59
                         }, 
                         {
-                         "duration":1300,
+                         "duration":2900,
                          "tileid":47
                         }, 
                         {
-                         "duration":1300,
+                         "duration":2900,
                          "tileid":48
                         }, 
                         {
-                         "duration":1300,
+                         "duration":2900,
                          "tileid":49
                         }, 
                         {
@@ -2175,6 +2295,15 @@
                 }, 
                 {
                  "id":119,
+                 "properties":[
+                        {
+                         "name":"isRoad",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":120,
                  "properties":[
                         {
                          "name":"isRoad",
@@ -2857,7 +2986,8 @@
                          "type":"int",
                          "value":168
                         }]
-                }, 
+                },
+            
                 {
                  "id":183,
                  "properties":[
@@ -2871,8 +3001,7 @@
                          "type":"int",
                          "value":168
                         }]
-                },
-            
+                }, 
                 {
                  "id":184,
                  "properties":[
@@ -2941,6 +3070,195 @@
                          "name":"burnedTileId",
                          "type":"int",
                          "value":169
+                        }]
+                }, 
+                {
+                 "id":189,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":190,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":191,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":192,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":193,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":194,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":195,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":196,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":197,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":198,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":199,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":200,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":201,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":202,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":203,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":204,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":205,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":206,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":207,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":208,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
+                        }]
+                }, 
+                {
+                 "id":209,
+                 "properties":[
+                        {
+                         "name":"isRiver",
+                         "type":"bool",
+                         "value":true
                         }]
                 }, 
                 {

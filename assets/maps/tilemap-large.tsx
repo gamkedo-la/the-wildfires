@@ -119,64 +119,78 @@
  <tile id="19">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="77"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="20">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="46"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="21">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="46"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="22">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="46"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="23">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="47"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="24">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="47"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="25">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="47"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="26">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="45"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="27">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="42"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="28">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="77"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="29">
   <properties>
    <property name="burnRate" type="int" value="1"/>
+   <property name="burnedTileId" type="int" value="77"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="30">
@@ -201,26 +215,36 @@
  <tile id="35">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="77"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="36">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="77"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="37">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="77"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="38">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="77"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="39">
   <properties>
    <property name="burnRate" type="int" value="2"/>
+   <property name="burnedTileId" type="int" value="77"/>
+   <property name="isVegetation" type="bool" value="false"/>
   </properties>
  </tile>
  <tile id="47">
@@ -228,10 +252,10 @@
    <property name="isWater" type="bool" value="true"/>
   </properties>
   <animation>
-   <frame tileid="47" duration="1500"/>
-   <frame tileid="48" duration="1500"/>
-   <frame tileid="49" duration="1500"/>
-   <frame tileid="59" duration="1500"/>
+   <frame tileid="47" duration="2700"/>
+   <frame tileid="48" duration="2700"/>
+   <frame tileid="49" duration="2700"/>
+   <frame tileid="59" duration="2700"/>
    <frame tileid="69" duration="5000"/>
   </animation>
  </tile>
@@ -240,10 +264,10 @@
    <property name="isWater" type="bool" value="true"/>
   </properties>
   <animation>
-   <frame tileid="48" duration="1500"/>
-   <frame tileid="49" duration="1500"/>
-   <frame tileid="59" duration="1500"/>
-   <frame tileid="47" duration="1500"/>
+   <frame tileid="48" duration="1300"/>
+   <frame tileid="49" duration="2300"/>
+   <frame tileid="59" duration="2900"/>
+   <frame tileid="47" duration="3100"/>
    <frame tileid="69" duration="6000"/>
   </animation>
  </tile>
@@ -252,10 +276,10 @@
    <property name="isWater" type="bool" value="true"/>
   </properties>
   <animation>
-   <frame tileid="49" duration="900"/>
-   <frame tileid="59" duration="900"/>
-   <frame tileid="48" duration="900"/>
-   <frame tileid="69" duration="3500"/>
+   <frame tileid="49" duration="4100"/>
+   <frame tileid="59" duration="3500"/>
+   <frame tileid="48" duration="3500"/>
+   <frame tileid="69" duration="8000"/>
   </animation>
  </tile>
  <tile id="50">
@@ -360,10 +384,10 @@
    <property name="isWater" type="bool" value="true"/>
   </properties>
   <animation>
-   <frame tileid="59" duration="1300"/>
-   <frame tileid="47" duration="1300"/>
-   <frame tileid="48" duration="1300"/>
-   <frame tileid="49" duration="1300"/>
+   <frame tileid="59" duration="2900"/>
+   <frame tileid="47" duration="2900"/>
+   <frame tileid="48" duration="2900"/>
+   <frame tileid="49" duration="2900"/>
    <frame tileid="69" duration="6500"/>
   </animation>
  </tile>
@@ -592,6 +616,11 @@
   </properties>
  </tile>
  <tile id="119">
+  <properties>
+   <property name="isRoad" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="120">
   <properties>
    <property name="isRoad" type="bool" value="true"/>
   </properties>
@@ -922,6 +951,111 @@
   <properties>
    <property name="burnRate" type="int" value="3"/>
    <property name="burnedTileId" type="int" value="169"/>
+  </properties>
+ </tile>
+ <tile id="189">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="190">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="191">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="192">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="193">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="194">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="195">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="196">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="197">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="198">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="199">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="200">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="201">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="202">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="203">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="204">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="205">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="206">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="207">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="208">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="209">
+  <properties>
+   <property name="isRiver" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="210">
