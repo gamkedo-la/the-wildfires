@@ -29,6 +29,7 @@ export const RESOURCES = {
   "velocity-pin": "velocity-pin",
   "water": "water",
   "wind-direction-pin": "wind-direction-pin",
+  "archipelago": "archipelago",
   "coastal": "coastal",
   "continental-test": "continental-test",
   "continental": "continental",

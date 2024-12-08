@@ -1,3 +1,4 @@
+import { ArchipelagoMap } from "./Archipelago";
 import { CoastalMap } from "./Coastal";
 import { ContinentalMap } from "./Continental";
 import { ContinentalTestMap } from "./ContinentalTest";
@@ -25,8 +26,10 @@ export interface FireLayerTile extends Phaser.Tilemaps.Tile {
 export interface StructuresLayerTile extends Phaser.Tilemaps.Tile {
   properties: {
     isBuilding: boolean;
-    burnRate: number;
     isRoad: boolean;
+    isVegetation: boolean;
+    isRiver: boolean;
+    burnRate: number;
     burnedTileId: number;
   };
 }
@@ -56,6 +59,7 @@ export enum MapTileType {
 export const MAPS = {
   CONTINENTAL: ContinentalMap,
   COASTAL: CoastalMap,
+  ARCHIPELAGO: ArchipelagoMap,
   CONTINENTAL_TEST: ContinentalTestMap,
 };
 

@@ -146,6 +146,8 @@ export class PointOfInterest {
       />
     );
 
+    statusIcon.setDepth(100);
+
     this.state = computed(() => {
       if (this.tilesLeft.get() === 0) {
         if (this.damagedTiles.get() === 0) {
