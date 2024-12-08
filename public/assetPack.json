@@ -128,6 +128,11 @@
       },
       {
         "type": "tilemapTiledJSON",
+        "key": "coastal",
+        "url": "assets/coastal.json"
+      },
+      {
+        "type": "tilemapTiledJSON",
         "key": "continental-test",
         "url": "assets/continental-test.json"
       },

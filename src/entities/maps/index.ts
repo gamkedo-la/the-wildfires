@@ -1,3 +1,4 @@
+import { CoastalMap } from "./Coastal";
 import { ContinentalMap } from "./Continental";
 import { ContinentalTestMap } from "./ContinentalTest";
 
@@ -54,6 +55,7 @@ export enum MapTileType {
 
 export const MAPS = {
   CONTINENTAL: ContinentalMap,
+  COASTAL: CoastalMap,
   CONTINENTAL_TEST: ContinentalTestMap,
 };
 
