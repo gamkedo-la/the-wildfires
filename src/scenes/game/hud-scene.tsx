@@ -333,18 +333,19 @@ export class HUDScene extends AbstractScene {
 
     this.add.existing(this.offscreenArrow);
 
-    this.vehiclePositionArrow = Object.create(this.offscreenArrow);
-    this.vehiclePositionArrow.setTexture(RESOURCES["plane-position-pointer"])
-    computed(() =>
-      vehicle.velocity.get().x === 0 &&
-      vehicle.velocity.get().y === 0
-    ).subscribe(isStopped => {
-      this.vehiclePositionArrow.visible = isStopped;
-    });
-
+    this.vehiclePositionArrow = (
+      <image
+        x={vehicle.position.get().x - 50}
+        y={vehicle.position.get().y - 30}
+        texture={RESOURCES["plane-position-pointer"]}
+        visible={computed(
+          () => vehicle.velocity.get().x === 0 && vehicle.velocity.get().y === 0
+        )}
+      />
+    );
 
     this.add.existing(this.vehiclePositionArrow);
   }
 
-  shutdown() { }
+  shutdown() {}
 }
