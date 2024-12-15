@@ -22,6 +22,7 @@ export class HUDScene extends AbstractScene {
   speedDialSprite: Phaser.GameObjects.Image;
   offscreenArrow: Phaser.GameObjects.Image;
   vehiclePositionArrow: Phaser.GameObjects.Image;
+  vehiclePositionArrowShowInterval: number = 0;
   knotsTXT: Phaser.GameObjects.Text;
 
   create({ gameScene }: { gameScene: MapScene }) {
@@ -333,7 +334,7 @@ export class HUDScene extends AbstractScene {
 
     this.add.existing(this.offscreenArrow);
 
-    this.vehiclePositionArrow = (
+    this.vehiclePositionArrow = this.add.existing(
       <image
         x={vehicle.position.get().x - 50}
         y={vehicle.position.get().y - 30}
@@ -343,8 +344,25 @@ export class HUDScene extends AbstractScene {
         )}
       />
     );
+  }
 
-    this.add.existing(this.vehiclePositionArrow);
+  update(time: number, delta: number) {
+    const { vehicle } = this.gameScene.vehiclesSystem;
+    const { isDown } = this.gameScene.key_control;
+    const isStopped = vehicle.velocity.get().x === 0 && vehicle.velocity.get().y === 0;
+    const showArrow = isDown || this.vehiclePositionArrowShowInterval > 0 || isStopped;
+    this.vehiclePositionArrow.setVisible(showArrow);
+  
+    if (isDown || isStopped) {
+      this.vehiclePositionArrowShowInterval = 3000;
+      this.vehiclePositionArrow.setScale(1.2);
+    } else {
+      this.vehiclePositionArrowShowInterval -= 10 * delta;
+      this.vehiclePositionArrow.setScale(Math.max(1.1, this.vehiclePositionArrowShowInterval / 1000));
+    }
+  
+    const { x, y } = vehicle.position.get();
+    this.vehiclePositionArrow.setPosition(x - 50, y - 30);
   }
 
   shutdown() {}
