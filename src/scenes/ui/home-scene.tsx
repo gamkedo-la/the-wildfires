@@ -10,11 +10,17 @@ import { Stack } from "../../ui/components/Stack";
 import { SCENES } from "../consts";
 import { VEHICLES, VehicleType } from "@game/entities/vehicles/index";
 import { MAPS, MapType } from "@game/entities/maps/index";
+import { RESOURCES } from "@game/assets";
 
 export class HomeScene extends AbstractScene {
   constructor() {
     super(SCENES.UI_HOME);
   }
+
+  backgroundMusic!:
+    | Phaser.Sound.WebAudioSound
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.HTML5AudioSound;
 
   create() {
     const runConfiguration = this.gameState.getEmptyRun();
@@ -170,7 +176,22 @@ export class HomeScene extends AbstractScene {
     );
 
     this.add.existing(startButton);
+
+    this.backgroundMusic = this.sound.add(RESOURCES["menu-theme"], {
+      loop: true,
+      volume: 0,
+    });
+
+    this.backgroundMusic.play();
+
+    this.tweens.add({
+      targets: this.backgroundMusic,
+      volume: 1,
+      duration: 5000,
+    });
   }
 
-  shutdown() {}
+  shutdown() {
+    this.backgroundMusic.stop();
+  }
 }

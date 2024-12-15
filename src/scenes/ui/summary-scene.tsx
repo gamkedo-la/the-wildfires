@@ -12,9 +12,36 @@ export class SummaryScene extends AbstractScene {
     super(SCENES.UI_SUMMARY);
   }
 
+  backgroundMusic:
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.HTML5AudioSound
+    | Phaser.Sound.WebAudioSound;
+
   create() {
     const run = this.gameState.currentRun.get();
     const poi = run?.poi || [];
+
+    this.backgroundMusic = this.sound.add(RESOURCES["menu-theme"], {
+      volume: 0.5,
+    });
+    let completionMusic: string = RESOURCES["maps-success"];
+
+    if (run?.endReason === END_REASONS.POI_DESTROYED) {
+      completionMusic = RESOURCES["maps-failure"];
+    }
+
+    this.sound.play(completionMusic, {
+      volume: 0.5,
+    });
+
+    this.time.addEvent({
+      delay: 12000,
+      callback: () => {
+        if (this.scene.isActive(SCENES.UI_SUMMARY)) {
+          this.backgroundMusic.play();
+        }
+      },
+    });
 
     this.add.existing(
       <text
@@ -148,12 +175,12 @@ export class SummaryScene extends AbstractScene {
         {poiList.map((item) => (
           <Parallel>
             <Step
-              duration={100}
+              duration={500}
               action={() =>
-                this.tweens.add({ targets: item, scale: 1, duration: 100 })
+                this.tweens.add({ targets: item, scale: 1, duration: 300 })
               }
             />
-            <Step duration={200} action={() => item.setVisible(true)} />
+            <Step duration={600} action={() => item.setVisible(true)} />
           </Parallel>
         ))}
       </Sequence>
@@ -207,5 +234,9 @@ export class SummaryScene extends AbstractScene {
     );
   }
 
-  shutdown() {}
+  shutdown() {
+    this.backgroundMusic.stop();
+    this.sound.stopByKey(RESOURCES["maps-success"]);
+    this.sound.stopByKey(RESOURCES["maps-failure"]);
+  }
 }

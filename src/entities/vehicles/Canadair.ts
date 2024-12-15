@@ -4,7 +4,7 @@ import { Vehicle } from "./Vehicle";
 
 export class Canadair extends Vehicle {
   constructor(scene: MapScene, x: number, y: number) {
-    super(scene, x, y, "canadair-spritesheet", 0.4);
+    super(scene, x, y, "canadair-spritesheet", 0.4, "CANADAIR");
 
     this.maxSpeed = 60;
     this.accelerationRate = 1; // was 130; but this was instant

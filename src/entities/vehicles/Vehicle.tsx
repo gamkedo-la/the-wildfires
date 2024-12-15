@@ -9,6 +9,8 @@ import {
 } from "../../consts";
 import { MapScene } from "../../scenes/game/map-scene";
 import { MapTileType } from "../maps";
+import { RESOURCES } from "@game/assets";
+import { VehicleType } from ".";
 
 export abstract class Vehicle {
   scene: MapScene;
@@ -35,6 +37,7 @@ export abstract class Vehicle {
   direction: MutableSignal<PMath.Vector2>;
   velocity: MutableSignal<PMath.Vector2>;
   acceleration: MutableSignal<PMath.Vector2>;
+  type: VehicleType;
 
   maxSpeed: number;
   accelerationRate: number;
@@ -70,14 +73,16 @@ export abstract class Vehicle {
     x: number,
     y: number,
     texture: string,
-    imageScale: number
+    imageScale: number,
+    type: VehicleType
   ) {
     this.scene = scene;
+    this.type = type;
+
     this.position = mutable(new PMath.Vector2(x, y));
     this.direction = mutable(PMath.Vector2.DOWN.clone());
     this.velocity = mutable(new PMath.Vector2(0, 0));
     this.acceleration = mutable(new PMath.Vector2(0, 0));
-    this.initSounds();
     this.started = false;
 
     this.maxImageScale = imageScale;
@@ -94,6 +99,8 @@ export abstract class Vehicle {
     this.turningState = signal(0);
 
     this.selectedTank = signal("water");
+
+    this.initSounds();
 
     this.shadow = (
       <image
@@ -193,10 +200,14 @@ export abstract class Vehicle {
 
   initSounds() {
     // looped audio we can pitch-shift based on velocity
-    this.engineSound = this.scene.sound.add("airplane-propeller-loop", {
-      loop: true,
-      volume: 0.25,
-    });
+    this.engineSound = this.scene.sound.add(
+      this.type === "SKYCRANE"
+        ? RESOURCES["helicopter-loop"]
+        : RESOURCES["airplane-propeller-loop"],
+      {
+        loop: true,
+      }
+    );
     this.engineSound.play();
 
     // looped audio we can fade in/out based on proximity to flame
@@ -220,7 +231,17 @@ export abstract class Vehicle {
     this.waterSound.setVolume(newVolume);
 
     // pitch-shift the engine loop based on velocity
-    this.engineSound.setRate(0.2 + this.velocity.get().length() / 200);
+    this.engineSound.detune = this.type === "MARTIN" ? -1200 : 0;
+    this.engineSound.setRate(
+      this.type === "MARTIN"
+        ? 0.1 + this.velocity.get().length() / this.maxSpeed
+        : 0.1 + 0.5 * (this.velocity.get().length() / this.maxSpeed)
+    );
+  }
+
+  mute() {
+    this.engineSound.stop();
+    this.waterSound.stop();
   }
 
   updateScale(dt: number) {
@@ -418,9 +439,18 @@ export abstract class Vehicle {
           )
         );
 
+        if (
+          this.waterTankLevel.get() >= this.waterTankCapacity &&
+          !this.scene.sound.isPlaying(RESOURCES["water-filled"])
+        ) {
+          this.scene.sound.play(RESOURCES["water-filled"]);
+        }
+
         // fade in the water tank filling sound
-        let newVolume = this.waterSound.volume + 0.5 * deltaSeconds;
-        if (newVolume > 0.25) newVolume = 0.25;
+        let newVolume = Math.min(
+          this.waterSound.volume + 0.5 * deltaSeconds,
+          0.5
+        );
         this.waterSound.setVolume(newVolume);
         if (_time - this.spacePressedTime > 250) {
           this.waterCollection.emitting = true;
@@ -518,6 +548,8 @@ export abstract class Vehicle {
     } else {
       this.waterDrop.emitting = false;
 
+      let lastRetardantTankLevel = this.retardantTankLevel.get();
+
       // DEBUG
       this.retardantTankLevel.update((value) =>
         PMath.Clamp(
@@ -526,6 +558,13 @@ export abstract class Vehicle {
           this.retardantTankCapacity
         )
       );
+
+      if (
+        lastRetardantTankLevel % this.retardantChargeSize >
+        this.retardantTankLevel.get() % this.retardantChargeSize
+      ) {
+        this.scene.sound.play(RESOURCES["retardant-fill"]);
+      }
     }
   }
 

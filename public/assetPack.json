@@ -18,8 +18,53 @@
       },
       {
         "type": "audio",
+        "key": "helicopter-loop",
+        "url": "assets/helicopter-loop.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "maps-failure",
+        "url": "assets/maps-failure.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "maps-success",
+        "url": "assets/maps-success.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "maps-theme",
+        "url": "assets/maps-theme.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "menu-theme",
+        "url": "assets/menu-theme.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "retardant-fill",
+        "url": "assets/retardant-fill.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "water-filled",
+        "url": "assets/water-filled.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "water-great-tank-filled",
+        "url": "assets/water-great-tank-filled.mp3"
+      },
+      {
+        "type": "audio",
         "key": "water-loop",
         "url": "assets/water-loop.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "wind-bonus",
+        "url": "assets/wind-bonus.mp3"
       },
       {
         "type": "image",

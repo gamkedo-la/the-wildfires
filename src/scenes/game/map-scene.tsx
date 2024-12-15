@@ -14,6 +14,7 @@ import {
   Transition,
 } from "../../ui/animation/animation";
 import { SCENES } from "../consts";
+import { RESOURCES } from "@game/assets";
 
 // TODO: this will probably vary by map
 const FIRE_INTERVAL_MS = 5000;
@@ -44,6 +45,11 @@ export class MapScene extends AbstractScene {
   key_esc!: Phaser.Input.Keyboard.Key;
 
   gameEnding: boolean;
+
+  backgroundMusic:
+    | Phaser.Sound.WebAudioSound
+    | Phaser.Sound.NoAudioSound
+    | Phaser.Sound.HTML5AudioSound;
 
   create() {
     this.bus = this.gamebus.getBus();
@@ -97,6 +103,19 @@ export class MapScene extends AbstractScene {
     this.scene.run(SCENES.DEBUG);
 
     this.gameState.setRunState(RunState.RUNNING);
+
+    this.backgroundMusic = this.sound.add(RESOURCES["maps-theme"], {
+      loop: true,
+      volume: 0,
+    });
+
+    this.backgroundMusic.play();
+
+    this.tweens.add({
+      targets: this.backgroundMusic,
+      volume: 0.5,
+      duration: 5000,
+    });
   }
 
   currentMap: GameMap;
@@ -158,6 +177,7 @@ export class MapScene extends AbstractScene {
   registerGameEndedListener() {
     effect(() => {
       const run = this.gameState.currentRun.get();
+      // TODO: if something is partially saved it is not triggering
       if (run.state === RunState.RUNNING) {
         const allSaved = run.poi.every(
           (poi) => poi.state.get() === POI_STATE.SAVED
@@ -219,6 +239,8 @@ export class MapScene extends AbstractScene {
       this.scene.stop(SCENES.HUD);
       this.scene.stop(SCENES.DEBUG);
       this.scene.pause();
+      this.backgroundMusic.stop();
+      this.vehiclesSystem.vehicle.mute();
       this.scene.run(SCENES.UI_SUMMARY);
     });
   }
@@ -231,6 +253,8 @@ export class MapScene extends AbstractScene {
     this.fireMapSystem.destroy();
     this.windSystem.destroy();
     this.windParticles.destroy();
+
+    this.backgroundMusic.stop();
   }
 
   doPause() {

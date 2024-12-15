@@ -11,7 +11,7 @@ export class Skycrane extends Vehicle {
   dragRate: number;
 
   constructor(scene: MapScene, x: number, y: number) {
-    super(scene, x, y, "skycrane-spritesheet", 0.5);
+    super(scene, x, y, "skycrane-spritesheet", 0.5, "SKYCRANE");
 
     this.sprite.setOrigin(0.5, 0.3);
     // Movement

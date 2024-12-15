@@ -83,7 +83,6 @@ const config = {
       input: "sounds/airplane-propeller-loop.mp3",
       output: "airplane-propeller-loop.mp3",
     },
-
     { input: "airplane/martin_export.png", output: "martin-sprite.png" },
     {
       input: "canadair-c415/canadair_export.png",
