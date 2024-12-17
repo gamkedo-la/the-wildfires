@@ -73,6 +73,11 @@
       },
       {
         "type": "image",
+        "key": "key-nine-slice",
+        "url": "assets/key-nine-slice.png"
+      },
+      {
+        "type": "image",
         "key": "martin-sprite",
         "url": "assets/martin-sprite.png"
       },

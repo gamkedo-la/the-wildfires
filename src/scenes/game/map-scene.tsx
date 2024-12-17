@@ -83,7 +83,9 @@ export class MapScene extends AbstractScene {
     this.key_two = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.TWO
     );
-    this.key_control = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.CTRL);
+    this.key_control = this.input.keyboard!.addKey(
+      Phaser.Input.Keyboard.KeyCodes.CTRL
+    );
     this.key_p = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     this.key_esc = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.ESC
@@ -108,14 +110,14 @@ export class MapScene extends AbstractScene {
 
     this.backgroundMusic = this.sound.add(RESOURCES["maps-theme"], {
       loop: true,
-      volume: 0,
+      volume: 0.5,
     });
 
     this.backgroundMusic.play();
 
     this.tweens.add({
       targets: this.backgroundMusic,
-      volume: 0.5,
+      volume: 1,
       duration: 5000,
     });
   }

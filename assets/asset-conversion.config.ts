@@ -141,6 +141,12 @@ const config = {
       args: "-b ${input} --scale 2 --sheet ${output}",
     },
     {
+      input: "ui/key-nine-slice.aseprite",
+      output: "key-nine-slice.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
       input: "ui/poi-results-nine-slice.aseprite",
       output: "poi-results-nine-slice.png",
       executable: "aseprite",

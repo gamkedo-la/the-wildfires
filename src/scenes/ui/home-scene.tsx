@@ -151,7 +151,9 @@ export class HomeScene extends AbstractScene {
         interactive={startButtonEnabled}
         onPointerdown={() => {
           this.gameState.startRun(runConfiguration);
-          this.scene.start(SCENES.MAP);
+          this.scene.pause();
+          this.scene.moveAbove(SCENES.UI_HOME, SCENES.UI_TUTORIAL);
+          this.scene.launch(SCENES.UI_TUTORIAL);
         }}
       >
         <rectangle

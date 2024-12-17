@@ -1,3 +1,4 @@
+import { TEXT_STYLE } from "@game/consts";
 import { AbstractScene } from "..";
 import { SCENES } from "../consts";
 
@@ -17,17 +18,19 @@ export class PauseScene extends AbstractScene {
 
     const { width, height } = this.scale;
 
-    this.add.rectangle(0, 0, width, height, 0x000000, 0.5).setOrigin(0);
+    this.add.rectangle(0, 0, width, height, 0x000000, 0.6).setOrigin(0);
 
     this.add
       .text(width / 2, height / 2 - 50, "Paused", {
+        ...TEXT_STYLE,
         fontSize: "64px",
         color: "#ffffff",
       })
       .setOrigin(0.5);
 
     const resumeButton = this.add
-      .text(width / 2, height / 2 + 50, "Resume", {
+      .text(width / 2, height / 2 + 100, "Resume", {
+        ...TEXT_STYLE,
         fontSize: "24px",
         color: "#ffffff",
       })

@@ -1,5 +1,6 @@
 import { Signal } from "@game/state/lib/types";
 import { createParticleEffect } from "./animation";
+import { EaseMap } from "@game/lib/easing";
 
 // Core animation signal with transition tracking
 export type TransitionSignal<T> = Signal<T> & {
@@ -16,7 +17,7 @@ export interface TransitionProps<T> {
   from?: T | (() => T);
   to: T | (() => T);
   duration?: number;
-  ease?: string;
+  ease?: (typeof EaseMap)[number];
 }
 
 export type StateTransitionConfig = {

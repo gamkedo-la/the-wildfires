@@ -17,6 +17,7 @@ export const RESOURCES = {
   "water-loop": "water-loop",
   "wind-bonus": "wind-bonus",
   "canadair-sprite": "canadair-sprite",
+  "key-nine-slice": "key-nine-slice",
   "martin-sprite": "martin-sprite",
   "martin": "martin",
   "payload-picker": "payload-picker",

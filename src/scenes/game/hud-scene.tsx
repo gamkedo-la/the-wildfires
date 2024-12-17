@@ -257,7 +257,7 @@ export class HUDScene extends AbstractScene {
           signal={pickerPosition}
           to={0}
           duration={400}
-          ease="Cubic.Out"
+          ease="Cubic.easeOut"
         />
       </Sequence>
     );
@@ -268,7 +268,7 @@ export class HUDScene extends AbstractScene {
           signal={pickerPosition}
           to={1}
           duration={500}
-          ease="Cubic.Out"
+          ease="Cubic.easeOut"
         />
       </Sequence>
     );

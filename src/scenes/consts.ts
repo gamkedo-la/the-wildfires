@@ -10,6 +10,7 @@ export const SCENES = {
   UI_HOME: "UI-Home",
   UI_MAP_SELECTION: "UI-MapSelection",
   UI_SUMMARY: "UI-Summary",
+  UI_TUTORIAL: "UI-Tutorial",
 
   TEST: "Test",
 };

@@ -86,6 +86,8 @@ function setGameObjectProperty(
       (pointer: Phaser.Input.Pointer, event: Phaser.Types.Input.EventData) =>
         value(gameObject, pointer, event)
     );
+  } else if (property === "depth") {
+    (gameObject as any).setDepth(value);
   } else {
     (gameObject as any)[property] = value;
   }

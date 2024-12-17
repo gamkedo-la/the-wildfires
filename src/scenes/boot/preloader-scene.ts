@@ -69,6 +69,11 @@ export class Preloader extends AbstractScene {
       }
     );
 
+    this.load.spritesheet("tilemap-spritesheet", "assets/tilemap-test-3.png", {
+      frameWidth: 24,
+      frameHeight: 32,
+    });
+
     this.load.spritesheet("pin-spritesheet", "assets/pin.png", {
       frameWidth: 90,
       frameHeight: 44,
