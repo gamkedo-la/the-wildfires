@@ -372,7 +372,7 @@ export class HUDScene extends AbstractScene {
             this.vehiclePositionArrowShowInterval.get() > 0
         )}
         scale={computed(() =>
-          Math.max(1, this.vehiclePositionArrowShowInterval.get() / 1500)
+          Math.max(1, this.vehiclePositionArrowShowInterval.get() / 150)
         )}
       />
     );
@@ -382,12 +382,12 @@ export class HUDScene extends AbstractScene {
     const { isDown } = this.gameScene.key_control;
 
     if (isDown) {
-      this.vehiclePositionArrowShowInterval.set(3000);
+      this.vehiclePositionArrowShowInterval.set(300);
     }
 
     if (this.vehiclePositionArrowShowInterval.get() > 0) {
-      this.vehiclePositionArrowShowInterval.set(
-        this.vehiclePositionArrowShowInterval.get() - 10 * delta
+      this.vehiclePositionArrowShowInterval.update(
+        (interval) => interval - delta
       );
     }
   }
