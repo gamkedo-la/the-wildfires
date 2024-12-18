@@ -1,4 +1,4 @@
-import { computed, effect } from "@game/state/lib/signals";
+import { computed, effect, signal } from "@game/state/lib/signals";
 import { AbstractScene } from "..";
 import { RESOURCES } from "../../assets";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_STYLE } from "../../consts";
@@ -9,6 +9,7 @@ import {
   Sequence,
   Transition,
 } from "../../ui/animation/animation";
+import { Signal } from "@game/state/lib/types";
 
 export class HUDScene extends AbstractScene {
   gameScene: MapScene;
@@ -22,7 +23,7 @@ export class HUDScene extends AbstractScene {
   speedDialSprite: Phaser.GameObjects.Image;
   offscreenArrow: Phaser.GameObjects.Image;
   vehiclePositionArrow: Phaser.GameObjects.Image;
-  vehiclePositionArrowShowInterval: number = 0;
+  vehiclePositionArrowShowInterval: Signal<number> = signal(0);
   knotsTXT: Phaser.GameObjects.Text;
 
   create({ gameScene }: { gameScene: MapScene }) {
@@ -361,33 +362,34 @@ export class HUDScene extends AbstractScene {
 
     this.vehiclePositionArrow = this.add.existing(
       <image
-        x={vehicle.position.get().x - 50}
-        y={vehicle.position.get().y - 30}
+        x={computed(() => vehicle.position.get().x - 50)}
+        y={computed(() => vehicle.position.get().y - 30)}
         texture={RESOURCES["plane-position-pointer"]}
         visible={computed(
-          () => vehicle.velocity.get().x === 0 && vehicle.velocity.get().y === 0
+          () =>
+            (vehicle.velocity.get().x === 0 &&
+              vehicle.velocity.get().y === 0) ||
+            this.vehiclePositionArrowShowInterval.get() > 0
+        )}
+        scale={computed(() =>
+          Math.max(1, this.vehiclePositionArrowShowInterval.get() / 1500)
         )}
       />
     );
   }
 
   update(time: number, delta: number) {
-    const { vehicle } = this.gameScene.vehiclesSystem;
     const { isDown } = this.gameScene.key_control;
-    const isStopped = vehicle.velocity.get().x === 0 && vehicle.velocity.get().y === 0;
-    const showArrow = isDown || this.vehiclePositionArrowShowInterval > 0 || isStopped;
-    this.vehiclePositionArrow.setVisible(showArrow);
-  
-    if (isDown || isStopped) {
-      this.vehiclePositionArrowShowInterval = 3000;
-      this.vehiclePositionArrow.setScale(1.2);
-    } else {
-      this.vehiclePositionArrowShowInterval -= 10 * delta;
-      this.vehiclePositionArrow.setScale(Math.max(1.1, this.vehiclePositionArrowShowInterval / 1000));
+
+    if (isDown) {
+      this.vehiclePositionArrowShowInterval.set(3000);
     }
-  
-    const { x, y } = vehicle.position.get();
-    this.vehiclePositionArrow.setPosition(x - 50, y - 30);
+
+    if (this.vehiclePositionArrowShowInterval.get() > 0) {
+      this.vehiclePositionArrowShowInterval.set(
+        this.vehiclePositionArrowShowInterval.get() - 10 * delta
+      );
+    }
   }
 
   shutdown() {}
