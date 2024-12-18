@@ -64,8 +64,32 @@ export function WaterDrop({
     lifespan: [2000, 4000],
   });
 
-  smokeFx.setDepth(2);
+  const retardantFx = scene.add.particles(
+    0,
+    0,
+    RESOURCES["retardant-particle"],
+    {
+      x: {
+        onEmit: () =>
+          PMath.RND.between(
+            scene.scale.width / 2 - 30,
+            scene.scale.width / 2 + 30
+          ),
+        onUpdate: (particle, key, t, value) => {
+          return value + Math.sin(5 * t * Math.PI) + (Math.random() - 0.5);
+        },
+      },
+      y: { min: 210, max: 220 },
+      quantity: 10,
+      speedY: { min: -25, max: -15 },
+      frequency: 25,
+      lifespan: { min: 1000, max: 2000 },
+      emitting: false,
+    }
+  );
 
+  smokeFx.setDepth(2);
+  retardantFx.setDepth(2);
   // TODO: Lost the z-index battle here (the particles go above everything no matter what depth)
   waterFx.setDepth(2);
 
@@ -123,7 +147,13 @@ export function WaterDrop({
             </Repeat>
             <Sequence>
               <Wait duration={1000} />
-              <Step duration={0} action={() => smokeFx.stop()} />
+              <Step
+                duration={0}
+                action={() => {
+                  smokeFx.stop();
+                  retardantFx.explode();
+                }}
+              />
               <Transition
                 signal={fireOpacity}
                 to={0}

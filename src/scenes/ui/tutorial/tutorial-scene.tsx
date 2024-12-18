@@ -1,13 +1,13 @@
+import { RESOURCES } from "@game/assets";
 import { TEXT_STYLE } from "@game/consts";
 import { AbstractScene } from "../../";
 import { SCENES } from "../../consts";
 import { Directions } from "./Directions";
+import { FireVelocity } from "./FireVelocity";
+import { PoiStatuses } from "./PoiStatuses";
+import { RetardantDrop } from "./RetardantDrop";
 import { WaterCollection } from "./WaterCollection";
 import { WaterDrop } from "./WaterDrop";
-import { RESOURCES } from "@game/assets";
-import { RetardantDrop } from "./RetardantDrop";
-import { PoiStatuses } from "./PoiStatuses";
-import { FireVelocity } from "./FireVelocity";
 
 export class TutorialScene extends AbstractScene {
   constructor() {
@@ -79,7 +79,7 @@ export class TutorialScene extends AbstractScene {
     );
   }
 
-  update(time: number, delta: number) {
+  update(_time: number, _delta: number) {
     if (this.key_enter.isDown) {
       this.startGame();
     }

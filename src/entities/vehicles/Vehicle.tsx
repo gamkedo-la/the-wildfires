@@ -51,10 +51,14 @@ export abstract class Vehicle {
 
   retardantTankCapacity: number = 99;
   retardantChargeSize: number = 33;
-  retardantTankConsumptionRate: number = 38;
+  retardantTankConsumptionRate: number = 20;
+  retardantTankRefillRate: number = 38;
   retardantTankLevel: Signal<number>;
 
   selectedTank: Signal<"water" | "retardant">;
+
+  windRiding: Signal<boolean>;
+  windRidingLength: number = 0;
 
   started: boolean;
 
@@ -67,6 +71,8 @@ export abstract class Vehicle {
   imageScale: Signal<number>;
   imageScaleGoal: number;
   maxImageScale: number;
+
+  retardantChargeFx: Phaser.GameObjects.Particles.ParticleEmitter;
 
   constructor(
     scene: MapScene,
@@ -85,6 +91,9 @@ export abstract class Vehicle {
     this.acceleration = mutable(new PMath.Vector2(0, 0));
     this.started = false;
 
+    this.windRiding = signal(false);
+    this.windRidingLength = 0;
+
     this.maxImageScale = imageScale;
 
     this.startImageScale = imageScale * 0.5;
@@ -101,6 +110,24 @@ export abstract class Vehicle {
     this.selectedTank = signal("water");
 
     this.initSounds();
+
+    this.retardantChargeFx = scene.add.particles(
+      0,
+      0,
+      RESOURCES["retardant-particle"],
+      {
+        x: {
+          onUpdate: (_particle, _key, t, value) => {
+            return value + Math.sin(5 * t * Math.PI) + (Math.random() - 0.5);
+          },
+        },
+        quantity: 10,
+        speedY: { min: -25, max: -5 },
+        frequency: 25,
+        lifespan: { min: 1000, max: 2000 },
+        emitting: false,
+      }
+    );
 
     this.shadow = (
       <image
@@ -376,6 +403,31 @@ export abstract class Vehicle {
       return true;
     });
 
+    this.windRiding.update(() => {
+      const angleDiff =
+        this.direction.get().angle() -
+        this.scene.windSystem.windVector.get().angle();
+      const isRiding = angleDiff < 0.25 && angleDiff > -0.25;
+
+      if (isRiding) {
+        this.windRidingLength += deltaSeconds;
+        if (this.windRidingLength > 1) {
+          this.retardantChargeFx.explode(
+            3,
+            this.position.get().x,
+            this.position.get().y
+          );
+          this.scene.sound.play(RESOURCES["wind-bonus"]);
+          this.remainingCharges++;
+          this.windRidingLength = 0;
+        }
+      } else {
+        this.windRidingLength = 0;
+      }
+
+      return isRiding;
+    });
+
     this.velocity.mutate((velocity) => {
       if (velocity.length() >= this.maxSpeed - 0.1) return false;
       velocity.add(this.acceleration.get());
@@ -383,7 +435,12 @@ export abstract class Vehicle {
     });
 
     this.position.mutate((position) => {
-      position.add(this.velocity.get().clone().scale(deltaSeconds));
+      position.add(
+        this.velocity
+          .get()
+          .clone()
+          .scale(deltaSeconds * (this.windRiding.get() ? 1.5 : 1))
+      );
       return true;
     });
   }
@@ -399,22 +456,29 @@ export abstract class Vehicle {
 
     if (this.scene.space_key.isDown) {
       if (!this.isCollectingWater && !this.tankWasOpen) {
-        if (
+        const isTileWater =
           this.scene.currentMap.typeAtWorldXY(
             this.position.get().x,
             this.position.get().y
-          ) === MapTileType.Water
-        ) {
-          this.isCollectingWater = true;
-          this.spacePressedTime = _time;
-        } else if (
-          this.selectedTank.get() === "water" &&
-          this.waterTankLevel.get() > 5
+          ) === MapTileType.Water;
+        const isSelectedWater = this.selectedTank.get() === "water";
+        const isSelectedRetardant = !isSelectedWater;
+
+        if (
+          isTileWater &&
+          isSelectedWater &&
+          this.waterTankLevel.get() === this.waterTankCapacity
         ) {
           this.tankWasOpen = "water";
           this.spacePressedTime = _time;
+        } else if (isTileWater) {
+          this.isCollectingWater = true;
+          this.spacePressedTime = _time;
+        } else if (isSelectedWater && this.waterTankLevel.get() > 5) {
+          this.tankWasOpen = "water";
+          this.spacePressedTime = _time;
         } else if (
-          this.selectedTank.get() === "retardant" &&
+          isSelectedRetardant &&
           this.retardantTankLevel.get() > this.retardantChargeSize
         ) {
           this.tankWasOpen = "retardant";
@@ -444,6 +508,12 @@ export abstract class Vehicle {
           !this.scene.sound.isPlaying(RESOURCES["water-filled"])
         ) {
           this.scene.sound.play(RESOURCES["water-filled"]);
+          this.retardantChargeFx.explode(
+            3,
+            this.position.get().x,
+            this.position.get().y
+          );
+          this.remainingCharges++;
         }
 
         // fade in the water tank filling sound
@@ -547,24 +617,33 @@ export abstract class Vehicle {
       if (!this.splashSound.isPlaying) this.splashSound.play(); // sound effect
     } else {
       this.waterDrop.emitting = false;
+    }
+  }
 
-      let lastRetardantTankLevel = this.retardantTankLevel.get();
+  remainingCharges: number = 0;
 
-      // DEBUG
-      this.retardantTankLevel.update((value) =>
-        PMath.Clamp(
-          value + (this.retardantTankConsumptionRate * deltaSeconds) / 100,
-          1,
-          this.retardantTankCapacity
-        )
+  loadRetardantCharge(delta: number) {
+    const deltaSeconds = delta * 0.001;
+    let lastRetardantTankLevel = this.retardantTankLevel.get();
+
+    // DEBUG
+    this.retardantTankLevel.update((value) => {
+      return PMath.Clamp(
+        value +
+          (this.retardantTankRefillRate * deltaSeconds) / 100 +
+          1 * this.remainingCharges,
+        1,
+        this.retardantTankCapacity
       );
+    });
 
-      if (
-        lastRetardantTankLevel % this.retardantChargeSize >
-        this.retardantTankLevel.get() % this.retardantChargeSize
-      ) {
-        this.scene.sound.play(RESOURCES["retardant-fill"]);
-      }
+    this.remainingCharges = 0;
+
+    if (
+      lastRetardantTankLevel % this.retardantChargeSize >
+      this.retardantTankLevel.get() % this.retardantChargeSize
+    ) {
+      this.scene.sound.play(RESOURCES["retardant-fill"]);
     }
   }
 

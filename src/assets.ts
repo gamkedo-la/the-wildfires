@@ -4,6 +4,7 @@
 
 export const RESOURCES = {
   "airplane-propeller-loop": "airplane-propeller-loop",
+  "fire-damage": "fire-damage",
   "fire-extinguished": "fire-extinguished",
   "fire-loop": "fire-loop",
   "helicopter-loop": "helicopter-loop",
@@ -29,6 +30,7 @@ export const RESOURCES = {
   "poi-results-nine-slice": "poi-results-nine-slice",
   "poi-status-icons": "poi-status-icons",
   "poi-tiles-icons": "poi-tiles-icons",
+  "retardant-particle": "retardant-particle",
   "skycrane-sprite": "skycrane-sprite",
   "smoke": "smoke",
   "tanks-overlay": "tanks-overlay",

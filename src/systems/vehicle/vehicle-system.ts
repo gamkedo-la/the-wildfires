@@ -27,6 +27,7 @@ export class VehicleSystem implements System {
   update(time: number, delta: number): void {
     this.vehicle.update(time, delta);
     this.vehicle.useTank(time, delta);
+    this.vehicle.loadRetardantCharge(delta);
   }
 
   changeVehicle(type: keyof typeof VEHICLES): void {

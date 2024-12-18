@@ -99,6 +99,12 @@ const config = {
       args: "-b ${input} --sheet ${output}",
     },
     {
+      input: "ui/retardant-particle.aseprite",
+      output: "retardant-particle.png",
+      executable: "aseprite",
+      args: "-b ${input} --sheet ${output}",
+    },
+    {
       input: "ui/tanks-overlay.aseprite",
       output: "tanks-overlay.png",
       executable: "aseprite",

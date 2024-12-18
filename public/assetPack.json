@@ -8,6 +8,11 @@
       },
       {
         "type": "audio",
+        "key": "fire-damage",
+        "url": "assets/fire-damage.mp3"
+      },
+      {
+        "type": "audio",
         "key": "fire-extinguished",
         "url": "assets/fire-extinguished.mp3"
       },
@@ -130,6 +135,11 @@
         "type": "image",
         "key": "poi-tiles-icons",
         "url": "assets/poi-tiles-icons.png"
+      },
+      {
+        "type": "image",
+        "key": "retardant-particle",
+        "url": "assets/retardant-particle.png"
       },
       {
         "type": "image",

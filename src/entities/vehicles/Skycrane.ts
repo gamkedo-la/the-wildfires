@@ -3,6 +3,7 @@ import { Math as PMath } from "phaser";
 import { MapScene } from "../../scenes/game/map-scene";
 import { Vehicle } from "./Vehicle";
 import { signal } from "@game/state/lib/signals";
+import { RESOURCES } from "@game/assets";
 
 export class Skycrane extends Vehicle {
   bodyDirection: PMath.Vector2;
@@ -99,6 +100,34 @@ export class Skycrane extends Vehicle {
     this.direction.mutate((direction) => {
       direction.setAngle(rads - PMath.PI2);
       return true;
+    });
+
+    this.windRiding.update((wasDiving) => {
+      const angleDiff =
+        this.direction.get().angle() -
+        this.scene.windSystem.windVector.get().angle();
+      const isRiding =
+        angleDiff < 0.25 &&
+        angleDiff > -0.25 &&
+        (this.scene.key_w.isDown || this.scene.key_up.isDown);
+
+      if (isRiding) {
+        this.windRidingLength += deltaSeconds;
+        if (this.windRidingLength > 1) {
+          this.retardantChargeFx.explode(
+            3,
+            this.position.get().x,
+            this.position.get().y
+          );
+          this.scene.sound.play(RESOURCES["wind-bonus"]);
+          this.remainingCharges++;
+          this.windRidingLength = 0;
+        }
+      } else {
+        this.windRidingLength = 0;
+      }
+
+      return isRiding;
     });
 
     // Hack to avoid the auto scaling from the other two aircraft

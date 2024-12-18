@@ -238,14 +238,39 @@ export class HUDScene extends AbstractScene {
     });
 
     this.add.existing(
+      <image x={14} y={667} texture={RESOURCES["tanks-overlay"]} origin={0} />
+    );
+
+    this.add.existing(
       <image
-        x={14}
-        y={667}
-        texture={RESOURCES["tanks-overlay"]}
-        origin={0}
-        onPointerdown={() => {
-          console.log("clicked");
-        }}
+        texture={RESOURCES["wind-direction-pin"]}
+        x={349}
+        y={679}
+        angle={computed(
+          () => Phaser.Math.RadToDeg(vehicle.direction.get().angle()) + 180
+        )}
+        origin={{ x: 0.8, y: 0.5 }}
+        tint={computed(() => {
+          if (vehicle.windRiding.get()) {
+            return 0xaaffaa;
+          }
+          return 0x00aaaa;
+        })}
+      />
+    );
+
+    this.add.existing(
+      <image
+        texture={RESOURCES["wind-direction-pin"]}
+        x={349}
+        y={679}
+        angle={computed(
+          () =>
+            Phaser.Math.RadToDeg(
+              this.gameScene.windSystem.windVector.get().angle()
+            ) + 180
+        )}
+        origin={{ x: 0.8, y: 0.5 }}
       />
     );
 

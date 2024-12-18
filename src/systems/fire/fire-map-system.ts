@@ -9,6 +9,7 @@ import {
 } from "../../entities/maps";
 import { GameMap } from "../../entities/maps/GameMap";
 import { MapScene } from "../../scenes/game/map-scene";
+import { RESOURCES } from "@game/assets";
 
 const burnedTilesIds = [41, 42, 43, 44, 166, 167, 168, 169, 231, 232, 233, 234];
 const doNotChangeBurnedTiles = [45, 46, 47];
@@ -23,6 +24,8 @@ export class FireMapSystem implements System {
 
   fireStarted: boolean;
 
+  retardantChargeFx: Phaser.GameObjects.Particles.ParticleEmitter;
+
   map: GameMap;
 
   constructor(scene: MapScene, fireInterval: number, burnInterval: number) {
@@ -33,6 +36,24 @@ export class FireMapSystem implements System {
     this.burnInterval = burnInterval;
     this.windAngle = PMath.RadToDeg(PMath.Vector2.UP.angle());
     this.windSpeed = 2;
+
+    this.retardantChargeFx = scene.add.particles(
+      0,
+      0,
+      RESOURCES["retardant-particle"],
+      {
+        x: {
+          onUpdate: (_particle, _key, t, value) => {
+            return value + Math.sin(5 * t * Math.PI) + (Math.random() - 0.5);
+          },
+        },
+        quantity: 10,
+        speedY: { min: -25, max: -5 },
+        frequency: 25,
+        lifespan: { min: 1000, max: 2000 },
+        emitting: false,
+      }
+    );
   }
 
   create(): this {
@@ -169,6 +190,8 @@ export class FireMapSystem implements System {
       mapTile.properties.isBurning = false;
       let tile = this.map.removeFire(tileX, tileY);
       this.stopSmoke(tile);
+      this.retardantChargeFx.explode(2, mapTile.pixelX, mapTile.pixelY);
+      this.scene.vehiclesSystem.vehicle.remainingCharges++;
     }
   }
   // Extinguish in a '+' shape pattern
