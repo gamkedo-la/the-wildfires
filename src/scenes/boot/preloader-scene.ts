@@ -51,6 +51,11 @@ export class Preloader extends AbstractScene {
       frameHeight: 101,
     });
 
+    this.load.spritesheet("martin-outline", "assets/martin-outline.png", {
+      frameWidth: 125,
+      frameHeight: 101,
+    });
+
     this.load.spritesheet(
       "canadair-spritesheet",
       "assets/canadair-sprite.png",
@@ -60,6 +65,11 @@ export class Preloader extends AbstractScene {
       }
     );
 
+    this.load.spritesheet("canadair-outline", "assets/canadair-outline.png", {
+      frameWidth: 83,
+      frameHeight: 85,
+    });
+
     this.load.spritesheet(
       "skycrane-spritesheet",
       "assets/skycrane-sprite.png",
@@ -68,6 +78,11 @@ export class Preloader extends AbstractScene {
         frameHeight: 83,
       }
     );
+
+    this.load.spritesheet("skycrane-outline", "assets/skycrane-outline.png", {
+      frameWidth: 48,
+      frameHeight: 83,
+    });
 
     this.load.spritesheet("tilemap-spritesheet", "assets/tilemap-test-3.png", {
       frameWidth: 24,

@@ -17,6 +17,7 @@ export abstract class Vehicle {
 
   sprite: Phaser.GameObjects.Image;
   shadow: Phaser.GameObjects.Image;
+  outline: Phaser.GameObjects.Image;
 
   engineSound:
     | Phaser.Sound.HTML5AudioSound
@@ -79,6 +80,7 @@ export abstract class Vehicle {
     x: number,
     y: number,
     texture: string,
+    outlineTexture: string,
     imageScale: number,
     type: VehicleType
   ) {
@@ -197,6 +199,36 @@ export abstract class Vehicle {
     );
 
     this.scene.add.existing(this.sprite);
+
+    this.outline = (
+      <image
+        texture={outlineTexture}
+        x={computed(() => {
+          const x = this.position.get().x;
+          if (x < 70) return 120;
+          if (x > GAME_WIDTH) return GAME_WIDTH - 20;
+          return x;
+        })}
+        y={computed(() => {
+          const y = this.position.get().y;
+          if (y < 70) return 100;
+          if (y > GAME_HEIGHT) return GAME_HEIGHT - 40;
+          return y;
+        })}
+        angle={computed(
+          () => PMath.RadToDeg(this.direction.get().angle()) - 90
+        )}
+        frame={computed(() => {
+          const currentFrame = Math.floor(this.turningState.get() / 20);
+          return Math.max(0, Math.min(4, currentFrame));
+        })}
+        scale={this.imageScale}
+        tint={0x2a1d0d}
+      />
+    );
+
+    this.outline.setDepth(1);
+    this.scene.add.existing(this.outline);
   }
 
   initWaterFX() {

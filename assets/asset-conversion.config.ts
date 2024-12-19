@@ -83,14 +83,29 @@ const config = {
       input: "sounds/airplane-propeller-loop.mp3",
       output: "airplane-propeller-loop.mp3",
     },
-    { input: "airplane/martin_export.png", output: "martin-sprite.png" },
     {
-      input: "canadair-c415/canadair_export.png",
+      input: "airplane/martin_export_no_outline.png",
+      output: "martin-sprite.png",
+    },
+    {
+      input: "airplane/martin_pixel_outline.png",
+      output: "martin-outline.png",
+    },
+    {
+      input: "canadair-c415/canadair_export_no_outline.png",
       output: "canadair-sprite.png",
+    },
+    {
+      input: "canadair-c415/canadair_pixel_outline.png",
+      output: "canadair-outline.png",
     },
     {
       input: "skycrane/skycrane_export.png",
       output: "skycrane-sprite.png",
+    },
+    {
+      input: "skycrane/skycrane_pixel_outline.png",
+      output: "skycrane-outline.png",
     },
     {
       input: "ui/the-wildfires-planes-hud.aseprite",

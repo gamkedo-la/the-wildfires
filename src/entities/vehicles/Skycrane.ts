@@ -12,9 +12,19 @@ export class Skycrane extends Vehicle {
   dragRate: number;
 
   constructor(scene: MapScene, x: number, y: number) {
-    super(scene, x, y, "skycrane-spritesheet", 0.5, "SKYCRANE");
+    super(
+      scene,
+      x,
+      y,
+      "skycrane-spritesheet",
+      "skycrane-outline",
+      0.5,
+      "SKYCRANE"
+    );
 
     this.sprite.setOrigin(0.5, 0.3);
+    this.outline.setOrigin(0.5, 0.3);
+
     // Movement
     this.maxSpeed = 80;
     this.accelerationRate = 3;

@@ -73,6 +73,11 @@
       },
       {
         "type": "image",
+        "key": "canadair-outline",
+        "url": "assets/canadair-outline.png"
+      },
+      {
+        "type": "image",
         "key": "canadair-sprite",
         "url": "assets/canadair-sprite.png"
       },
@@ -80,6 +85,11 @@
         "type": "image",
         "key": "key-nine-slice",
         "url": "assets/key-nine-slice.png"
+      },
+      {
+        "type": "image",
+        "key": "martin-outline",
+        "url": "assets/martin-outline.png"
       },
       {
         "type": "image",
@@ -140,6 +150,11 @@
         "type": "image",
         "key": "retardant-particle",
         "url": "assets/retardant-particle.png"
+      },
+      {
+        "type": "image",
+        "key": "skycrane-outline",
+        "url": "assets/skycrane-outline.png"
       },
       {
         "type": "image",
