@@ -16,10 +16,6 @@ import {
 import { SCENES } from "../consts";
 import { RESOURCES } from "@game/assets";
 
-// TODO: this will probably vary by map
-const FIRE_INTERVAL_MS = 5000;
-const BURN_INTERVAL_MS = 5000;
-
 export class MapScene extends AbstractScene {
   declare bus: Phaser.Events.EventEmitter;
   declare gamebus: PhaserGamebus;
@@ -132,11 +128,7 @@ export class MapScene extends AbstractScene {
       this,
       this.gameState.currentRun.get().vehicle
     ).create();
-    this.fireMapSystem = new FireMapSystem(
-      this,
-      FIRE_INTERVAL_MS,
-      BURN_INTERVAL_MS
-    ).create();
+    this.fireMapSystem = new FireMapSystem(this).create();
     this.windSystem = new WindSystem(this).create();
   }
 

@@ -1103,7 +1103,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1122,7 +1122,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1141,7 +1141,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1160,7 +1160,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1179,7 +1179,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1198,7 +1198,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1217,7 +1217,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1236,7 +1236,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1255,7 +1255,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1274,7 +1274,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1293,7 +1293,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1352,7 +1352,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1371,7 +1371,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1390,7 +1390,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1409,7 +1409,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {
@@ -1428,7 +1428,7 @@
                         {
                          "name":"isVegetation",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }]
                 }, 
                 {

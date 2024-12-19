@@ -120,77 +120,77 @@
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="77"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="20">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="46"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="21">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="46"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="22">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="46"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="23">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="47"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="24">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="47"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="25">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="47"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="26">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="45"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="27">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="42"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="28">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="77"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="29">
   <properties>
    <property name="burnRate" type="int" value="1"/>
    <property name="burnedTileId" type="int" value="77"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="30">
@@ -216,35 +216,35 @@
   <properties>
    <property name="burnRate" type="int" value="2"/>
    <property name="burnedTileId" type="int" value="77"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="36">
   <properties>
    <property name="burnRate" type="int" value="2"/>
    <property name="burnedTileId" type="int" value="77"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="37">
   <properties>
    <property name="burnRate" type="int" value="2"/>
    <property name="burnedTileId" type="int" value="77"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="38">
   <properties>
    <property name="burnRate" type="int" value="2"/>
    <property name="burnedTileId" type="int" value="77"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="39">
   <properties>
    <property name="burnRate" type="int" value="2"/>
    <property name="burnedTileId" type="int" value="77"/>
-   <property name="isVegetation" type="bool" value="false"/>
+   <property name="isVegetation" type="bool" value="true"/>
   </properties>
  </tile>
  <tile id="47">

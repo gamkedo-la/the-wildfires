@@ -68,6 +68,7 @@ export class WindSystem implements System {
   direction: PMath.Vector2;
   speed: number;
 
+  randomPad: number;
   windVector: MutableSignal<PMath.Vector2>;
 
   constructor(scene: MapScene) {
@@ -78,6 +79,7 @@ export class WindSystem implements System {
     this.direction = PMath.Vector2.UP;
     this.speed = 2;
     this.windVector = mutable(this.direction.clone());
+    this.randomPad = Math.random() / 0.00001;
 
     return this;
   }
@@ -85,10 +87,9 @@ export class WindSystem implements System {
   update(time: number, _delta: number): void {
     // Time in ms passed to aperiodic function is scaled
     // so that change rate is not too fast.
-    const scaledTime = time / 5000;
+    const scaledTime = (time + this.randomPad) * 0.0001;
 
-    this.direction.setAngle((dirFunc(scaledTime) + 1) * Math.PI);
-
+    this.direction.setAngle(dirFunc(scaledTime) * Math.PI);
     this.speed = (speedFunc(scaledTime) + 1) * 5;
 
     this.windVector.mutate((vec) => {

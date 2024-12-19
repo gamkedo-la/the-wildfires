@@ -16,8 +16,8 @@ const doNotChangeBurnedTiles = [45, 46, 47];
 
 export class FireMapSystem implements System {
   scene: MapScene;
-  fireInterval: number;
-  burnInterval: number;
+  burnTickInterval: number = 1000;
+  burnRatio: number = 5;
   windAngle: number;
   windSpeed: number;
   windDirection: PMath.Vector2;
@@ -28,12 +28,10 @@ export class FireMapSystem implements System {
 
   map: GameMap;
 
-  constructor(scene: MapScene, fireInterval: number, burnInterval: number) {
+  constructor(scene: MapScene) {
     this.scene = scene;
     this.map = scene.currentMap;
 
-    this.fireInterval = fireInterval;
-    this.burnInterval = burnInterval;
     this.windAngle = PMath.RadToDeg(PMath.Vector2.UP.angle());
     this.windSpeed = 2;
 
@@ -58,7 +56,6 @@ export class FireMapSystem implements System {
 
   create(): this {
     this.initializeFireTiles();
-    this.setupFireSpread();
     this.setupWaterDropEvent();
     return this;
   }
@@ -72,29 +69,9 @@ export class FireMapSystem implements System {
   private initializeFireTiles() {
     this.map.fireLayer
       .filterTiles((t: Tilemaps.Tile) => t.index === this.map.fireTileId)
-      .forEach((tile) => {
-        this.emitSmoke(tile as FireLayerTile);
+      .flatMap((tile) => {
+        this.ignite(tile.x, tile.y);
       });
-
-    this.scene.time.delayedCall(100, () => {
-      this.spreadFire();
-    });
-
-    this.scene.time.delayedCall(200, () => {
-      this.spreadFire();
-    });
-
-    this.scene.time.delayedCall(this.fireInterval * 2, () => {
-      this.fireStarted = true;
-    });
-  }
-
-  private setupFireSpread() {
-    this.scene.time.addEvent({
-      delay: this.fireInterval,
-      loop: true,
-      callback: () => this.spreadFire(),
-    });
   }
 
   private setupWaterDropEvent() {
@@ -123,53 +100,6 @@ export class FireMapSystem implements System {
     this.windDirection = windDirection;
     this.windAngle = windAngle;
     this.windSpeed = windSpeed;
-  }
-
-  private ignite(tileX: number, tileY: number) {
-    let mapTile = this.map.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
-
-    if (
-      !mapTile ||
-      mapTile.properties.isWatered ||
-      tileX < 2 ||
-      tileY < 2 ||
-      tileX >= this.map.mapLayer.width ||
-      tileY >= this.map.mapLayer.height
-    )
-      return;
-
-    let structuresTile = this.map.structuresLayer.getTileAt(
-      tileX,
-      tileY
-    ) as StructuresLayerTile;
-
-    if (structuresTile?.properties.isRoad && Phaser.Math.Between(0, 100) < 90) {
-      // TODO: magic number
-      // 10% chance to ignite road
-      return;
-    }
-
-    if (mapTile?.properties.burnRate > 0 && !mapTile?.properties.isBurning) {
-      mapTile.properties.isBurning = true;
-      mapTile.properties.fuel =
-        mapTile.properties.fuel || mapTile.properties.maxFuel || 50;
-      mapTile.properties.burnTimer = 0;
-
-      let tile = this.map.putFire(tileX, tileY);
-      this.emitSmoke(tile);
-    }
-
-    if (!mapTile?.properties.wasBurning) {
-      mapTile.properties.wasBurning = true;
-
-      if (structuresTile?.properties.isRoad) {
-        mapTile.properties.fuel += 20;
-      }
-      if (structuresTile?.properties.isBuilding) {
-        console.log("burning building");
-        mapTile.properties.fuel += 100;
-      }
-    }
   }
 
   private dropWater(tileX: number, tileY: number) {
@@ -275,6 +205,100 @@ export class FireMapSystem implements System {
       });
   }
 
+  private burnDown(tileX: number, tileY: number) {
+    let mapTile = this.map.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
+
+    if (mapTile?.properties.isBurning) {
+      mapTile.properties.isBurning = false;
+      let tile = this.map.removeFire(tileX, tileY);
+      this.stopSmoke(tile);
+    }
+
+    let structuresTile = this.map.structuresLayer.getTileAt(
+      tileX,
+      tileY
+    ) as StructuresLayerTile;
+
+    if (
+      structuresTile?.properties.isBuilding ||
+      structuresTile?.properties.isVegetation
+    ) {
+      structuresTile.index = structuresTile.properties.burnedTileId;
+    }
+
+    const poi = this.map.pointsOfInterestLayer.getTileAt(tileX, tileY)?.index;
+    if (poi) {
+      this.map.scene.gameState.causePointOfInterestDamage(
+        poi - this.map.pointsOfInterestLayer.startingIndex
+      );
+    }
+  }
+
+  private ignite(tileX: number, tileY: number) {
+    let mapTile = this.map.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
+
+    // Corners
+    if (
+      !mapTile ||
+      mapTile.properties.isWatered ||
+      tileX < 2 ||
+      tileY < 2 ||
+      tileX >= this.map.mapLayer.width ||
+      tileY >= this.map.mapLayer.height
+    )
+      return;
+
+    let structuresTile = this.map.structuresLayer.getTileAt(
+      tileX,
+      tileY
+    ) as StructuresLayerTile;
+
+    if (
+      structuresTile?.properties.isRiver ||
+      (structuresTile?.properties.isRoad && Phaser.Math.Between(0, 100) < 90)
+    ) {
+      // TODO: magic number
+      // 10% chance to ignite road
+      return;
+    }
+
+    if (mapTile?.properties.burnRate > 0 && !mapTile?.properties.isBurning) {
+      const burnRate = structuresTile?.properties.burnRate
+        ? Math.min(
+            structuresTile.properties.burnRate,
+            mapTile.properties.burnRate
+          )
+        : mapTile.properties.burnRate;
+
+      mapTile.properties.isBurning = true;
+      mapTile.properties.fuel = (5 - burnRate) * this.burnRatio;
+      mapTile.properties.burnTimer = 0;
+
+      let tile = this.map.putFire(tileX, tileY);
+      this.emitSmoke(tile);
+    }
+  }
+
+  tim: number = 0;
+  fireDirectionStep: number = 0;
+  directions = [
+    { x: 1, y: 0 },
+    { x: -1, y: 0 },
+    { x: 0, y: 1 },
+    { x: 0, y: -1 },
+  ];
+
+  private getSomeFireDirection(biasX: number, biasY: number) {
+    this.fireDirectionStep = (this.fireDirectionStep + 1) % 4;
+
+    const direction = this.directions[this.fireDirectionStep];
+
+    return {
+      x: direction.x + biasX,
+      y: direction.y + biasY,
+    };
+  }
+
   private burnTiles(delta: number) {
     let burningTiles = this.map.mapLayer.filterTiles(
       (t: MapLayerTile) => t.properties.isBurning
@@ -284,21 +308,26 @@ export class FireMapSystem implements System {
       this.scene.endGame(END_REASONS.FIRE_EXTINGUISHED);
     }
 
+    this.tim += delta;
+    if (this.tim > this.burnTickInterval) {
+      this.tim = 0;
+      this.spreadFire(burningTiles.length);
+    }
+
     burningTiles.forEach((t: MapLayerTile) => {
       t.properties.burnTimer += delta;
 
-      if (t.properties.burnTimer >= this.burnInterval / t.properties.burnRate) {
+      if (t.properties.burnTimer >= this.burnTickInterval) {
         t.properties.burnTimer = 0;
         t.properties.fuel -= 1;
 
-        // TODO: magic number
-        let spreadChance = Phaser.Math.Between(0, 10);
-        if (spreadChance < t.properties.burnRate) {
+        if (t.properties.fuel == 1) {
           this.ignite(
-            t.x + Math.floor(Math.random() * 2) - 1,
-            t.y + Math.floor(Math.random() * 2) - 1
+            t.x + Math.floor(Math.random() * 3) - 1,
+            t.y + Math.floor(Math.random() * 3) - 1
           );
         }
+        //}
 
         if (t.properties.fuel <= 0) {
           // TODO: Absolute hack, not sure it's worth the visual "improvement"
@@ -315,83 +344,41 @@ export class FireMapSystem implements System {
     });
   }
 
-  private burnDown(tileX: number, tileY: number) {
-    let mapTile = this.map.mapLayer.getTileAt(tileX, tileY) as MapLayerTile;
-
-    if (mapTile?.properties.isBurning) {
-      mapTile.properties.isBurning = false;
-      let tile = this.map.removeFire(tileX, tileY);
-      this.stopSmoke(tile);
-    }
-
-    let structuresTile = this.map.structuresLayer.getTileAt(
-      tileX,
-      tileY
-    ) as StructuresLayerTile;
-
-    if (structuresTile?.properties.isBuilding) {
-      structuresTile.index = structuresTile.properties.burnedTileId;
-    }
-
-    const poi = this.map.pointsOfInterestLayer.getTileAt(tileX, tileY)?.index;
-    if (poi) {
-      this.map.scene.gameState.causePointOfInterestDamage(
-        poi - this.map.pointsOfInterestLayer.startingIndex
-      );
-    }
-  }
-
-  private spreadFire() {
+  private spreadFire(burningTilesCount: number) {
     let [eastSpread, westSpread, southSpread, northSpread] =
       this.calculateSpread();
 
     const ignitionPoints = this.map.fireLayer
       .filterTiles((t: Tilemaps.Tile) => t.index === this.map.fireTileId)
       .flatMap((tile) => [
-        { x: tile.x - westSpread, y: tile.y },
-        { x: tile.x + eastSpread, y: tile.y },
-        { x: tile.x, y: tile.y - northSpread },
-        { x: tile.x, y: tile.y + southSpread },
+        this.getSomeFireDirection(tile.x - westSpread, tile.y),
+        this.getSomeFireDirection(tile.x + eastSpread, tile.y),
+        this.getSomeFireDirection(tile.x, tile.y - northSpread),
+        this.getSomeFireDirection(tile.x, tile.y + southSpread),
       ]);
 
     [...new Set(ignitionPoints)].forEach((p) => {
+      if (burningTilesCount > 200) {
+        const chance = Math.max(0, 1 - (burningTilesCount - 200) / 50);
+        if (Math.random() > chance) {
+          return;
+        }
+      }
+
       this.ignite(p.x, p.y);
     });
   }
 
   private calculateSpread() {
-    let eastSpread = 1,
-      westSpread = 1,
-      southSpread = 1,
-      northSpread = 1;
-
-    if (this.windSpeed >= 3) {
-      if (this.windDirection.x >= 0.8) westSpread = 0;
-      else if (this.windDirection.x <= -0.8) eastSpread = 0;
-      else if (this.windDirection.y >= 0.8) northSpread = 0;
-      else if (this.windDirection.y <= -0.8) southSpread = 0;
-    }
-
-    if (this.windSpeed >= 7) {
-      [westSpread, eastSpread] =
-        this.windDirection.x >= 0.5
-          ? [Math.max(westSpread - 1, 0), eastSpread + 1]
-          : [westSpread, eastSpread];
-      [westSpread, eastSpread] =
-        this.windDirection.x >= -0.5
-          ? [westSpread + 1, Math.max(eastSpread - 1)]
-          : [westSpread, eastSpread];
-      [northSpread, southSpread] =
-        this.windDirection.y >= 0.5
-          ? [Math.max(northSpread - 1, 0), southSpread + 1]
-          : [northSpread, southSpread];
-      [northSpread, southSpread] =
-        this.windDirection.y >= -0.5
-          ? [northSpread + 1, Math.max(southSpread - 1, 0)]
-          : [northSpread, southSpread];
-    }
-
-    return [eastSpread, westSpread, southSpread, northSpread];
+    const normalizedSpeed = Math.min(this.windSpeed / 10, 1);
+    const threshold = Math.random();
+    const windInfluence = threshold < normalizedSpeed ? 1.5 : 0;
+    return [
+      Math.floor(windInfluence * Math.max(0, this.windDirection.x)),
+      Math.floor(windInfluence * Math.max(0, -this.windDirection.x)),
+      Math.floor(windInfluence * Math.max(0, this.windDirection.y)),
+      Math.floor(windInfluence * Math.max(0, -this.windDirection.y)),
+    ];
   }
 
   private emitSmoke(tile: FireLayerTile) {
@@ -417,9 +404,13 @@ export class FireMapSystem implements System {
           quantity: 1,
           angle: () =>
             PMath.RND.between(this.windAngle - 15, this.windAngle + 15),
-          speed: () => 15 + this.windSpeed,
+          speed: {
+            onEmit: () => 10 + this.windSpeed * 4,
+          },
           frequency: PMath.RND.between(10, 50),
-          lifespan: PMath.RND.between(500, 10000),
+          lifespan: {
+            onEmit: () => PMath.RND.between(2500, 25000) / this.windSpeed,
+          },
         }
       );
     } else {
