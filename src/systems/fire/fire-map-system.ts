@@ -16,8 +16,8 @@ const doNotChangeBurnedTiles = [45, 46, 47];
 
 export class FireMapSystem implements System {
   scene: MapScene;
-  burnTickInterval: number = 1000;
-  burnRatio: number = 5;
+  burnTickInterval: number = 2400;
+  burnRatio: number = 6;
   windAngle: number;
   windSpeed: number;
   windDirection: PMath.Vector2;
@@ -154,7 +154,7 @@ export class FireMapSystem implements System {
 
     if (!mapTile || mapTile.properties.isWater) return;
 
-    mapTile.properties.waterTimer = 45000;
+    mapTile.properties.waterTimer = 30000;
 
     if (mapTile?.properties.isWatered) {
       return;
@@ -382,7 +382,7 @@ export class FireMapSystem implements System {
   }
 
   private emitSmoke(tile: FireLayerTile) {
-    if (Phaser.Math.Between(0, 100) < 70) return;
+    if (Phaser.Math.Between(0, 100) < 60) return;
 
     const tint = [
       [0x664433, 0x927e6a, 0xefd8a1, 0x927e6a],
@@ -407,7 +407,7 @@ export class FireMapSystem implements System {
           speed: {
             onEmit: () => 10 + this.windSpeed * 4,
           },
-          frequency: PMath.RND.between(10, 50),
+          frequency: PMath.RND.between(20, 50),
           lifespan: {
             onEmit: () => PMath.RND.between(2500, 25000) / this.windSpeed,
           },

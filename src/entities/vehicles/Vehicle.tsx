@@ -51,7 +51,7 @@ export abstract class Vehicle {
 
   retardantTankCapacity: number = 99;
   retardantChargeSize: number = 33;
-  retardantTankConsumptionRate: number = 20;
+  retardantTankConsumptionRate: number = 30;
   retardantTankRefillRate: number = 38;
   retardantTankLevel: Signal<number>;
 
@@ -448,6 +448,7 @@ export abstract class Vehicle {
   // Vehicles will drop water continuously until the tank is empty
   // Water is collected when space is pressed until it's pressed again
   tankWasOpen: "water" | "retardant" | null = null;
+  closeRetardantTankAt: number = 0;
   spacePressedTime: number = 0;
   isCollectingWater: boolean = false;
 
@@ -483,6 +484,8 @@ export abstract class Vehicle {
         ) {
           this.tankWasOpen = "retardant";
           this.spacePressedTime = _time;
+          this.closeRetardantTankAt =
+            this.retardantTankLevel.get() - this.retardantChargeSize;
         }
       }
 
@@ -580,25 +583,21 @@ export abstract class Vehicle {
 
       if (!this.splashSound.isPlaying) this.splashSound.play(); // sound effect
     } else if (this.tankWasOpen === "retardant") {
-      const minClamp =
-        this.retardantTankLevel.get() -
-        (this.retardantTankLevel.get() % this.retardantChargeSize) -
-        1;
       this.retardantTankLevel.update((value) =>
         PMath.Clamp(
           value - this.retardantTankConsumptionRate * deltaSeconds,
-          minClamp,
+          this.closeRetardantTankAt,
           this.retardantTankCapacity
         )
       );
 
       const currentLevel = this.retardantTankLevel.get();
-      if (currentLevel <= 1 || currentLevel % this.retardantChargeSize < 1) {
+      if (currentLevel <= 1 || currentLevel <= this.closeRetardantTankAt) {
         this.tankWasOpen = null;
       }
 
       // Water takes time to reach the ground
-      if (_time - this.spacePressedTime > 300) {
+      if (_time - this.spacePressedTime > 150) {
         const positionBehind = this.position
           .get()
           .clone()
