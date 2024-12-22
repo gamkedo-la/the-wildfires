@@ -245,8 +245,8 @@ export class FireMapSystem implements System {
       mapTile.properties.isWatered ||
       tileX < 2 ||
       tileY < 2 ||
-      tileX >= this.map.mapLayer.width ||
-      tileY >= this.map.mapLayer.height
+      tileX >= 68 ||
+      tileY >= 67
     )
       return;
 
