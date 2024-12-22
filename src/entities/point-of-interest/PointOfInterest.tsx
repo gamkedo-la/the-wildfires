@@ -1,8 +1,9 @@
 import { computed, effect, signal } from "@game/state/lib/signals";
+import { Signal } from "@game/state/lib/types";
+import { Tilemaps } from "phaser";
 import { RESOURCES } from "../../assets";
 import { MapScene } from "../../scenes/game/map-scene";
 import { GameMap } from "../maps/GameMap";
-import { Signal } from "@game/state/lib/types";
 
 // TODO: Maybe there will be a POI UI in the HUD where instead of a fixed time to start, it's on the player to alert the POI and start the evacuation. Obviously the less
 export const POI_STATE = {
@@ -21,7 +22,6 @@ export class PointOfInterest {
 
   id: number;
   name: string;
-  timeout: number;
 
   legend: Phaser.GameObjects.Text;
 
@@ -90,14 +90,20 @@ export class PointOfInterest {
       />
     );
 
+    rectangle.setDepth(1);
+
     const savedHealthBar: Phaser.GameObjects.Rectangle =
       this.scene.add.existing(
         <rectangle width={0} height={0} fillColor={0xa58c27} />
       );
 
+    savedHealthBar.setDepth(1);
+
     const damageBar: Phaser.GameObjects.Rectangle = this.scene.add.existing(
       <rectangle width={0} height={0} fillColor={0xae2334} />
     );
+
+    damageBar.setDepth(1);
 
     effect(() => {
       const opened = this.open.get();
@@ -146,7 +152,7 @@ export class PointOfInterest {
       />
     );
 
-    statusIcon.setDepth(100);
+    statusIcon.setDepth(2);
 
     this.state = computed(() => {
       if (this.tilesLeft.get() === 0) {
@@ -201,32 +207,49 @@ export class PointOfInterest {
           break;
       }
     });
+    const t = this.scene.time.addEvent({
+      delay: map.fireTick,
+      callback: () => {
+        let closestDistance = Infinity;
 
-    // TODO: Fix this on the map file. This is now how much one tile takes to be saved
-    this.timeout = 5;
+        map.fireTilesCache.forEach((tile: Tilemaps.Tile) => {
+          // No need for sqrt since we only care about relative distances for comparison
+          const tileDistance =
+            Math.pow(tile.pixelX - x, 2) + Math.pow(tile.pixelY - y, 2);
+
+          if (tileDistance < closestDistance) {
+            closestDistance = tileDistance;
+          }
+        });
+
+        if (closestDistance < 10000) {
+          this.scene.time.delayedCall(300, () => {
+            this.open.set(true);
+            pin.play("pin-vertical-flash");
+            this.legend.setVisible(true);
+          });
+          this.scene.time.delayedCall(3000, () => {
+            this.legend.setVisible(false);
+            pin.play("pin-vertical-hide");
+            this.open.set(false);
+          });
+          this.saveTile();
+          this.timer.paused = false;
+
+          t.destroy();
+        }
+      },
+      repeat: -1,
+      callbackScope: this,
+    });
 
     this.timer = this.scene.time.addEvent({
-      delay: this.timeout * 1000,
+      delay: map.evacuationTileDelay,
       callback: () => {
         this.saveTile();
       },
       callbackScope: this,
       paused: true,
-    });
-
-    // Start the timer
-    this.scene.time.delayedCall(delay * 1000, () => {
-      this.timer.paused = false;
-      this.scene.time.delayedCall(300 + this.timeout * 1000, () => {
-        this.open.set(true);
-        pin.play("pin-vertical-flash");
-        this.legend.setVisible(true);
-      });
-      this.scene.time.delayedCall(1000 + this.timeout * 1000, () => {
-        this.legend.setVisible(false);
-        pin.play("pin-vertical-hide");
-        this.open.set(false);
-      });
     });
 
     const pin: Phaser.GameObjects.Sprite = (
@@ -249,6 +272,8 @@ export class PointOfInterest {
       />
     );
 
+    pin.setDepth(2);
+
     this.scene.add.existing(pin);
 
     pin.setVisible(false);
@@ -261,6 +286,8 @@ export class PointOfInterest {
       })
       .setOrigin(0.5, 1.1)
       .setVisible(false);
+
+    this.legend.setDepth(2);
 
     this.scene.time.delayedCall(100 * id, () => {
       pin.setVisible(true);
@@ -284,7 +311,6 @@ export class PointOfInterest {
     if (this.tilesLeft.get() > 0) {
       this.tilesLeft.update((value) => value - damage);
       this.damagedTiles.update((value) => value + damage);
-      this.legend.setText(`${this.maxTiles.get() - this.damagedTiles.get()}%`);
     }
   }
 
