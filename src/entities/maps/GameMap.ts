@@ -14,11 +14,17 @@ export abstract class GameMap {
     startingIndex: number;
   };
 
-  fireTileId: number;
   cameraPosition: Phaser.Math.Vector2;
   aircraftStartPosition: Phaser.Math.Vector2;
 
   animatedTiles: any[];
+
+  fireTileId: number;
+  fireTick: number = 2400;
+  fireRatio: number = 6;
+  fireTilesCache: Phaser.Tilemaps.Tile[];
+
+  evacuationTileDelay: number = 7000;
 
   create() {
     let fireTileId = this.map.properties.find(
@@ -61,6 +67,17 @@ export abstract class GameMap {
 
     this.registerPointsOfInterest();
     this.registerAnimatedTiles();
+
+    this.fireTilesCache = [];
+    this.scene.time.addEvent({
+      delay: this.fireTick,
+      callback: () => {
+        this.fireTilesCache = this.fireLayer.filterTiles(
+          (tile: Phaser.Tilemaps.Tile) => tile.index === this.fireTileId
+        );
+      },
+      loop: true,
+    });
   }
 
   update(_time: number, delta: number) {

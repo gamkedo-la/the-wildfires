@@ -16,8 +16,8 @@ const doNotChangeBurnedTiles = [45, 46, 47];
 
 export class FireMapSystem implements System {
   scene: MapScene;
-  burnTickInterval: number = 2400;
-  burnRatio: number = 6;
+  burnTickInterval: number;
+  burnRatio: number;
   windAngle: number;
   windSpeed: number;
   windDirection: PMath.Vector2;
@@ -31,6 +31,8 @@ export class FireMapSystem implements System {
   constructor(scene: MapScene) {
     this.scene = scene;
     this.map = scene.currentMap;
+    this.burnTickInterval = this.map.fireTick / 10;
+    this.burnRatio = this.map.fireRatio;
 
     this.windAngle = PMath.RadToDeg(PMath.Vector2.UP.angle());
     this.windSpeed = 2;
