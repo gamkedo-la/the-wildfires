@@ -21,7 +21,7 @@ export function KeyButton({
         texture={RESOURCES["key-nine-slice"]}
         frame={0}
         originX={0.5}
-        scale={2}
+        scale={1.5}
         x={x}
         y={y}
         width={25}
@@ -41,11 +41,11 @@ export function KeyButton({
         originX={0.5}
         x={x}
         y={
-          press ? computed(() => y - 15 + (press.get() === 1 ? 5 : 0)) : y - 15
+          press ? computed(() => y - 11 + (press.get() === 1 ? 3 : 0)) : y - 11
         }
         style={{
           ...TEXT_STYLE,
-          fontSize: "20px",
+          fontSize: "18px",
           fontStyle: "bold",
           color: "#45230d",
         }}
@@ -82,7 +82,7 @@ export function Directions({
   };
 
   const startX = 122;
-  const startY = 140;
+  const startY = 170;
   const path = new Phaser.Curves.Path(startX, startY);
 
   // First ellipse (right loop)
@@ -165,6 +165,13 @@ export function Directions({
         angle={computed(() => planeAngle.get() % 360)}
         x={planeX}
         y={planeY}
+      />
+      <text
+        x={width / 2}
+        y={-55}
+        text={"Control plane"}
+        originX={0.5}
+        style={{ ...TEXT_STYLE, fontSize: "26px", color: "#ffffff" }}
       />
     </container>
   );

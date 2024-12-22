@@ -32,10 +32,10 @@ export class TutorialScene extends AbstractScene {
         originX={0.5}
         scale={2}
         x={width / 2}
-        y={height - 90}
+        y={height - 80}
         width={100}
         tint={0x00ff00}
-        height={50}
+        height={40}
         leftWidth={4}
         rightWidth={4}
         topHeight={4}
@@ -46,9 +46,9 @@ export class TutorialScene extends AbstractScene {
     );
 
     const resumeButton = this.add
-      .text(width / 2, height - 90, "START", {
+      .text(width / 2, height - 83, "Start mission", {
         ...TEXT_STYLE,
-        fontSize: "42px",
+        fontSize: "24px",
       })
       .setOrigin(0.5)
       .setInteractive();
@@ -56,19 +56,25 @@ export class TutorialScene extends AbstractScene {
     resumeButton.on("pointerdown", () => this.startGame());
 
     this.add.existing(
-      <text x={40} y={30} text="How to play" style={TEXT_STYLE} />
+      <text
+        x={width / 2}
+        originX={0.5}
+        y={30}
+        text="How to play"
+        style={{ ...TEXT_STYLE, fontSize: "30px", color: "#ffffff" }}
+      />
     );
 
-    this.add.existing(<WaterCollection x={-1} y={50} scene={this} />);
+    this.add.existing(<WaterCollection x={-1} y={80} scene={this} />);
     this.add.existing(
-      <WaterDrop x={this.scale.width / 3} y={50} scene={this} />
+      <WaterDrop x={this.scale.width / 3} y={80} scene={this} />
     );
     this.add.existing(
-      <RetardantDrop x={(2 * this.scale.width) / 3} y={50} scene={this} />
+      <RetardantDrop x={(2 * this.scale.width) / 3} y={80} scene={this} />
     );
 
     //x={this.scale.width / 2 - this.scale.width / 6}
-    this.add.existing(<Directions x={0} y={380} scene={this} />);
+    this.add.existing(<Directions x={0} y={450} scene={this} />);
 
     this.add.existing(
       <PoiStatuses x={this.scale.width / 2} y={380} scene={this} />

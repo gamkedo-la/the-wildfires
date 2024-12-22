@@ -9,6 +9,7 @@ import {
   Step,
   Wait,
 } from "../../../ui/animation/animation";
+import { TEXT_STYLE } from "@game/consts";
 
 export function FireVelocity({
   x,
@@ -30,10 +31,10 @@ export function FireVelocity({
   ];
 
   const smokeFx1 = scene.add.particles(0, 0, "smoke-spritesheet", {
-    x: () => PMath.RND.between(x + 95, x + 120),
-    y: () => PMath.RND.between(420, 430),
+    x: () => PMath.RND.between(x + 100, x + 125),
+    y: () => PMath.RND.between(470, 480),
     color: PMath.RND.pick(tint),
-    anim: "smoke-out",
+    frame: [0, 1, 2, 3],
     quantity: 1,
     angle: () => PMath.RND.between(-180, -90),
     speed: [5, 15],
@@ -45,10 +46,10 @@ export function FireVelocity({
   });
 
   const smokeFx2 = scene.add.particles(0, 0, "smoke-spritesheet", {
-    x: () => PMath.RND.between(3 * 32 + x + 120, 3 * 32 + x + 145),
-    y: () => PMath.RND.between(420, 430),
+    x: () => PMath.RND.between(3 * 32 + x + 133, 3 * 32 + x + 155),
+    y: () => PMath.RND.between(470, 480),
     color: PMath.RND.pick(tint),
-    anim: "smoke-out",
+    frame: [0, 1, 2, 3],
     quantity: 1,
     angle: () => PMath.RND.between(-180, -90),
     speed: [5, 15],
@@ -60,10 +61,10 @@ export function FireVelocity({
   });
 
   const smokeFx3 = scene.add.particles(0, 0, "smoke-spritesheet", {
-    x: () => PMath.RND.between(-2 * 32 + x + 120, -2 * 32 + x + 145),
-    y: () => PMath.RND.between(520, 530),
+    x: () => PMath.RND.between(-2 * 32 + x + 134, -2 * 32 + x + 156),
+    y: () => PMath.RND.between(565, 575),
     color: PMath.RND.pick(tint),
-    anim: "smoke-out",
+    frame: [0, 1, 2, 3],
     quantity: 1,
     angle: () => PMath.RND.between(-180, -90),
     speed: [5, 15],
@@ -75,10 +76,10 @@ export function FireVelocity({
   });
 
   const smokeFx4 = scene.add.particles(0, 0, "smoke-spritesheet", {
-    x: () => PMath.RND.between(1 * 32 + x + 120, 1 * 32 + x + 145),
-    y: () => PMath.RND.between(620, 630),
+    x: () => PMath.RND.between(1 * 32 + x + 105, 1 * 32 + x + 130),
+    y: () => PMath.RND.between(663, 673),
     color: PMath.RND.pick(tint),
-    anim: "smoke-out",
+    frame: [0, 1, 2, 3],
     quantity: 1,
     angle: () => PMath.RND.between(-180, -90),
     speed: [5, 15],
@@ -245,7 +246,7 @@ export function FireVelocity({
   );
 
   return (
-    <container x={x - 10} y={y - 50} width={width} height={height}>
+    <container x={x - 10} y={y} width={width} height={height}>
       <>{tile(2, -48, 78)}</>
       <>{tile(8, -16, 78)}</>
       <>{tile(5, 16, 78)}</>
@@ -319,6 +320,14 @@ export function FireVelocity({
       <>{fire(fireColumn6, 1, 1, -16, 318)}</>
       <>{fire(fireColumn6, 2, 0, 16, 318)}</>
       <>{fire(fireColumn6, 3, 1, 48, 318)}</>
+
+      <text
+        x={width / 2}
+        y={30}
+        text={"Watch out"}
+        originX={0.5}
+        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#ffffff" }}
+      />
     </container>
   );
 }

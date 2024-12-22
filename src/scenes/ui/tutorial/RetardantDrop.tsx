@@ -56,10 +56,10 @@ export function RetardantDrop({
 
   const smokeFx = scene.add.particles(0, 0, "smoke-spritesheet", {
     x: () => PMath.RND.between(x + 95, x + 120),
-    y: () => PMath.RND.between(190, 210),
+    y: () => PMath.RND.between(240, 250),
     color: PMath.RND.pick(tint),
-    anim: "smoke-out",
-    quantity: 2,
+    frame: [0, 1, 2, 3],
+    quantity: 1,
     angle: () => PMath.RND.between(-180, -90),
     speed: [5, 15],
     gravityX: -5,
@@ -90,14 +90,14 @@ export function RetardantDrop({
           <Transition
             signal={keyPressPickTint}
             to={1}
-            duration={0}
+            duration={1}
             ease="Cubic.easeIn"
           />
           <Wait duration={700} />
           <Transition
             signal={keyPressPickTint}
             to={0}
-            duration={0}
+            duration={1}
             ease="Cubic.easeIn"
           />
           <Parallel>
@@ -153,7 +153,7 @@ export function RetardantDrop({
           <Transition
             signal={tintSignal}
             to={0xffffff}
-            duration={0}
+            duration={1}
             ease="Cubic.easeIn"
           />
         </Sequence>
@@ -244,21 +244,19 @@ export function RetardantDrop({
         depth={-1}
       />
 
-      {/*
       <text
         x={width / 2}
-        y={20}
-        text={"Drop water"}
+        y={30}
+        text={"Prevent"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "24px", color: "#ffffff" }}
+        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#ffffff" }}
       />
-      */}
 
-      <KeyButton keyName="1" x={width / 2 - 25} y={0} />
+      <KeyButton keyName="1" x={width / 2 - 25} y={220} />
       <KeyButton
         keyName="2"
         x={width / 2 + 25}
-        y={0}
+        y={220}
         press={keyPressPickTint}
       />
 
@@ -267,10 +265,10 @@ export function RetardantDrop({
         frame={0}
         originX={0.5}
         x={width / 2}
-        y={height - 30}
+        y={height - 40}
         width={150}
         height={25}
-        scale={2}
+        scale={1.5}
         leftWidth={4}
         rightWidth={4}
         topHeight={4}
@@ -279,10 +277,10 @@ export function RetardantDrop({
       />
       <text
         x={width / 2}
-        y={computed(() => height - 45 + keyPressPos.get())}
+        y={computed(() => height - 54 + keyPressPos.get())}
         text={"space"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#45230d" }}
+        style={{ ...TEXT_STYLE, fontSize: "18px", color: "#45230d" }}
       />
     </container>
   );

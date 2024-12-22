@@ -157,15 +157,23 @@ export function WaterCollection({
         depth={-1}
       />
 
+      <text
+        x={width / 2}
+        y={30}
+        text={"Collect"}
+        originX={0.5}
+        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#ffffff" }}
+      />
+
       <nineslice
         texture={RESOURCES["key-nine-slice"]}
         frame={0}
         originX={0.5}
         x={width / 2}
-        y={height - 30}
+        y={height - 40}
         width={150}
         height={25}
-        scale={2}
+        scale={1.5}
         leftWidth={4}
         rightWidth={4}
         topHeight={4}
@@ -174,10 +182,10 @@ export function WaterCollection({
       />
       <text
         x={width / 2}
-        y={computed(() => height - 45 + keyPressPos.get())}
+        y={computed(() => height - 54 + keyPressPos.get())}
         text={"space"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#45230d" }}
+        style={{ ...TEXT_STYLE, fontSize: "18px", color: "#45230d" }}
       />
     </container>
   );

@@ -51,10 +51,10 @@ export function WaterDrop({
   ];
 
   const smokeFx = scene.add.particles(0, 0, "smoke-spritesheet", {
-    x: () => PMath.RND.between(x + 125, x + 200),
-    y: () => PMath.RND.between(190, 210),
+    x: () => PMath.RND.between(x + 130, x + 205),
+    y: () => PMath.RND.between(240, 250),
     color: PMath.RND.pick(tint),
-    anim: "smoke-out",
+    frame: [0, 1, 2, 3],
     quantity: 1,
     angle: () => PMath.RND.between(-180, -90),
     speed: [5, 15],
@@ -110,14 +110,14 @@ export function WaterDrop({
           <Transition
             signal={keyPressPickTint}
             to={1}
-            duration={0}
+            duration={1}
             ease="Cubic.easeIn"
           />
           <Wait duration={800} />
           <Transition
             signal={keyPressPickTint}
             to={0}
-            duration={0}
+            duration={1}
             ease="Cubic.easeIn"
           />
           <Wait duration={200} />
@@ -148,7 +148,7 @@ export function WaterDrop({
             <Sequence>
               <Wait duration={1000} />
               <Step
-                duration={0}
+                duration={1}
                 action={() => {
                   smokeFx.stop();
                   retardantFx.explode();
@@ -163,7 +163,7 @@ export function WaterDrop({
               <Transition
                 signal={tintSignal}
                 to={0xaaaaff}
-                duration={0}
+                duration={1}
                 ease="Cubic.easeIn"
               />
             </Sequence>
@@ -187,13 +187,13 @@ export function WaterDrop({
           <Transition
             signal={fireOpacity}
             to={1}
-            duration={0}
+            duration={1}
             ease="Cubic.easeIn"
           />
           <Transition
             signal={tintSignal}
             to={0xffffff}
-            duration={0}
+            duration={1}
             ease="Cubic.easeIn"
           />
         </Sequence>
@@ -268,23 +268,31 @@ export function WaterDrop({
         depth={-1}
       />
 
+      <text
+        x={width / 2}
+        y={30}
+        text={"Extinguish"}
+        originX={0.5}
+        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#ffffff" }}
+      />
+
       <KeyButton
         keyName="1"
         x={width / 2 - 25}
-        y={0}
+        y={220}
         press={keyPressPickTint}
       />
-      <KeyButton keyName="2" x={width / 2 + 25} y={0} />
+      <KeyButton keyName="2" x={width / 2 + 25} y={220} />
 
       <nineslice
         texture={RESOURCES["key-nine-slice"]}
         frame={0}
         originX={0.5}
         x={width / 2}
-        y={height - 30}
+        y={height - 40}
         width={150}
         height={25}
-        scale={2}
+        scale={1.5}
         leftWidth={4}
         rightWidth={4}
         topHeight={4}
@@ -293,10 +301,10 @@ export function WaterDrop({
       />
       <text
         x={width / 2}
-        y={computed(() => height - 45 + keyPressPos.get())}
+        y={computed(() => height - 54 + keyPressPos.get())}
         text={"space"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#45230d" }}
+        style={{ ...TEXT_STYLE, fontSize: "18px", color: "#45230d" }}
       />
     </container>
   );
