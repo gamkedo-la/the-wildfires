@@ -1,5 +1,4 @@
 import PhaserGamebus from "./lib/gamebus";
-import { RexUIPlugin } from "./lib/rexui";
 
 import { Boot } from "./scenes/boot/boot-scene";
 import { Preloader } from "./scenes/boot/preloader-scene";
@@ -38,13 +37,6 @@ const config: Types.Core.GameConfig = {
         key: "GameStateManager",
         plugin: GameStateManager,
         mapping: "gameState",
-      },
-    ],
-    scene: [
-      {
-        key: "rexUI",
-        plugin: RexUIPlugin,
-        mapping: "rexUI",
       },
     ],
   },
