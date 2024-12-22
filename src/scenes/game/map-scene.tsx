@@ -143,6 +143,11 @@ export class MapScene extends AbstractScene {
       quantity: 10,
       speedX: 0,
       speedY: 0,
+      alpha: {
+        start: 1,
+        end: 0.3,
+        ease: "quart.out",
+      },
       emitZone: {
         type: "random",
         source: new Phaser.Geom.Rectangle(0, 0, width, height),

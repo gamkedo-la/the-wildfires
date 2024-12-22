@@ -210,9 +210,10 @@ export class Preloader extends AbstractScene {
     });
 
     const graphics = this.add.graphics();
-    graphics.fillStyle(0xffffff);
-    graphics.fillCircle(1, 1, 1);
-    graphics.generateTexture("wind_particle", 1, 1);
+    graphics.fillStyle(0x927e6a);
+    graphics.fillStyle(0xefd8a1);
+    graphics.fillCircle(1, 1, 2);
+    graphics.generateTexture("wind_particle", 2, 2);
     graphics.destroy();
   }
 
