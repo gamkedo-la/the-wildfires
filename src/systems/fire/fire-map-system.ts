@@ -402,8 +402,8 @@ export class FireMapSystem implements System {
           x: { random: [-tile.width / 3, tile.width / 3] },
           y: { random: [-tile.height / 3, tile.height / 3] },
           color: PMath.RND.pick(tint),
-          anim: "smoke-out",
           quantity: 1,
+          frame: [0, 1, 2, 3],
           angle: () =>
             PMath.RND.between(this.windAngle - 15, this.windAngle + 15),
           speed: {
