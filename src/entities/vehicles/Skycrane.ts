@@ -56,6 +56,12 @@ export class Skycrane extends Vehicle {
 
     this.updateScale(deltaSeconds);
 
+    if (this.scene.key_one.isDown) {
+      this.selectedTank.set("water");
+    } else if (this.scene.key_two.isDown) {
+      this.selectedTank.set("retardant");
+    }
+
     if (this.scene.key_a.isDown || this.scene.key_left.isDown) {
       this.bodyDirection.rotate(-this.bodyTurnRate * deltaSeconds);
       this.turningState.update((value) =>
