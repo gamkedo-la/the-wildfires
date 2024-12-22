@@ -254,7 +254,13 @@ export function RetardantDrop({
       />
       */}
 
-      <KeyButton keyName="2" x={width / 2} y={0} press={keyPressPickTint} />
+      <KeyButton keyName="1" x={width / 2 - 25} y={0} />
+      <KeyButton
+        keyName="2"
+        x={width / 2 + 25}
+        y={0}
+        press={keyPressPickTint}
+      />
 
       <nineslice
         texture={RESOURCES["key-nine-slice"]}

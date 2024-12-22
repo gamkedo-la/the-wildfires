@@ -268,7 +268,13 @@ export function WaterDrop({
         depth={-1}
       />
 
-      <KeyButton keyName="1" x={width / 2} y={0} press={keyPressPickTint} />
+      <KeyButton
+        keyName="1"
+        x={width / 2 - 25}
+        y={0}
+        press={keyPressPickTint}
+      />
+      <KeyButton keyName="2" x={width / 2 + 25} y={0} />
 
       <nineslice
         texture={RESOURCES["key-nine-slice"]}

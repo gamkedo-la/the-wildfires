@@ -178,6 +178,7 @@ export function FireVelocity({
             fireColumn2.set(5);
             fireColumn3.set(4);
             fireColumn5.set(6);
+            fireColumn6.set(4);
             smokeFx4.start();
           }}
         />
