@@ -31,7 +31,7 @@ export class FireMapSystem implements System {
   constructor(scene: MapScene) {
     this.scene = scene;
     this.map = scene.currentMap;
-    this.burnTickInterval = this.map.fireTick / 10;
+    this.burnTickInterval = this.map.fireTick;
     this.burnRatio = this.map.fireRatio;
 
     this.windAngle = PMath.RadToDeg(PMath.Vector2.UP.angle());
