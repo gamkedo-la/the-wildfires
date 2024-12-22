@@ -136,14 +136,14 @@ export abstract class Vehicle {
         x={computed(() => {
           // const x = this.sprite.x; // can't access sprite from here?
           const x = this.position.get().x;
-          if (x < 70) return 120;
-          if (x > GAME_WIDTH) return GAME_WIDTH - 20;
+          if (x < 40) return 120;
+          if (x > GAME_WIDTH + 63) return GAME_WIDTH - 20;
           return x;
         })}
         y={computed(() => {
           const y = this.position.get().y;
-          if (y < 70) return 100;
-          if (y > GAME_HEIGHT) return GAME_HEIGHT - 40;
+          if (y < 30) return 100;
+          if (y > GAME_HEIGHT + 30) return GAME_HEIGHT - 40;
           // shadow is far below the plane when faster,
           // and directly underneath when stopped
           let altitudeFromSpeed = this.velocity.get().length() / 2;
@@ -176,14 +176,14 @@ export abstract class Vehicle {
       <image
         x={computed(() => {
           const x = this.position.get().x;
-          if (x < 70) return 120;
-          if (x > GAME_WIDTH) return GAME_WIDTH - 20;
+          if (x < 40) return 120;
+          if (x > GAME_WIDTH + 63) return GAME_WIDTH - 20;
           return x;
         })}
         y={computed(() => {
           const y = this.position.get().y;
-          if (y < 70) return 100;
-          if (y > GAME_HEIGHT) return GAME_HEIGHT - 40;
+          if (y < 30) return 100;
+          if (y > GAME_HEIGHT + 30) return GAME_HEIGHT - 40;
           return y;
         })}
         texture={texture}
@@ -205,14 +205,14 @@ export abstract class Vehicle {
         texture={outlineTexture}
         x={computed(() => {
           const x = this.position.get().x;
-          if (x < 70) return 120;
-          if (x > GAME_WIDTH) return GAME_WIDTH - 20;
+          if (x < 40) return 120;
+          if (x > GAME_WIDTH + 63) return GAME_WIDTH - 20;
           return x;
         })}
         y={computed(() => {
           const y = this.position.get().y;
-          if (y < 70) return 100;
-          if (y > GAME_HEIGHT) return GAME_HEIGHT - 40;
+          if (y < 30) return 100;
+          if (y > GAME_HEIGHT + 30) return GAME_HEIGHT - 40;
           return y;
         })}
         angle={computed(

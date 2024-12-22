@@ -348,10 +348,10 @@ export class HUDScene extends AbstractScene {
         })}
         visible={computed(
           () =>
-            vehicle.position.get().x < 70 ||
-            vehicle.position.get().x > GAME_WIDTH ||
-            vehicle.position.get().y < 70 ||
-            vehicle.position.get().y > GAME_HEIGHT
+            vehicle.position.get().x < 40 ||
+            vehicle.position.get().x > GAME_WIDTH + 63 ||
+            vehicle.position.get().y < 30 ||
+            vehicle.position.get().y > GAME_HEIGHT + 30
         )}
         texture={RESOURCES["plane-offscreen-pointer"]}
       />
