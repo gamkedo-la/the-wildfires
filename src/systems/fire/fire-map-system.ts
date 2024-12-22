@@ -111,7 +111,7 @@ export class FireMapSystem implements System {
 
     mapTile.properties.waterTimer = 10000;
 
-    if (mapTile?.properties.isWatered) {
+    if (mapTile?.properties.isWatered && !mapTile.properties.isBurning) {
       return;
     }
 
