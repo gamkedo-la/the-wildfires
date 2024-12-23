@@ -8,6 +8,7 @@ export const END_REASONS = {
   FIRE_EXTINGUISHED: "fire-extinguished",
   POI_SAVED: "poi-saved",
   POI_DESTROYED: "poi-destroyed",
+  CANCELLED: "cancelled",
 } as const;
 
 export const RunState = {

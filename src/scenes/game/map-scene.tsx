@@ -222,14 +222,14 @@ export class MapScene extends AbstractScene {
       />
     );
 
-    rect.setDepth(1);
+    rect.setDepth(2);
 
     this.animationEngine.run(
       <Sequence>
         <Transition
           from={0}
-          to={0.6}
           duration={5000}
+          to={0.75}
           signal={backgroundAlpha}
         />
       </Sequence>

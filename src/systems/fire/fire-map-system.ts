@@ -411,7 +411,8 @@ export class FireMapSystem implements System {
           },
           frequency: PMath.RND.between(20, 50),
           lifespan: {
-            onEmit: () => PMath.RND.between(2500, 25000) / this.windSpeed,
+            onEmit: () =>
+              Math.min(5000, PMath.RND.between(2500, 25000) / this.windSpeed),
           },
         }
       );

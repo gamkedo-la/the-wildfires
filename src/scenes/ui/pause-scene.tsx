@@ -1,6 +1,9 @@
 import { TEXT_STYLE } from "@game/consts";
 import { AbstractScene } from "..";
 import { SCENES } from "../consts";
+import { PointOfInterestBadge } from "./components/PointOfInterestBadge";
+import { RESOURCES } from "@game/assets";
+import { Stack } from "../../ui/components/Stack";
 
 export class PauseScene extends AbstractScene {
   constructor() {
@@ -20,24 +23,120 @@ export class PauseScene extends AbstractScene {
 
     this.add.rectangle(0, 0, width, height, 0x000000, 0.6).setOrigin(0);
 
-    this.add
-      .text(width / 2, height / 2 - 50, "Paused", {
-        ...TEXT_STYLE,
-        fontSize: "64px",
-        color: "#ffffff",
-      })
-      .setOrigin(0.5);
+    const run = this.gameState.currentRun.get();
+    const poi = run?.poi || [];
 
-    const resumeButton = this.add
-      .text(width / 2, height / 2 + 100, "Resume", {
-        ...TEXT_STYLE,
-        fontSize: "24px",
-        color: "#ffffff",
-      })
-      .setOrigin(0.5)
-      .setInteractive();
+    this.add.existing(
+      <text
+        x={50}
+        y={260}
+        text="Paused"
+        style={{
+          ...TEXT_STYLE,
+          fontSize: "48px",
+        }}
+      />
+    );
 
-    resumeButton.on("pointerdown", () => this.resumeGame());
+    const poiList = poi.map((item) => (
+      <PointOfInterestBadge item={item} x={100} y={100} />
+    ));
+
+    this.add.existing(
+      <Stack
+        direction="vertical"
+        spacing={10}
+        x={550}
+        y={height / 2 - (poiList.length / 2) * 40}
+      >
+        {poiList.slice(0, poiList.length / 2)}
+      </Stack>
+    );
+
+    this.add.existing(
+      <Stack
+        direction="vertical"
+        spacing={10}
+        x={770}
+        y={height / 2 - (poiList.length / 2) * 40}
+      >
+        {poiList.slice(poiList.length / 2)}
+      </Stack>
+    );
+
+    this.add.existing(
+      <container
+        x={150}
+        y={500}
+        width={100}
+        height={40}
+        interactive
+        onPointerdown={() => {
+          this.resumeGame();
+        }}
+      >
+        <nineslice
+          texture={RESOURCES["key-nine-slice"]}
+          frame={0}
+          originX={0.5}
+          scale={2}
+          x={0}
+          y={0}
+          width={100}
+          tint={0xbbffbb}
+          height={40}
+          leftWidth={4}
+          rightWidth={4}
+          topHeight={4}
+          bottomHeight={5}
+        />
+        <text
+          text={"Resume"}
+          x={0}
+          y={0}
+          origin={0.5}
+          style={{ ...TEXT_STYLE, fontSize: "24px", color: "#000000" }}
+        />
+      </container>
+    );
+
+    this.add.existing(
+      <container
+        x={370}
+        y={500}
+        width={100}
+        height={40}
+        interactive
+        onPointerdown={() => {
+          this.scene.stop(SCENES.MAP);
+          this.gameState.endRun();
+          this.scene.start(SCENES.UI_HOME);
+        }}
+      >
+        <nineslice
+          texture={RESOURCES["key-nine-slice"]}
+          frame={0}
+          originX={0.5}
+          scale={2}
+          x={0}
+          y={0}
+          width={100}
+          tint={0xffffff}
+          height={40}
+          leftWidth={4}
+          rightWidth={4}
+          topHeight={4}
+          bottomHeight={5}
+        />
+        <text
+          text={"Back to menu"}
+          x={0}
+          y={0}
+          origin={0.5}
+          style={{ ...TEXT_STYLE, fontSize: "24px", color: "#000000" }}
+        />
+      </container>
+    );
   }
 
   update(time: number, delta: number) {

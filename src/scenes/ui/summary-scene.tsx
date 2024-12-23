@@ -2,10 +2,10 @@ import { RESOURCES } from "@game/assets";
 import { TEXT_STYLE } from "@game/consts";
 import { END_REASONS } from "@game/state/game-state";
 import { AbstractScene } from "..";
-import { POI_STATE } from "../../entities/point-of-interest/PointOfInterest";
 import { Parallel, Sequence, Step } from "../../ui/animation/animation";
 import { Stack } from "../../ui/components/Stack";
 import { SCENES } from "../consts";
+import { PointOfInterestBadge } from "./components/PointOfInterestBadge";
 
 export class SummaryScene extends AbstractScene {
   constructor() {
@@ -20,6 +20,8 @@ export class SummaryScene extends AbstractScene {
   create() {
     const run = this.gameState.currentRun.get();
     const poi = run?.poi || [];
+
+    const { width, height } = this.scale;
 
     this.backgroundMusic = this.sound.add(RESOURCES["menu-theme"], {
       volume: 0.5,
@@ -45,15 +47,15 @@ export class SummaryScene extends AbstractScene {
 
     this.add.existing(
       <text
-        x={100}
-        y={100}
-        text={`${
+        x={50}
+        y={260}
+        text={
           run?.endReason === END_REASONS.POI_SAVED
             ? "Everyone is safe!"
             : run?.endReason === END_REASONS.POI_DESTROYED
             ? "Disaster!"
             : "Fire extinguished!"
-        }`}
+        }
         style={{
           ...TEXT_STYLE,
           fontSize: "48px",
@@ -65,109 +67,38 @@ export class SummaryScene extends AbstractScene {
       />
     );
 
+    this.add.existing(
+      <text
+        text={`You completed the mission in ${run?.time}s`}
+        x={60}
+        y={350}
+        style={{ ...TEXT_STYLE, fontSize: "20px" }}
+      />
+    );
+
+    this.add.existing(
+      <text
+        text={
+          run?.endReason === END_REASONS.POI_SAVED
+            ? "Despite the fire, everyone evacuated safely!"
+            : run?.endReason === END_REASONS.POI_DESTROYED
+            ? "The fire destroyed the area!"
+            : "You cleared the fire and kept the area safe!"
+        }
+        x={60}
+        y={380}
+        style={{ ...TEXT_STYLE, fontSize: "20px" }}
+      />
+    );
+
     const poiList = poi.map((item) => (
-      <container width={200} height={80} visible={false} scale={1.5}>
-        <nineslice
-          texture={RESOURCES["poi-results-nine-slice"]}
-          origin={0}
-          width={100}
-          height={40}
-          scale={2}
-          leftWidth={7}
-          rightWidth={7}
-          topHeight={16}
-          bottomHeight={6}
-          tint={
-            item.finalState.get() === POI_STATE.SAVED
-              ? 0xbbffbb
-              : item.finalState.get() === POI_STATE.DAMAGED
-              ? 0xffbbbb
-              : 0xffffbb
-          }
-        />
-        <Stack direction="vertical" spacing={10} x={10} y={0}>
-          <container width={20} height={20}>
-            <image
-              texture={RESOURCES["poi-status-icons"]}
-              frame={
-                item.finalState.get() === POI_STATE.SAVED
-                  ? 1
-                  : item.finalState.get() === POI_STATE.DAMAGED
-                  ? 0
-                  : 2
-              }
-              x={10}
-              y={5}
-              width={20}
-              height={20}
-            />
-            <text
-              x={25}
-              y={0}
-              text={item.name}
-              style={{ ...TEXT_STYLE, fontSize: "16px", color: "#2a1d0d" }}
-            />
-          </container>
-          <container width={200} height={30}>
-            <container x={3} y={0} width={20} height={20}>
-              <image
-                texture={RESOURCES["poi-tiles-icons"]}
-                x={20}
-                y={5}
-                width={20}
-                height={20}
-                frame={0}
-              />
-              <text
-                x={40}
-                y={0}
-                text={item.savedTiles.get().toString()}
-                style={{
-                  ...TEXT_STYLE,
-                  fontSize: "16px",
-                  color: "#2a1d0d",
-                }}
-              />
-              <image
-                texture={RESOURCES["poi-tiles-icons"]}
-                x={80}
-                y={5}
-                width={20}
-                height={20}
-                frame={1}
-              />
-              <text
-                x={98}
-                y={0}
-                text={item.damagedTiles.get().toString()}
-                style={{
-                  ...TEXT_STYLE,
-                  fontSize: "16px",
-                  color: "#2a1d0d",
-                }}
-              />
-              <image
-                texture={RESOURCES["poi-tiles-icons"]}
-                x={135}
-                y={5}
-                width={20}
-                height={20}
-                frame={2}
-              />
-              <text
-                x={150}
-                y={0}
-                text={`${item.maxTiles.get()}`}
-                style={{
-                  ...TEXT_STYLE,
-                  fontSize: "16px",
-                  color: "#2a1d0d",
-                }}
-              />
-            </container>
-          </container>
-        </Stack>
-      </container>
+      <PointOfInterestBadge
+        item={item}
+        x={100}
+        y={100}
+        scale={1.5}
+        visible={false}
+      />
     ));
 
     this.animationEngine.run(
@@ -186,49 +117,127 @@ export class SummaryScene extends AbstractScene {
       </Sequence>
     );
 
-    const stack = (
-      <Stack direction="vertical" spacing={10} x={640} y={20}>
-        {poiList}
+    this.add.existing(
+      <Stack
+        direction="vertical"
+        spacing={10}
+        x={550}
+        y={height / 2 - (poiList.length / 2) * 40}
+      >
+        {poiList.slice(0, poiList.length / 2)}
       </Stack>
     );
 
-    this.add.existing(stack);
+    this.add.existing(
+      <Stack
+        direction="vertical"
+        spacing={10}
+        x={770}
+        y={height / 2 - (poiList.length / 2) * 40}
+      >
+        {poiList.slice(poiList.length / 2)}
+      </Stack>
+    );
 
     // TODO: Actual Vehicle?
+    /*
     const vehicle = run?.vehicle;
     this.add.existing(
       <text
         text={`Vehicle ${vehicle}`}
         x={100}
         y={200}
-        style={{ ...TEXT_STYLE }}
+        style={{ ...TEXT_STYLE, fontSize: "24px" }}
       />
     );
 
     const map = run?.map;
     this.add.existing(
-      <text text={`Map ${map}`} x={100} y={250} style={{ ...TEXT_STYLE }} />
-    );
+      <text
+        text={`Map ${map}`}
+        x={100}
+        y={250}
+        style={{ ...TEXT_STYLE, fontSize: "24px" }}
+      />
+    );*/
 
     this.add.existing(
       <container
-        x={200}
+        x={150}
         y={500}
-        width={200}
-        height={80}
+        width={100}
+        height={40}
         interactive
         onPointerdown={() => {
-          this.scene.stop(SCENES.MAP);
-          this.scene.start(SCENES.UI_HOME);
+          const run = this.gameState.currentRun.get();
+          const runConfiguration = this.gameState.getEmptyRun();
+          runConfiguration.map = run?.map;
+          runConfiguration.vehicle = run?.vehicle;
+          this.gameState.startRun(runConfiguration);
+
+          this.scene.stop(SCENES.UI_SUMMARY);
+          this.scene.start(SCENES.MAP);
         }}
       >
-        <rectangle width={200} height={80} fillColor={0xffffff} />
+        <nineslice
+          texture={RESOURCES["key-nine-slice"]}
+          frame={0}
+          originX={0.5}
+          scale={2}
+          x={0}
+          y={0}
+          width={100}
+          tint={0xbbffbb}
+          height={40}
+          leftWidth={4}
+          rightWidth={4}
+          topHeight={4}
+          bottomHeight={5}
+        />
         <text
           text={"Try again"}
           x={0}
           y={0}
           origin={0.5}
-          style={{ ...TEXT_STYLE, color: "#000000" }}
+          style={{ ...TEXT_STYLE, fontSize: "24px", color: "#000000" }}
+        />
+      </container>
+    );
+
+    this.add.existing(
+      <container
+        x={370}
+        y={500}
+        width={100}
+        height={40}
+        interactive
+        onPointerdown={() => {
+          this.scene.stop(SCENES.MAP);
+          this.gameState.endRun(END_REASONS.CANCELLED);
+          this.scene.start(SCENES.UI_HOME);
+        }}
+      >
+        <nineslice
+          texture={RESOURCES["key-nine-slice"]}
+          frame={0}
+          originX={0.5}
+          scale={2}
+          x={0}
+          y={0}
+          width={100}
+          tint={0xffffff}
+          height={40}
+          leftWidth={4}
+          rightWidth={4}
+          topHeight={4}
+          bottomHeight={5}
+        />
+        <text
+          text={"Back to menu"}
+          x={0}
+          y={0}
+          origin={0.5}
+          style={{ ...TEXT_STYLE, fontSize: "24px", color: "#000000" }}
         />
       </container>
     );

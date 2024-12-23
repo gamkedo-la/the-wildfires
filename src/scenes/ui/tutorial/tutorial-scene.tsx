@@ -23,7 +23,7 @@ export class TutorialScene extends AbstractScene {
 
     const { width, height } = this.scale;
 
-    this.add.rectangle(0, 0, width, height, 0x000000, 0.75).setOrigin(0);
+    this.add.rectangle(0, 0, width, height, 0x000000, 0.85).setOrigin(0);
 
     this.add.existing(
       <nineslice
@@ -34,7 +34,7 @@ export class TutorialScene extends AbstractScene {
         x={width / 2}
         y={height - 80}
         width={100}
-        tint={0x00ff00}
+        tint={0xbbffbb}
         height={40}
         leftWidth={4}
         rightWidth={4}
@@ -49,6 +49,7 @@ export class TutorialScene extends AbstractScene {
       .text(width / 2, height - 83, "Start mission", {
         ...TEXT_STYLE,
         fontSize: "24px",
+        color: "#000000",
       })
       .setOrigin(0.5)
       .setInteractive();
