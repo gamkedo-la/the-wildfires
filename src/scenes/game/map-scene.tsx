@@ -180,18 +180,29 @@ export class MapScene extends AbstractScene {
       const run = this.gameState.currentRun.get();
       // TODO: if something is partially saved it is not triggering
       if (run.state === RunState.RUNNING) {
-        const allSaved = run.poi.every(
-          (poi) => poi.state.get() === POI_STATE.SAVED
-        );
-        const allDamaged = run.poi.every(
+        const finished = run.poi.every(
           (poi) =>
+            poi.state.get() === POI_STATE.SAVED ||
             poi.state.get() === POI_STATE.DAMAGED ||
             poi.state.get() === POI_STATE.PARTIALLY_SAVED
         );
-        if (allSaved) {
-          this.endGame(END_REASONS.POI_SAVED);
-        } else if (allDamaged) {
-          this.endGame(END_REASONS.POI_DESTROYED);
+
+        const allSaved = run.poi.every(
+          (poi) => poi.state.get() === POI_STATE.SAVED
+        );
+
+        const anyDamaged = run.poi.some(
+          (poi) => poi.state.get() === POI_STATE.DAMAGED
+        );
+
+        if (finished) {
+          if (allSaved) {
+            this.endGame(END_REASONS.POI_SAVED);
+          } else if (anyDamaged) {
+            this.endGame(END_REASONS.POI_DESTROYED);
+          } else {
+            this.endGame(END_REASONS.POI_SAVED_WITH_DAMAGE);
+          }
         }
       }
     });
@@ -228,14 +239,14 @@ export class MapScene extends AbstractScene {
       <Sequence>
         <Transition
           from={0}
-          duration={5000}
           to={0.75}
+          duration={3000}
           signal={backgroundAlpha}
         />
       </Sequence>
     );
 
-    this.time.delayedCall(5000, () => {
+    this.time.delayedCall(3000, () => {
       this.gameState.endRun(endReason);
       this.scene.stop(SCENES.HUD);
       this.scene.stop(SCENES.DEBUG);

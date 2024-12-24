@@ -6,6 +6,7 @@ import { Parallel, Sequence, Step } from "../../ui/animation/animation";
 import { Stack } from "../../ui/components/Stack";
 import { SCENES } from "../consts";
 import { PointOfInterestBadge } from "./components/PointOfInterestBadge";
+import { POI_STATE } from "../../entities/point-of-interest/PointOfInterest";
 
 export class SummaryScene extends AbstractScene {
   constructor() {
@@ -20,6 +21,12 @@ export class SummaryScene extends AbstractScene {
   create() {
     const run = this.gameState.currentRun.get();
     const poi = run?.poi || [];
+
+    const poiDamaged = poi.filter(
+      (poi) =>
+        poi.state.get() === POI_STATE.DAMAGED ||
+        poi.state.get() === POI_STATE.PARTIALLY_SAVED
+    ).length;
 
     const { width, height } = this.scale;
 
@@ -54,13 +61,16 @@ export class SummaryScene extends AbstractScene {
             ? "Everyone is safe!"
             : run?.endReason === END_REASONS.POI_DESTROYED
             ? "Disaster!"
+            : run?.endReason === END_REASONS.POI_SAVED_WITH_DAMAGE
+            ? "Damage in the area!"
             : "Fire extinguished!"
         }
         style={{
           ...TEXT_STYLE,
           fontSize: "48px",
           color:
-            run?.endReason === END_REASONS.POI_DESTROYED
+            run?.endReason === END_REASONS.POI_DESTROYED ||
+            run?.endReason === END_REASONS.POI_SAVED_WITH_DAMAGE
               ? "#ffbbbb"
               : "#bbffbb",
         }}
@@ -69,7 +79,9 @@ export class SummaryScene extends AbstractScene {
 
     this.add.existing(
       <text
-        text={`You completed the mission in ${run?.time}s`}
+        text={`The mission took ${Math.floor(run?.time / 60)}m ${Math.floor(
+          run?.time % 60
+        )}s`}
         x={60}
         y={350}
         style={{ ...TEXT_STYLE, fontSize: "20px" }}
@@ -78,13 +90,9 @@ export class SummaryScene extends AbstractScene {
 
     this.add.existing(
       <text
-        text={
-          run?.endReason === END_REASONS.POI_SAVED
-            ? "Despite the fire, everyone evacuated safely!"
-            : run?.endReason === END_REASONS.POI_DESTROYED
-            ? "The fire destroyed the area!"
-            : "You cleared the fire and kept the area safe!"
-        }
+        text={`The fire damaged ${poiDamaged === 0 ? "no" : poiDamaged} ${
+          poiDamaged === 1 ? "place" : "places"
+        }!`}
         x={60}
         y={380}
         style={{ ...TEXT_STYLE, fontSize: "20px" }}
@@ -106,12 +114,12 @@ export class SummaryScene extends AbstractScene {
         {poiList.map((item) => (
           <Parallel>
             <Step
-              duration={500}
+              duration={50}
               action={() =>
                 this.tweens.add({ targets: item, scale: 1, duration: 300 })
               }
             />
-            <Step duration={600} action={() => item.setVisible(true)} />
+            <Step duration={60} action={() => item.setVisible(true)} />
           </Parallel>
         ))}
       </Sequence>
@@ -213,7 +221,6 @@ export class SummaryScene extends AbstractScene {
         interactive
         onPointerdown={() => {
           this.scene.stop(SCENES.MAP);
-          this.gameState.endRun(END_REASONS.CANCELLED);
           this.scene.start(SCENES.UI_HOME);
         }}
       >

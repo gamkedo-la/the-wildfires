@@ -2,6 +2,7 @@ import { TEXT_STYLE } from "@game/consts";
 import { AbstractScene } from "..";
 import { SCENES } from "../consts";
 import { PointOfInterestBadge } from "./components/PointOfInterestBadge";
+import { END_REASONS } from "@game/state/game-state";
 import { RESOURCES } from "@game/assets";
 import { Stack } from "../../ui/components/Stack";
 
@@ -109,7 +110,7 @@ export class PauseScene extends AbstractScene {
         interactive
         onPointerdown={() => {
           this.scene.stop(SCENES.MAP);
-          this.gameState.endRun();
+          this.gameState.endRun(END_REASONS.CANCELLED);
           this.scene.start(SCENES.UI_HOME);
         }}
       >

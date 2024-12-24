@@ -7,6 +7,7 @@ import { MutableSignal, Signal } from "./lib/types";
 export const END_REASONS = {
   FIRE_EXTINGUISHED: "fire-extinguished",
   POI_SAVED: "poi-saved",
+  POI_SAVED_WITH_DAMAGE: "poi-saved-with-damage",
   POI_DESTROYED: "poi-destroyed",
   CANCELLED: "cancelled",
 } as const;

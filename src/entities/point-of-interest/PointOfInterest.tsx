@@ -5,15 +5,14 @@ import { RESOURCES } from "../../assets";
 import { MapScene } from "../../scenes/game/map-scene";
 import { GameMap } from "../maps/GameMap";
 
-// TODO: Maybe there will be a POI UI in the HUD where instead of a fixed time to start, it's on the player to alert the POI and start the evacuation. Obviously the less
 export const POI_STATE = {
-  ALERTED: "alerted", // Maybe
+  // Initial states
+  UNTOUCHED: "untouched",
   EVACUATING: "evacuating",
-  // TODO: too many states, too complicated. Make the state done or not done and count the tiles
+  // Final states
   SAVED: "saved",
   PARTIALLY_SAVED: "partially-saved",
   DAMAGED: "damaged",
-  UNTOUCHED: "untouched",
 } as const;
 
 export class PointOfInterest {
@@ -306,11 +305,9 @@ export class PointOfInterest {
   }
 
   damageTile() {
-    const damage = 1;
-
     if (this.tilesLeft.get() > 0) {
-      this.tilesLeft.update((value) => value - damage);
-      this.damagedTiles.update((value) => value + damage);
+      this.tilesLeft.update((value) => value - 1);
+      this.damagedTiles.update((value) => value + 1);
     }
   }
 
