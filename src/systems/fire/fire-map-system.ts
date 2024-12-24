@@ -350,6 +350,7 @@ export class FireMapSystem implements System {
     let [eastSpread, westSpread, southSpread, northSpread] =
       this.calculateSpread();
 
+    const chance = Math.max(0, 1 - (250 - burningTilesCount) / 200);
     const ignitionPoints = this.map.fireLayer
       .filterTiles((t: Tilemaps.Tile) => t.index === this.map.fireTileId)
       .flatMap((tile) => [
@@ -360,11 +361,8 @@ export class FireMapSystem implements System {
       ]);
 
     [...new Set(ignitionPoints)].forEach((p) => {
-      if (burningTilesCount > 200) {
-        const chance = Math.max(0, 1 - (burningTilesCount - 200) / 50);
-        if (Math.random() > chance) {
-          return;
-        }
+      if (Math.random() < chance) {
+        return;
       }
 
       this.ignite(p.x, p.y);
