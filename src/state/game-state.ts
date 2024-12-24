@@ -80,6 +80,7 @@ export class GameStateManager
     this.mutateRun((run) => {
       run.state = RunState.ENDED;
       run.endReason = reason;
+      run.time = (this.game.getTime() - run.time) / 1000;
       this.runs.push(run);
       return true;
     });

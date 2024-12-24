@@ -150,6 +150,7 @@ export class HomeScene extends AbstractScene {
         height={100}
         interactive={startButtonEnabled}
         onPointerdown={() => {
+          runConfiguration.time = this.game.getTime();
           this.gameState.startRun(runConfiguration);
           this.scene.pause();
           this.scene.moveAbove(SCENES.UI_HOME, SCENES.UI_TUTORIAL);
