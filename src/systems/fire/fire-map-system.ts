@@ -74,6 +74,8 @@ export class FireMapSystem implements System {
       .flatMap((tile) => {
         this.ignite(tile.x, tile.y);
       });
+
+    this.fireStarted = true;
   }
 
   private setupWaterDropEvent() {
