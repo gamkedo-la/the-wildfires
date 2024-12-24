@@ -25,6 +25,7 @@ export abstract class GameMap {
   fireTilesCache: Phaser.Tilemaps.Tile[];
 
   evacuationTileDelay: number = 7000;
+  evacuationAlarmDistance: number = 8000;
 
   create() {
     let fireTileId = this.map.properties.find(
