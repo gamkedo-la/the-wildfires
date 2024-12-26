@@ -173,8 +173,8 @@ export class SummaryScene extends AbstractScene {
       <container
         x={150}
         y={500}
-        width={100}
-        height={40}
+        width={200}
+        height={80}
         interactive
         onPointerdown={() => {
           const run = this.gameState.currentRun.get();
@@ -216,8 +216,8 @@ export class SummaryScene extends AbstractScene {
       <container
         x={370}
         y={500}
-        width={100}
-        height={40}
+        width={200}
+        height={80}
         interactive
         onPointerdown={() => {
           this.scene.stop(SCENES.MAP);

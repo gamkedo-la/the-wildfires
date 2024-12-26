@@ -69,8 +69,8 @@ export class PauseScene extends AbstractScene {
       <container
         x={150}
         y={500}
-        width={100}
-        height={40}
+        width={200}
+        height={80}
         interactive
         onPointerdown={() => {
           this.resumeGame();
@@ -84,7 +84,6 @@ export class PauseScene extends AbstractScene {
           x={0}
           y={0}
           width={100}
-          tint={0xbbffbb}
           height={40}
           leftWidth={4}
           rightWidth={4}
@@ -92,7 +91,7 @@ export class PauseScene extends AbstractScene {
           bottomHeight={5}
         />
         <text
-          text={"Resume"}
+          text={"Resume game"}
           x={0}
           y={0}
           origin={0.5}
@@ -105,8 +104,8 @@ export class PauseScene extends AbstractScene {
       <container
         x={370}
         y={500}
-        width={100}
-        height={40}
+        width={200}
+        height={80}
         interactive
         onPointerdown={() => {
           this.scene.stop(SCENES.MAP);
@@ -130,7 +129,7 @@ export class PauseScene extends AbstractScene {
           bottomHeight={5}
         />
         <text
-          text={"Back to menu"}
+          text={"Main menu"}
           x={0}
           y={0}
           origin={0.5}

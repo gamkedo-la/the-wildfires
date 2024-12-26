@@ -1,15 +1,15 @@
 import { computed, effect, signal } from "@game/state/lib/signals";
+import { Signal } from "@game/state/lib/types";
 import { AbstractScene } from "..";
 import { RESOURCES } from "../../assets";
 import { GAME_HEIGHT, GAME_WIDTH, TEXT_STYLE } from "../../consts";
-import { MapScene } from "./map-scene";
-import { SCENES } from "../consts";
 import {
   createTransitionSignal,
   Sequence,
   Transition,
 } from "../../ui/animation/animation";
-import { Signal } from "@game/state/lib/types";
+import { SCENES } from "../consts";
+import { MapScene } from "./map-scene";
 
 export class HUDScene extends AbstractScene {
   gameScene: MapScene;
@@ -375,6 +375,38 @@ export class HUDScene extends AbstractScene {
           Math.max(1, this.vehiclePositionArrowShowInterval.get() / 150)
         )}
       />
+    );
+
+    this.add.existing(
+      <container
+        x={30}
+        y={25}
+        width={200}
+        height={80}
+        interactive
+        onPointerdown={() => this.scene.get(SCENES.MAP).doPause()}
+      >
+        <nineslice
+          texture={RESOURCES["key-nine-slice"]}
+          frame={0}
+          originX={0.5}
+          x={0}
+          y={0}
+          width={50}
+          height={30}
+          leftWidth={4}
+          rightWidth={4}
+          topHeight={4}
+          bottomHeight={5}
+        />
+        <text
+          text={"Pause"}
+          x={0}
+          y={0}
+          origin={0.5}
+          style={{ ...TEXT_STYLE, fontSize: "12px", color: "#000000" }}
+        />
+      </container>
     );
   }
 
