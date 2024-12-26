@@ -221,7 +221,7 @@ export class PointOfInterest {
           }
         });
 
-        if (closestDistance < map.evacuationAlarmDistance) {
+        if (closestDistance < map.evacuationAlarmDistance / 10) {
           this.scene.time.delayedCall(300, () => {
             this.open.set(true);
             pin.play("pin-vertical-flash");

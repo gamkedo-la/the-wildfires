@@ -9,6 +9,9 @@ export class ArchipelagoMap extends GameMap {
 
     this.scene = scene;
 
+    this.fireTick = 2400;
+    this.evacuationTileDelay = 10000;
+
     this.map = scene.add.tilemap(RESOURCES["archipelago"]) as MapWithProperties;
 
     this.configurationObjects = this.map.getObjectLayer("configuration")!;

@@ -20,11 +20,11 @@ export abstract class GameMap {
   animatedTiles: any[];
 
   fireTileId: number;
-  fireTick: number = 2000;
+  fireTick: number = 4000;
   fireRatio: number = 4;
   fireTilesCache: Phaser.Tilemaps.Tile[];
 
-  evacuationTileDelay: number = 7000;
+  evacuationTileDelay: number = 14000;
   evacuationAlarmDistance: number = 8000;
 
   create() {
