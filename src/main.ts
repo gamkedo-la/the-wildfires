@@ -13,6 +13,7 @@ import { HUDScene } from "./scenes/game/hud-scene";
 import { SummaryScene } from "./scenes/ui/summary-scene";
 import { GameStateManager } from "./state/game-state";
 import { TutorialScene } from "./scenes/ui/tutorial/tutorial-scene";
+import { PreplanningScene } from "./scenes/ui/preplanning-scene";
 
 const config: Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -43,6 +44,7 @@ const config: Types.Core.GameConfig = {
   scene: [
     Boot,
     Preloader,
+    PreplanningScene,
     MainGame,
     HUDScene,
     SummaryScene,

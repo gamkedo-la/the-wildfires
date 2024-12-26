@@ -37,6 +37,7 @@ export const RESOURCES = {
   "skycrane-sprite": "skycrane-sprite",
   "smoke": "smoke",
   "tanks-overlay": "tanks-overlay",
+  "tilemap-planning": "tilemap-planning",
   "tilemap-test-2": "tilemap-test-2",
   "tilemap-test-3": "tilemap-test-3",
   "tilemap-test": "tilemap-test",

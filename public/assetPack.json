@@ -173,6 +173,11 @@
       },
       {
         "type": "image",
+        "key": "tilemap-planning",
+        "url": "assets/tilemap-planning.png"
+      },
+      {
+        "type": "image",
         "key": "tilemap-test-2",
         "url": "assets/tilemap-test-2.png"
       },

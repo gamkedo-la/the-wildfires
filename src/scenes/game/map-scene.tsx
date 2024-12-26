@@ -52,6 +52,7 @@ export class MapScene extends AbstractScene {
     this.bus = this.gamebus.getBus();
 
     this.camera = this.cameras.main;
+    this.camera.fadeIn(500);
     this.camera.setBackgroundColor(0x00ff00);
 
     this.space_key = this.input.keyboard!.addKey(

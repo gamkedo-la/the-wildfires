@@ -46,7 +46,7 @@ export class TutorialScene extends AbstractScene {
     );
 
     const resumeButton = this.add
-      .text(width / 2, height - 83, "Start mission", {
+      .text(width / 2, height - 83, "Plan mission", {
         ...TEXT_STYLE,
         fontSize: "24px",
         color: "#000000",
@@ -94,7 +94,7 @@ export class TutorialScene extends AbstractScene {
 
   startGame() {
     this.scene.stop(SCENES.UI_HOME);
-    this.scene.start(SCENES.MAP);
+    this.scene.start(SCENES.UI_PREPLANNING);
   }
 
   shutdown() {}

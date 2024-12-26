@@ -56,6 +56,13 @@ export enum MapTileType {
   Water,
 }
 
+export const MAPS_TILEMAPS = {
+  CONTINENTAL: "continental",
+  COASTAL: "coastal",
+  ARCHIPELAGO: "archipelago",
+  CONTINENTAL_TEST: "continental-test",
+} as const;
+
 export const MAPS = {
   CONTINENTAL: ContinentalMap,
   COASTAL: CoastalMap,
