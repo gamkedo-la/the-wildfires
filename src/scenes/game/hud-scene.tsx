@@ -411,9 +411,10 @@ export class HUDScene extends AbstractScene {
   }
 
   update(time: number, delta: number) {
-    const { isDown } = this.gameScene.key_control;
+    const { isDown: whereIsTheVehicleKeyDown } = this.gameScene.key_control;
+    const { isDown: hudKeyDown } = this.gameScene.key_h;
 
-    if (isDown) {
+    if (whereIsTheVehicleKeyDown) {
       this.vehiclePositionArrowShowInterval.set(300);
     }
 
@@ -422,7 +423,9 @@ export class HUDScene extends AbstractScene {
         (interval) => interval - delta
       );
     }
+
+    this.scene.setVisible((!hudKeyDown));
   }
 
-  shutdown() {}
+  shutdown() { }
 }
