@@ -37,11 +37,8 @@ export class FireMapSystem implements System {
     this.windAngle = PMath.RadToDeg(PMath.Vector2.UP.angle());
     this.windSpeed = 2;
 
-    this.retardantChargeFx = scene.add.particles(
-      0,
-      0,
-      RESOURCES["retardant-particle"],
-      {
+    this.retardantChargeFx = scene.add
+      .particles(0, 0, RESOURCES["retardant-particle"], {
         x: {
           onUpdate: (_particle, _key, t, value) => {
             return value + Math.sin(5 * t * Math.PI) + (Math.random() - 0.5);
@@ -52,8 +49,8 @@ export class FireMapSystem implements System {
         frequency: 25,
         lifespan: { min: 1000, max: 2000 },
         emitting: false,
-      }
-    );
+      })
+      .setDepth(1);
   }
 
   create(): this {

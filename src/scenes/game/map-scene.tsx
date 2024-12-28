@@ -101,7 +101,10 @@ export class MapScene extends AbstractScene {
     this.scene.run(SCENES.HUD, {
       gameScene: this,
     });
-    this.scene.run(SCENES.DEBUG);
+
+    if (import.meta.env.VITE_DEBUG) {
+      this.scene.run(SCENES.DEBUG);
+    }
 
     this.gameState.setRunState(RunState.RUNNING);
 
@@ -250,7 +253,9 @@ export class MapScene extends AbstractScene {
     this.time.delayedCall(3000, () => {
       this.gameState.endRun(endReason);
       this.scene.stop(SCENES.HUD);
-      this.scene.stop(SCENES.DEBUG);
+      if (import.meta.env.VITE_DEBUG) {
+        this.scene.stop(SCENES.DEBUG);
+      }
       this.scene.pause();
       this.backgroundMusic.stop();
       this.vehiclesSystem.vehicle.mute();
@@ -259,7 +264,9 @@ export class MapScene extends AbstractScene {
   }
 
   shutdown() {
-    this.scene.stop(SCENES.DEBUG);
+    if (import.meta.env.VITE_DEBUG) {
+      this.scene.stop(SCENES.DEBUG);
+    }
     this.scene.stop(SCENES.HUD);
 
     this.vehiclesSystem.destroy();

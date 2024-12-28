@@ -227,7 +227,7 @@ export abstract class Vehicle {
       />
     );
 
-    this.outline.setDepth(1);
+    this.outline.setDepth(2);
     this.scene.add.existing(this.outline);
   }
 
