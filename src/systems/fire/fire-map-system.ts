@@ -135,14 +135,29 @@ export class FireMapSystem implements System {
         true
       );
 
-      for (let x = tileX - range; x <= tileX + range; x++) {
-        this.dropWater(x, tileY);
+      // For hexagonal maps, need to handle offset coordinates
+      this.dropWater(tileX, tileY);
+
+      this.dropWater(tileX + 1, tileY);
+      this.dropWater(tileX - 1, tileY);
+
+      this.dropWater(tileX, tileY + 1);
+      this.dropWater(tileX, tileY - 1);
+
+      if (tileY % 2 === 0) {
+        this.dropWater(tileX - 1, tileY + 1);
+        this.dropWater(tileX - 1, tileY - 1);
+      } else {
+        this.dropWater(tileX + 1, tileY + 1);
+        this.dropWater(tileX + 1, tileY - 1);
       }
-      for (let y = tileY - range; y <= tileY + range; y++) {
-        if (y !== tileY) {
-          // Avoid double-extinguishing the center tile
-          this.dropWater(tileX, y);
-        }
+
+      if (range === 2) {
+        this.dropWater(tileX + 2, tileY);
+        this.dropWater(tileX - 2, tileY);
+
+        this.dropWater(tileX, tileY + 2);
+        this.dropWater(tileX, tileY - 2);
       }
     } catch (e) {
       // TODO: Something is off with this function and I couldn't fix on a first check with the debugger. The try catch is a workaround
@@ -179,13 +194,21 @@ export class FireMapSystem implements System {
         true
       );
 
-      for (let x = tileX - range; x <= tileX + range; x++) {
-        this.dropRetardant(x, tileY);
-      }
-      for (let y = tileY - range; y <= tileY + range; y++) {
-        if (y !== tileY) {
-          this.dropRetardant(tileX, y);
-        }
+      // For hexagonal maps, need to handle offset coordinates
+      this.dropRetardant(tileX, tileY);
+
+      this.dropRetardant(tileX + 1, tileY);
+      this.dropRetardant(tileX - 1, tileY);
+
+      this.dropRetardant(tileX, tileY + 1);
+      this.dropRetardant(tileX, tileY - 1);
+
+      if (tileY % 2 === 0) {
+        this.dropRetardant(tileX - 1, tileY + 1);
+        this.dropRetardant(tileX - 1, tileY - 1);
+      } else {
+        this.dropRetardant(tileX + 1, tileY + 1);
+        this.dropRetardant(tileX + 1, tileY - 1);
       }
     } catch (e) {
       console.error(e);
@@ -423,6 +446,8 @@ export class FireMapSystem implements System {
   }
 
   destroy(): void {
+    this.scene.events.off(EVENT_DROP_WATER);
+    this.scene.events.off(EVENT_DROP_RETARDANT);
     console.log("FireMapSystem destroy");
   }
 }
