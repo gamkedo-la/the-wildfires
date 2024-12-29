@@ -150,6 +150,18 @@ export function RetardantDrop({
               ease="Cubic.easeIn"
             />
           </Parallel>
+        </Sequence>
+      </Parallel>
+      <Parallel>
+        <Transition
+          signal={planeX}
+          from={0}
+          to={width + 32}
+          duration={5000}
+          ease="Linear"
+        />
+        <Sequence>
+          <Wait duration={4000} />
           <Transition
             signal={tintSignal}
             to={0xffffff}
