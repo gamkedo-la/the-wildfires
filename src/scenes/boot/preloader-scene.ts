@@ -2,8 +2,6 @@ import { GAME_WIDTH } from "@game/consts";
 import { AbstractScene } from "..";
 import { RESOURCES } from "../../assets";
 import { SCENES } from "../consts";
-import { MapScene } from "../game/map-scene";
-import { HomeScene } from "../ui/home-scene";
 
 export const RESOURCES_INDEX = Object.keys(RESOURCES).reduce(
   (acc, key, index) => ({ ...acc, [key]: index }),
@@ -128,12 +126,12 @@ export class Preloader extends AbstractScene {
         // We start the game right away in dev mode
         //this.scene.start(SCENES.TEST);
         //  return;
-        this.scene.add(SCENES.UI_HOME, HomeScene);
 
         if (import.meta.env.VITE_DEBUG) {
           // Normal game
-          // return this.scene.start(SCENES.UI_HOME);
+          return this.scene.start(SCENES.UI_HOME);
 
+          /**
           // Quick game start
           const runConfiguration = this.gameState.getEmptyRun();
           runConfiguration.map = "CONTINENTAL";
@@ -144,23 +142,16 @@ export class Preloader extends AbstractScene {
           /**
           // Quick summary screen
           this.scene.get(SCENES.MAP).time.addEvent({
-            delay: 2000,
+            delay: 1,
             callback: () => {
-              this.scene.get(SCENES.MAP).endGame();
+              this.scene.get(SCENES.MAP).endGame(END_REASONS.FIRE_EXTINGUISHED);
             },
           });
-          */
+          /**/
         }
 
         // Otherwise we await for user input so the sound works correctly
-        this.add.text(20, 20, "Click to start", {
-          fontFamily: "DotGothic16",
-          fontSize: "32px",
-        });
-
-        this.input.once("pointerdown", () => {
-          this.scene.start(SCENES.UI_HOME);
-        });
+        this.scene.start(SCENES.UI_HOME);
       },
     });
 

@@ -49,5 +49,6 @@ export const RESOURCES = {
   "coastal": "coastal",
   "continental-test": "continental-test",
   "continental": "continental",
+  "main-menu": "main-menu",
   "test-island-16": "test-island-16",
 } as const;

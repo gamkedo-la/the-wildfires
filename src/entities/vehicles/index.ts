@@ -9,4 +9,5 @@ export const VEHICLES = {
 } as const;
 
 export type VehicleType = keyof typeof VEHICLES;
+export type VehicleTypeLowercase = Lowercase<VehicleType>;
 export type VehicleClass = (typeof VEHICLES)[VehicleType];

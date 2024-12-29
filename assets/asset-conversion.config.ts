@@ -86,6 +86,12 @@ const config = {
       args: "--export-map json --embed-tilesets ${input} ${output}",
     },
     {
+      input: "maps/main-menu.tmx",
+      output: "main-menu.json",
+      executable: "tiled",
+      args: "--export-map json --embed-tilesets ${input} ${output}",
+    },
+    {
       input: "maps/continental-test.tmx",
       output: "continental-test.json",
       executable: "tiled",

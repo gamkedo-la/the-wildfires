@@ -233,6 +233,11 @@
       },
       {
         "type": "tilemapTiledJSON",
+        "key": "main-menu",
+        "url": "assets/main-menu.json"
+      },
+      {
+        "type": "tilemapTiledJSON",
         "key": "test-island-16",
         "url": "assets/test-island-16.json"
       }
