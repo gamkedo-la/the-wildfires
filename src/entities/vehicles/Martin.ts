@@ -8,9 +8,9 @@ export class Martin extends Vehicle {
 
     this.maxSpeed = 50;
     this.accelerationRate = 1;
-    this.turnRate = Math.PI * 0.35;
+    this.turnRate = Math.PI * 0.45;
 
-    this.waterTankCapacity = 600;
+    this.waterTankCapacity = 300;
     this.waterTankConsumptionRate = 130;
     this.waterTankRefillRate = 150;
 

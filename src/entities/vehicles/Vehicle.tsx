@@ -605,8 +605,8 @@ export abstract class Vehicle {
 
         this.scene.events.emit(EVENT_DROP_WATER, {
           x: positionBehind.x,
-          range: 1,
           y: positionBehind.y + 12,
+          range: this.type === "MARTIN" ? 2 : 1,
         });
       }
 
