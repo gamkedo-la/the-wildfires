@@ -52,7 +52,7 @@ export abstract class Vehicle {
 
   retardantTankCapacity: number = 99;
   retardantChargeSize: number = 33;
-  retardantTankConsumptionRate: number = 30;
+  retardantTankConsumptionRate: number = 25;
   retardantTankRefillRate: number = 38;
   retardantTankLevel: Signal<number>;
 
@@ -597,7 +597,7 @@ export abstract class Vehicle {
       }
 
       // Water takes time to reach the ground
-      if (_time - this.spacePressedTime > 300) {
+      if (_time - this.spacePressedTime > 150) {
         const positionBehind = this.position
           .get()
           .clone()
@@ -605,8 +605,8 @@ export abstract class Vehicle {
 
         this.scene.events.emit(EVENT_DROP_WATER, {
           x: positionBehind.x,
-          y: positionBehind.y + 15,
           range: 1,
+          y: positionBehind.y + 12,
         });
       }
 
@@ -637,7 +637,7 @@ export abstract class Vehicle {
 
         this.scene.events.emit(EVENT_DROP_RETARDANT, {
           x: positionBehind.x,
-          y: positionBehind.y + 15,
+          y: positionBehind.y + 12,
           range: 1,
         });
       }

@@ -12,7 +12,6 @@ export class VehicleSystem implements System {
     this.scene = scene;
     this.vehicleType = vehicleType;
 
-    // TODO With future picker for vehicle type, this will take into consideration vehicle type
     this.vehicle = new VEHICLES[vehicleType](
       this.scene,
       this.scene.currentMap.aircraftStartPosition.x,
