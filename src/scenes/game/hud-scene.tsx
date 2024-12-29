@@ -381,8 +381,8 @@ export class HUDScene extends AbstractScene {
       <container
         x={30}
         y={25}
-        width={200}
-        height={80}
+        width={50}
+        height={30}
         interactive
         onPointerdown={() => this.scene.get(SCENES.MAP).doPause()}
       >
@@ -408,6 +408,38 @@ export class HUDScene extends AbstractScene {
         />
       </container>
     );
+
+    this.add.existing(
+      <container
+        x={80}
+        y={25}
+        width={50}
+        height={30}
+        interactive
+        onPointerdown={() => this.scene.get(SCENES.MAP).doTutorialPause()}
+      >
+        <nineslice
+          texture={RESOURCES["key-nine-slice"]}
+          frame={0}
+          originX={0.5}
+          x={0}
+          y={0}
+          width={50}
+          height={30}
+          leftWidth={4}
+          rightWidth={4}
+          topHeight={4}
+          bottomHeight={5}
+        />
+        <text
+          text={"Help"}
+          x={0}
+          y={0}
+          origin={0.5}
+          style={{ ...TEXT_STYLE, fontSize: "12px", color: "#000000" }}
+        />
+      </container>
+    );
   }
 
   update(time: number, delta: number) {
@@ -424,8 +456,8 @@ export class HUDScene extends AbstractScene {
       );
     }
 
-    this.scene.setVisible((!hudKeyDown));
+    this.scene.setVisible(!hudKeyDown);
   }
 
-  shutdown() { }
+  shutdown() {}
 }

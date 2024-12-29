@@ -84,9 +84,7 @@ export class MapScene extends AbstractScene {
     this.key_control = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.CTRL
     );
-    this.key_h = this.input.keyboard!.addKey(
-      Phaser.Input.Keyboard.KeyCodes.H
-    );
+    this.key_h = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.H);
     this.key_p = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     this.key_esc = this.input.keyboard!.addKey(
       Phaser.Input.Keyboard.KeyCodes.ESC
@@ -282,7 +280,16 @@ export class MapScene extends AbstractScene {
   }
 
   doPause() {
-    this.scene.pause();
-    this.scene.launch(SCENES.UI_PAUSE);
+    if (!this.scene.isPaused()) {
+      this.scene.pause();
+      this.scene.launch(SCENES.UI_PAUSE);
+    }
+  }
+
+  doTutorialPause() {
+    if (!this.scene.isPaused()) {
+      this.scene.pause();
+      this.scene.launch(SCENES.UI_PAUSE_TUTORIAL);
+    }
   }
 }

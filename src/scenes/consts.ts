@@ -7,6 +7,7 @@ export const SCENES = {
   HUD: "HUD",
 
   UI_PAUSE: "UI-Pause",
+  UI_PAUSE_TUTORIAL: "UI-PauseTutorial",
   UI_HOME: "UI-Home",
   UI_MAP_SELECTION: "UI-MapSelection",
   UI_PREPLANNING: "UI-Preplanning",
