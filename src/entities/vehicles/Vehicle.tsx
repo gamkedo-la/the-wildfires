@@ -223,7 +223,10 @@ export abstract class Vehicle {
           return Math.max(0, Math.min(4, currentFrame));
         })}
         scale={this.imageScale}
-        tint={0x2a1d0d}
+        tint={computed(() => {
+          if (this.selectedTank.get() === "retardant") return 0xef3a0c;
+          return 0x2a1d0d;
+        })}
       />
     );
 
