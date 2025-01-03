@@ -153,6 +153,7 @@ export abstract class Vehicle {
             this.waterTankLevel.get() < this.waterTankCapacity
           ) {
             altitudeFromSpeed /= this.maxSpeed - this.velocity.get().length();
+            altitudeFromSpeed = Math.min(30, altitudeFromSpeed);
           }
 
           return y + altitudeFromSpeed;
