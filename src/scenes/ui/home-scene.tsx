@@ -150,8 +150,9 @@ export class HomeScene extends AbstractScene {
           text="Click to start"
           x={0}
           y={0}
+          resolution={4}
           origin={0.5}
-          style={{ ...TEXT_STYLE, fontSize: "18px", color: "#ffffff" }}
+          style={{ ...TEXT_STYLE, fontSize: 16, color: "#ffffff" }}
         />
       </container>
     );

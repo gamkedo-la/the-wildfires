@@ -46,11 +46,12 @@ export class TutorialScene extends AbstractScene {
     );
 
     const resumeButton = this.add
-      .text(width / 2, height - 83, "Plan mission", {
+      .text(width / 2, height - 83, "Preview mission", {
         ...TEXT_STYLE,
-        fontSize: "24px",
+        fontSize: "22px",
         color: "#000000",
       })
+      .setResolution(2)
       .setOrigin(0.5)
       .setInteractive();
 
@@ -61,8 +62,9 @@ export class TutorialScene extends AbstractScene {
         x={width / 2}
         originX={0.5}
         y={30}
+        resolution={2}
         text="How to play"
-        style={{ ...TEXT_STYLE, fontSize: "30px", color: "#ffffff" }}
+        style={{ ...TEXT_STYLE, fontSize: 30, color: "#ffffff" }}
       />
     );
 

@@ -72,7 +72,7 @@ export function WaterCollection({
             />
             <Transition
               signal={keyPressPos}
-              to={5}
+              to={3}
               duration={100}
               ease="Cubic.easeIn"
             />
@@ -162,7 +162,8 @@ export function WaterCollection({
         y={30}
         text={"Collect"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#ffffff" }}
+        style={{ ...TEXT_STYLE, fontSize: 24, color: "#ffffff" }}
+        resolution={4}
       />
 
       <nineslice
@@ -182,10 +183,11 @@ export function WaterCollection({
       />
       <text
         x={width / 2}
-        y={computed(() => height - 54 + keyPressPos.get())}
+        y={computed(() => height - 51 + keyPressPos.get())}
         text={"space"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "18px", color: "#45230d" }}
+        style={{ ...TEXT_STYLE, fontSize: 16, color: "#45230d" }}
+        resolution={4}
       />
     </container>
   );

@@ -404,7 +404,8 @@ export class HUDScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
-          style={{ ...TEXT_STYLE, fontSize: "12px", color: "#000000" }}
+          resolution={2}
+          style={{ ...TEXT_STYLE, fontSize: 12, color: "#000000" }}
         />
       </container>
     );
@@ -436,7 +437,8 @@ export class HUDScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
-          style={{ ...TEXT_STYLE, fontSize: "12px", color: "#000000" }}
+          resolution={2}
+          style={{ ...TEXT_STYLE, fontSize: 12, color: "#000000" }}
         />
       </container>
     );

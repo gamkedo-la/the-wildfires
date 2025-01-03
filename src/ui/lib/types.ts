@@ -25,6 +25,7 @@ export type ContainerElement =
 export type TextElement = PhaserGameObjectProps<Phaser.GameObjects.Text> & {
   text?: SignalValue<string>;
   style?: SignalValue<Phaser.Types.GameObjects.Text.TextStyle>;
+  resolution?: SignalValue<number>;
 };
 
 export type RectangleElement =
