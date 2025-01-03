@@ -23,10 +23,11 @@ const config: Types.Core.GameConfig = {
   height: GAME_HEIGHT,
   parent: "game-container",
   backgroundColor: "#028af8",
-  pixelArt: true,
+  roundPixels: true,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
+    zoom: 2,
   },
   plugins: {
     global: [
