@@ -107,6 +107,7 @@ export class PreplanningScene extends AbstractScene {
               fontSize: "12px",
               color: "#36170c",
             }}
+            resolution={2}
             origin={{ x: 0.5, y: 1.1 }}
           />
         );
@@ -168,6 +169,7 @@ export class PreplanningScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
+          resolution={2}
           style={{ ...TEXT_STYLE, fontSize: "24px", color: "#000000" }}
         />
       </container>
@@ -204,6 +206,7 @@ export class PreplanningScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
+          resolution={2}
           style={{ ...TEXT_STYLE, fontSize: "24px", color: "#000000" }}
         />
       </container>

@@ -68,6 +68,7 @@ export const PointOfInterestBadge = ({
           x={item.state.get() !== POI_STATE.UNTOUCHED ? 25 : 10}
           y={0}
           text={item.name}
+          resolution={2}
           style={{ ...TEXT_STYLE, fontSize: "16px", color: "#2a1d0d" }}
         />
       </container>

@@ -32,6 +32,7 @@ export class PauseScene extends AbstractScene {
         x={50}
         y={260}
         text="Paused"
+        resolution={2}
         style={{
           ...TEXT_STYLE,
           fontSize: "48px",
@@ -95,6 +96,7 @@ export class PauseScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
+          resolution={2}
           style={{ ...TEXT_STYLE, fontSize: "24px", color: "#000000" }}
         />
       </container>
@@ -133,6 +135,7 @@ export class PauseScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
+          resolution={2}
           style={{ ...TEXT_STYLE, fontSize: "24px", color: "#000000" }}
         />
       </container>

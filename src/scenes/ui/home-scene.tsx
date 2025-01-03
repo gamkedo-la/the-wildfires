@@ -208,6 +208,7 @@ export class HomeScene extends AbstractScene {
             x={0}
             y={0}
             origin={0.5}
+            resolution={2}
             style={{
               ...TEXT_STYLE,
               color: "#efd8a1",
@@ -286,6 +287,7 @@ export class HomeScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
+          resolution={2}
           style={{
             ...TEXT_STYLE,
             color: "#efd8a1",
@@ -328,6 +330,7 @@ export class HomeScene extends AbstractScene {
                   x={0}
                   y={0}
                   origin={0.5}
+                  resolution={2}
                   style={{ ...TEXT_STYLE, color: "#000000", fontSize: "14px" }}
                 />
               </Stack>
@@ -351,6 +354,7 @@ export class HomeScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
+          resolution={2}
           style={{
             ...TEXT_STYLE,
             color: "#efd8a1",
@@ -393,6 +397,7 @@ export class HomeScene extends AbstractScene {
                   x={0}
                   y={0}
                   origin={0.5}
+                  resolution={2}
                   style={{ ...TEXT_STYLE, color: "#000000", fontSize: "14px" }}
                 />
               </Stack>
@@ -416,6 +421,7 @@ export class HomeScene extends AbstractScene {
           x={0}
           y={0}
           origin={0.5}
+          resolution={2}
           style={{
             ...TEXT_STYLE,
             color: "#efd8a1",
@@ -458,6 +464,7 @@ export class HomeScene extends AbstractScene {
                   x={0}
                   y={0}
                   origin={0.5}
+                  resolution={2}
                   style={{ ...TEXT_STYLE, color: "#000000", fontSize: "14px" }}
                 />
               </Stack>
