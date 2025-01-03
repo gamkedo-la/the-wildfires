@@ -168,7 +168,7 @@ export function Directions({
       />
       <text
         x={width / 2}
-        y={-55}
+        y={y + 250}
         text={"Control plane"}
         originX={0.5}
         style={{ ...TEXT_STYLE, fontSize: "26px", color: "#ffffff" }}

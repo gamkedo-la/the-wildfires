@@ -147,7 +147,7 @@ export class PreplanningScene extends AbstractScene {
         onPointerdown={() => {
           this.scene.stop(SCENES.UI_PREPLANNING);
           this.gameState.endRun(END_REASONS.CANCELLED);
-          this.scene.start(SCENES.UI_HOME);
+          this.scene.resume(SCENES.UI_HOME);
         }}
       >
         <nineslice
@@ -213,7 +213,24 @@ export class PreplanningScene extends AbstractScene {
     );
   }
 
+  update(_time: number, _delta: number) {
+    if (this.key_enter.isDown && !this.gameStarted) {
+      this.startGame();
+    }
+
+    if (this.key_esc.isDown && !this.gameStarted) {
+      this.gameState.endRun(END_REASONS.CANCELLED);
+      this.scene.stop(SCENES.UI_PREPLANNING);
+      this.scene.resume(SCENES.UI_HOME);
+    }
+  }
+
+  gameStarted = false;
+
   startGame() {
+    if (this.gameStarted) return;
+    this.gameStarted = true;
+
     const planeX = createTransitionSignal(0);
 
     this.add.existing(

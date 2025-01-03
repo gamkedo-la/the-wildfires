@@ -32,7 +32,7 @@ export function FireVelocity({
 
   const smokeFx1 = scene.add.particles(0, 0, "smoke-spritesheet", {
     x: () => PMath.RND.between(x + 100, x + 125),
-    y: () => PMath.RND.between(470, 480),
+    y: () => PMath.RND.between(y + 90, y + 100),
     color: PMath.RND.pick(tint),
     frame: [0, 1, 2, 3],
     quantity: 1,
@@ -47,7 +47,7 @@ export function FireVelocity({
 
   const smokeFx2 = scene.add.particles(0, 0, "smoke-spritesheet", {
     x: () => PMath.RND.between(3 * 32 + x + 133, 3 * 32 + x + 155),
-    y: () => PMath.RND.between(470, 480),
+    y: () => PMath.RND.between(y + 90, y + 100),
     color: PMath.RND.pick(tint),
     frame: [0, 1, 2, 3],
     quantity: 1,
@@ -62,7 +62,7 @@ export function FireVelocity({
 
   const smokeFx3 = scene.add.particles(0, 0, "smoke-spritesheet", {
     x: () => PMath.RND.between(-2 * 32 + x + 134, -2 * 32 + x + 156),
-    y: () => PMath.RND.between(565, 575),
+    y: () => PMath.RND.between(y + 185, y + 195),
     color: PMath.RND.pick(tint),
     frame: [0, 1, 2, 3],
     quantity: 1,
@@ -77,7 +77,7 @@ export function FireVelocity({
 
   const smokeFx4 = scene.add.particles(0, 0, "smoke-spritesheet", {
     x: () => PMath.RND.between(1 * 32 + x + 105, 1 * 32 + x + 130),
-    y: () => PMath.RND.between(663, 673),
+    y: () => PMath.RND.between(y + 283, y + 293),
     color: PMath.RND.pick(tint),
     frame: [0, 1, 2, 3],
     quantity: 1,
