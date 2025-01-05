@@ -23,7 +23,11 @@ export class PreplanningScene extends AbstractScene {
   key_esc!: Phaser.Input.Keyboard.Key;
   key_enter!: Phaser.Input.Keyboard.Key;
 
+  gameStarted: boolean;
+
   create() {
+    this.gameStarted = false;
+
     this.bus = this.gamebus.getBus();
 
     this.camera = this.cameras.main;
@@ -225,8 +229,6 @@ export class PreplanningScene extends AbstractScene {
     }
   }
 
-  gameStarted = false;
-
   startGame() {
     if (this.gameStarted) return;
     this.gameStarted = true;
@@ -290,7 +292,13 @@ export class PreplanningScene extends AbstractScene {
           duration={1500}
           ease="Linear"
         />
-        <Step duration={1} action={() => this.scene.start(SCENES.MAP)} />
+        <Step
+          duration={1}
+          action={() => {
+            this.scene.stop(SCENES.UI_HOME);
+            this.scene.start(SCENES.MAP);
+          }}
+        />
       </Sequence>
     );
   }
