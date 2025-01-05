@@ -326,7 +326,8 @@ export function FireVelocity({
         y={30}
         text={"Watch out"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#ffffff" }}
+        style={{ ...TEXT_STYLE, fontSize: 24, color: "#ffffff" }}
+        resolution={2}
       />
     </container>
   );

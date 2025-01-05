@@ -261,7 +261,8 @@ export function RetardantDrop({
         y={30}
         text={"Prevent"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#ffffff" }}
+        style={{ ...TEXT_STYLE, fontSize: 24, color: "#ffffff" }}
+        resolution={2}
       />
 
       <KeyButton keyName="1" x={width / 2 - 25} y={220} />
@@ -289,10 +290,11 @@ export function RetardantDrop({
       />
       <text
         x={width / 2}
-        y={computed(() => height - 54 + keyPressPos.get())}
+        y={computed(() => height - 51 + keyPressPos.get())}
         text={"space"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "18px", color: "#45230d" }}
+        style={{ ...TEXT_STYLE, fontSize: 16, color: "#45230d" }}
+        resolution={2}
       />
     </container>
   );

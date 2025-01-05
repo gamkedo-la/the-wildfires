@@ -163,7 +163,7 @@ export function WaterCollection({
         text={"Collect"}
         originX={0.5}
         style={{ ...TEXT_STYLE, fontSize: 24, color: "#ffffff" }}
-        resolution={4}
+        resolution={2}
       />
 
       <nineslice
@@ -187,7 +187,7 @@ export function WaterCollection({
         text={"space"}
         originX={0.5}
         style={{ ...TEXT_STYLE, fontSize: 16, color: "#45230d" }}
-        resolution={4}
+        resolution={2}
       />
     </container>
   );

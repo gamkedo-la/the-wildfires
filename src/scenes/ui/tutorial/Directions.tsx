@@ -49,6 +49,7 @@ export function KeyButton({
           fontStyle: "bold",
           color: "#45230d",
         }}
+        resolution={2}
       />
     </>
   );
@@ -171,7 +172,8 @@ export function Directions({
         y={y + 250}
         text={"Control plane"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "26px", color: "#ffffff" }}
+        style={{ ...TEXT_STYLE, fontSize: 24, color: "#ffffff" }}
+        resolution={2}
       />
     </container>
   );

@@ -70,7 +70,8 @@ export function PoiStatuses({
         y={py + 50}
         originX={0.5}
         text={"Evacuating"}
-        style={{ ...TEXT_STYLE, fontSize: "16px" }}
+        style={{ ...TEXT_STYLE, fontSize: 16 }}
+        resolution={2}
       />
 
       <text
@@ -78,7 +79,8 @@ export function PoiStatuses({
         y={py + 50}
         originX={0.5}
         text={"Damaged"}
-        style={{ ...TEXT_STYLE, fontSize: "16px" }}
+        style={{ ...TEXT_STYLE, fontSize: 16 }}
+        resolution={2}
       />
 
       <text
@@ -86,7 +88,8 @@ export function PoiStatuses({
         y={py + 50}
         originX={0.5}
         text={"Saved"}
-        style={{ ...TEXT_STYLE, fontSize: "16px" }}
+        style={{ ...TEXT_STYLE, fontSize: 16 }}
+        resolution={2}
       />
 
       <text
@@ -94,7 +97,8 @@ export function PoiStatuses({
         y={30}
         text={"Protect points"}
         originX={0.5}
-        style={{ ...TEXT_STYLE, fontSize: "20px", color: "#ffffff" }}
+        style={{ ...TEXT_STYLE, fontSize: 24, color: "#ffffff" }}
+        resolution={2}
       />
 
       {poiEvacuating}
