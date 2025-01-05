@@ -59,6 +59,7 @@ export class Skycrane extends Vehicle {
     const deltaSeconds = delta * 0.001;
 
     this.updateScale(deltaSeconds);
+    this.updateSounds(deltaSeconds);
 
     if (this.scene.key_one.isDown) {
       this.selectedTank.set("water");
@@ -122,7 +123,7 @@ export class Skycrane extends Vehicle {
       return true;
     });
 
-    this.windRiding.update((wasDiving) => {
+    this.windRiding.update(() => {
       const angleDiff =
         this.direction.get().angle() -
         this.scene.windSystem.windVector.get().angle();

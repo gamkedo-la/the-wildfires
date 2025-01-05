@@ -92,11 +92,14 @@ export class HUDScene extends AbstractScene {
         y={710}
         text={computed(() => {
           const vel = vehicle.velocity.get().length();
-          return ` ${Math.round(
-            vehicle.isCollectingWater &&
-              vehicle.waterTankLevel.get() < vehicle.waterTankCapacity
-              ? (7.5 * vel) / (vehicle.maxSpeed - vel) + 0.001
-              : 7.5 * vel
+          return ` ${Math.min(
+            600,
+            Math.round(
+              vehicle.isCollectingWater &&
+                vehicle.waterTankLevel.get() < vehicle.waterTankCapacity
+                ? (7.5 * vel) / (vehicle.maxSpeed - vel) + 0.001
+                : 7.5 * vel
+            )
           )
             .toString()
             .padStart(3, "0")} ft`;
