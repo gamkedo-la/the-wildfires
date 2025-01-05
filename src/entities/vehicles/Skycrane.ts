@@ -59,7 +59,11 @@ export class Skycrane extends Vehicle {
     const deltaSeconds = delta * 0.001;
 
     this.updateScale(deltaSeconds);
-    this.updateSounds(deltaSeconds);
+
+    // slowly fade out the water tank filling sound
+    let newVolume = (this.waterSound.volume -= 0.25 * deltaSeconds);
+    if (newVolume < 0) newVolume = 0;
+    this.waterSound.setVolume(newVolume);
 
     if (this.scene.key_one.isDown) {
       this.selectedTank.set("water");
