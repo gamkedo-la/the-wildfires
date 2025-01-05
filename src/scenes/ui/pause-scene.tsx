@@ -146,7 +146,7 @@ export class PauseScene extends AbstractScene {
     );
   }
 
-  update(time: number, delta: number) {
+  update() {
     if (this.key_esc.isDown || Phaser.Input.Keyboard.JustDown(this.key_p)) {
       this.resumeGame();
     }

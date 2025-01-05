@@ -57,8 +57,8 @@ const VehicleSprite = ({
   ...props
 }: {
   vehicle: VehicleTypeLowercase;
-  x: number;
-  y: number;
+  x?: number;
+  y?: number;
   [key: string]: any;
 }) => {
   return (
@@ -253,10 +253,10 @@ export class HomeScene extends AbstractScene {
           }
         }}
         onPointerover={(self) => {
-          self.first.tint = 0xaaffaa;
+          (self.first! as Phaser.GameObjects.NineSlice).tint = 0xaaffaa;
         }}
         onPointerout={(self) => {
-          self.first.tint = 0xffffff;
+          (self.first! as Phaser.GameObjects.NineSlice).tint = 0xffffff;
         }}
       >
         <NineSlices x={0} y={0} width={200} height={50} scale={0.5} />
@@ -290,7 +290,7 @@ export class HomeScene extends AbstractScene {
             }}
           />
           <Stack direction="vertical" spacing={10} x={140} y={40}>
-            {Object.keys(VEHICLES).map((vehicle, index) => (
+            {Object.keys(VEHICLES).map((vehicle) => (
               <container width={250} height={50}>
                 <Stack x={-110} y={-20} direction="horizontal" spacing={25}>
                   <VehicleSprite
@@ -307,14 +307,14 @@ export class HomeScene extends AbstractScene {
                     }}
                   />
                   <text
-                    text={VEHICLES[vehicle].model}
+                    text={VEHICLES[vehicle as keyof typeof VEHICLES].model}
                     origin={{ x: 0.4, y: 0.5 }}
                     resolution={2}
                     style={{ ...TEXT_STYLE, fontSize: 8, color: "#000000" }}
                   />
                 </Stack>
                 <text
-                  text={VEHICLES[vehicle].description}
+                  text={VEHICLES[vehicle as keyof typeof VEHICLES].description}
                   x={-120}
                   y={-10}
                   origin={0}
@@ -376,10 +376,10 @@ export class HomeScene extends AbstractScene {
           }
         }}
         onPointerover={(self) => {
-          self.first.tint = 0xaaffaa;
+          (self.first! as Phaser.GameObjects.NineSlice).tint = 0xaaffaa;
         }}
         onPointerout={(self) => {
-          self.first.tint = 0xffffff;
+          (self.first! as Phaser.GameObjects.NineSlice).tint = 0xffffff;
         }}
       >
         <NineSlices x={0} y={0} width={200} height={50} scale={0.5} />
@@ -412,7 +412,7 @@ export class HomeScene extends AbstractScene {
           }}
         />
         <Stack direction="vertical" spacing={10} x={140} y={40}>
-          {Object.keys(CREDITS).map((credit, index) => (
+          {Object.keys(CREDITS).map((credit) => (
             <container width={250} height={20}>
               <text
                 x={0}
@@ -429,7 +429,7 @@ export class HomeScene extends AbstractScene {
               <text
                 x={0}
                 y={10}
-                text={CREDITS[credit]}
+                text={CREDITS[credit as keyof typeof CREDITS]}
                 origin={{ x: 0.4, y: 0.5 }}
                 resolution={2}
                 style={{ ...TEXT_STYLE, fontSize: 8, color: "#000000" }}
@@ -464,7 +464,7 @@ export class HomeScene extends AbstractScene {
           }}
         />
         <Stack direction="vertical" spacing={3} x={0} y={20}>
-          {Object.keys(VEHICLES).map((vehicle, index) => (
+          {Object.keys(VEHICLES).map((vehicle) => (
             <container
               width={90}
               height={20}
@@ -481,10 +481,10 @@ export class HomeScene extends AbstractScene {
                 this.scene.launch(SCENES.UI_TUTORIAL);
               }}
               onPointerover={(self) => {
-                self.first.tint = 0xaaffaa;
+                (self.first! as Phaser.GameObjects.NineSlice).tint = 0xaaffaa;
               }}
               onPointerout={(self) => {
-                self.first.tint = 0xffffff;
+                (self.first! as Phaser.GameObjects.NineSlice).tint = 0xffffff;
               }}
             >
               <NineSlices x={0} y={0} width={180} height={40} scale={0.5} />
@@ -533,7 +533,7 @@ export class HomeScene extends AbstractScene {
           }}
         />
         <Stack direction="vertical" spacing={3} x={0} y={20}>
-          {Object.keys(VEHICLES).map((vehicle, index) => (
+          {Object.keys(VEHICLES).map((vehicle) => (
             <container
               width={90}
               height={20}
@@ -550,10 +550,10 @@ export class HomeScene extends AbstractScene {
                 this.scene.launch(SCENES.UI_TUTORIAL);
               }}
               onPointerover={(self) => {
-                self.first.tint = 0xaaffaa;
+                (self.first! as Phaser.GameObjects.NineSlice).tint = 0xaaffaa;
               }}
               onPointerout={(self) => {
-                self.first.tint = 0xffffff;
+                (self.first! as Phaser.GameObjects.NineSlice).tint = 0xffffff;
               }}
             >
               <NineSlices x={0} y={0} width={180} height={40} scale={0.5} />
@@ -602,7 +602,7 @@ export class HomeScene extends AbstractScene {
           }}
         />
         <Stack direction="vertical" spacing={3} x={0} y={20}>
-          {Object.keys(VEHICLES).map((vehicle, index) => (
+          {Object.keys(VEHICLES).map((vehicle) => (
             <container
               width={90}
               height={20}
@@ -619,10 +619,10 @@ export class HomeScene extends AbstractScene {
                 this.scene.launch(SCENES.UI_TUTORIAL);
               }}
               onPointerover={(self) => {
-                self.first.tint = 0xaaffaa;
+                (self.first! as Phaser.GameObjects.NineSlice).tint = 0xaaffaa;
               }}
               onPointerout={(self) => {
-                self.first.tint = 0xffffff;
+                (self.first! as Phaser.GameObjects.NineSlice).tint = 0xffffff;
               }}
             >
               <NineSlices x={0} y={0} width={180} height={40} scale={0.5} />
@@ -661,7 +661,7 @@ export class HomeScene extends AbstractScene {
     });
   }
 
-  update(time: number, delta: number) {
+  update(_time: number, delta: number) {
     this.animatedTiles.forEach((tile) => {
       if (!tile.tileAnimationData) return;
 

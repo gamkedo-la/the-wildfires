@@ -147,28 +147,6 @@ export class SummaryScene extends AbstractScene {
       </Stack>
     );
 
-    // TODO: Actual Vehicle?
-    /*
-    const vehicle = run?.vehicle;
-    this.add.existing(
-      <text
-        text={`Vehicle ${vehicle}`}
-        x={100}
-        y={200}
-        style={{ ...TEXT_STYLE, fontSize: "24px" }}
-      />
-    );
-
-    const map = run?.map;
-    this.add.existing(
-      <text
-        text={`Map ${map}`}
-        x={100}
-        y={250}
-        style={{ ...TEXT_STYLE, fontSize: "24px" }}
-      />
-    );*/
-
     this.add.existing(
       <container
         x={150}
