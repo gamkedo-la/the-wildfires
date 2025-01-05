@@ -312,9 +312,6 @@ export class HUDScene extends AbstractScene {
         x={128}
         y={computed(() => 680 + pickerPosition.get() * 35)}
         texture={RESOURCES["payload-picker"]}
-        onPointerdown={() => {
-          console.log("clicked");
-        }}
       />
     );
 
@@ -387,7 +384,10 @@ export class HUDScene extends AbstractScene {
         width={50}
         height={30}
         interactive
-        onPointerdown={() => this.scene.get(SCENES.MAP).doPause()}
+        onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+          this.scene.get(SCENES.MAP).doPause();
+        }}
       >
         <nineslice
           texture={RESOURCES["key-nine-slice"]}
@@ -420,7 +420,10 @@ export class HUDScene extends AbstractScene {
         width={50}
         height={30}
         interactive
-        onPointerdown={() => this.scene.get(SCENES.MAP).doTutorialPause()}
+        onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+          this.scene.get(SCENES.MAP).doTutorialPause();
+        }}
       >
         <nineslice
           texture={RESOURCES["key-nine-slice"]}

@@ -74,6 +74,8 @@ export class PauseScene extends AbstractScene {
         height={80}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           this.resumeGame();
         }}
       >
@@ -110,6 +112,8 @@ export class PauseScene extends AbstractScene {
         height={80}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           this.scene.stop(SCENES.MAP);
           this.gameState.endRun(END_REASONS.CANCELLED);
           this.scene.start(SCENES.UI_HOME);

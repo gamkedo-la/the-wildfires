@@ -1,4 +1,4 @@
-import { computed, mutable, signal } from "@game/state/lib/signals";
+import { computed, effect, mutable, signal } from "@game/state/lib/signals";
 import { MutableSignal, Signal } from "@game/state/lib/types";
 import { Math as PMath } from "phaser";
 import {
@@ -233,6 +233,17 @@ export abstract class Vehicle {
         })}
       />
     );
+
+    let firstPlay = true;
+
+    effect(() => {
+      this.selectedTank.get();
+      if (firstPlay) {
+        firstPlay = false;
+      } else {
+        this.scene.sound.play(RESOURCES["tank-switch"], { volume: 0.33 });
+      }
+    });
 
     this.outline.setDepth(2);
     this.scene.add.existing(this.outline);
@@ -505,13 +516,16 @@ export abstract class Vehicle {
         const isSelectedRetardant = !isSelectedWater;
 
         if (
-          isTileWater &&
           isSelectedWater &&
+          isTileWater &&
           this.waterTankLevel.get() === this.waterTankCapacity
         ) {
           this.tankWasOpen = "water";
           this.spacePressedTime = _time;
-        } else if (isTileWater) {
+        } else if (
+          isTileWater &&
+          this.waterTankLevel.get() !== this.waterTankCapacity
+        ) {
           this.isCollectingWater = true;
           this.spacePressedTime = _time;
         } else if (isSelectedWater && this.waterTankLevel.get() > 5) {
@@ -525,6 +539,9 @@ export abstract class Vehicle {
           this.spacePressedTime = _time;
           this.closeRetardantTankAt =
             this.retardantTankLevel.get() - this.retardantChargeSize;
+        } else if (_time - this.spacePressedTime > 700) {
+          this.spacePressedTime = _time;
+          this.scene.sound.play(RESOURCES["empty-tank"], { volume: 0.25 });
         }
       }
 

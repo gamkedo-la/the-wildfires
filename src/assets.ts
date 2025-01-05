@@ -4,6 +4,8 @@
 
 export const RESOURCES = {
   "airplane-propeller-loop": "airplane-propeller-loop",
+  "button": "button",
+  "empty-tank": "empty-tank",
   "fire-damage": "fire-damage",
   "fire-extinguished": "fire-extinguished",
   "fire-loop": "fire-loop",
@@ -13,6 +15,7 @@ export const RESOURCES = {
   "maps-theme": "maps-theme",
   "menu-theme": "menu-theme",
   "retardant-fill": "retardant-fill",
+  "tank-switch": "tank-switch",
   "water-filled": "water-filled",
   "water-great-tank-filled": "water-great-tank-filled",
   "water-loop": "water-loop",

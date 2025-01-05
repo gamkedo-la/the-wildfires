@@ -61,6 +61,8 @@ export class TutorialScene extends AbstractScene {
         scrollFactor={0}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           this.startGame();
         }}
       >
@@ -100,6 +102,8 @@ export class TutorialScene extends AbstractScene {
         scrollFactor={0}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           this.next();
         }}
       >

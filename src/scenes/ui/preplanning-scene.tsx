@@ -149,6 +149,8 @@ export class PreplanningScene extends AbstractScene {
         height={80}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           this.scene.stop(SCENES.UI_PREPLANNING);
           this.gameState.endRun(END_REASONS.CANCELLED);
           this.scene.resume(SCENES.UI_HOME);
@@ -187,6 +189,8 @@ export class PreplanningScene extends AbstractScene {
         height={80}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           this.startGame();
         }}
       >

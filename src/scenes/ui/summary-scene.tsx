@@ -177,6 +177,8 @@ export class SummaryScene extends AbstractScene {
         height={80}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           const run = this.gameState.currentRun.get();
           const runConfiguration = this.gameState.getEmptyRun();
           runConfiguration.map = run?.map;
@@ -220,6 +222,8 @@ export class SummaryScene extends AbstractScene {
         height={80}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           this.scene.stop(SCENES.MAP);
           this.scene.start(SCENES.UI_HOME);
         }}

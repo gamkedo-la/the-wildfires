@@ -8,6 +8,16 @@
       },
       {
         "type": "audio",
+        "key": "button",
+        "url": "assets/button.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "empty-tank",
+        "url": "assets/empty-tank.mp3"
+      },
+      {
+        "type": "audio",
         "key": "fire-damage",
         "url": "assets/fire-damage.mp3"
       },
@@ -50,6 +60,11 @@
         "type": "audio",
         "key": "retardant-fill",
         "url": "assets/retardant-fill.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "tank-switch",
+        "url": "assets/tank-switch.mp3"
       },
       {
         "type": "audio",

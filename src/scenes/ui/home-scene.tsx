@@ -243,6 +243,8 @@ export class HomeScene extends AbstractScene {
         height={25}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           if (vehiclesX.get() > 90) {
             this.animationEngine.run(hideVehiclesDialog);
           } else if (vehiclesX.get() < -100) {
@@ -364,6 +366,8 @@ export class HomeScene extends AbstractScene {
         height={25}
         interactive
         onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+
           if (creditsX.get() > 90) {
             this.animationEngine.run(hideCreditsDialog);
           } else if (creditsX.get() < -100) {
@@ -466,6 +470,8 @@ export class HomeScene extends AbstractScene {
               height={20}
               interactive
               onPointerdown={() => {
+                this.sound.play(RESOURCES["button"]);
+
                 runConfiguration.vehicle = vehicle as VehicleType;
                 runConfiguration.map = "ARCHIPELAGO";
                 runConfiguration.time = this.game.getTime();
@@ -533,6 +539,8 @@ export class HomeScene extends AbstractScene {
               height={20}
               interactive
               onPointerdown={() => {
+                this.sound.play(RESOURCES["button"]);
+
                 runConfiguration.vehicle = vehicle as VehicleType;
                 runConfiguration.map = "CONTINENTAL";
                 runConfiguration.time = this.game.getTime();
@@ -600,6 +608,8 @@ export class HomeScene extends AbstractScene {
               height={20}
               interactive
               onPointerdown={() => {
+                this.sound.play(RESOURCES["button"]);
+
                 runConfiguration.vehicle = vehicle as VehicleType;
                 runConfiguration.map = "COASTAL";
                 runConfiguration.time = this.game.getTime();

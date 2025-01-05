@@ -42,7 +42,10 @@ export class PauseTutorialScene extends AbstractScene {
         topHeight={4}
         bottomHeight={5}
         interactive={true}
-        onPointerdown={() => this.resumeGame()}
+        onPointerdown={() => {
+          this.sound.play(RESOURCES["button"]);
+          this.resumeGame();
+        }}
       />
     );
 
