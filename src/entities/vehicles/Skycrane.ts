@@ -6,6 +6,10 @@ import { signal } from "@game/state/lib/signals";
 import { RESOURCES } from "@game/assets";
 
 export class Skycrane extends Vehicle {
+  static model = "Sikorsky S-64 Skycrane";
+  static description =
+    "Heavy-lift helicopter. Fitted with a 10,000L tank that can be filled in 45 seconds.";
+
   bodyDirection: PMath.Vector2;
   bodyVelocity: PMath.Vector2;
   bodyTurnRate: number;
@@ -40,9 +44,9 @@ export class Skycrane extends Vehicle {
     this.straightBias = 200;
 
     // Water tank
-    this.waterTankCapacity = 100;
+    this.waterTankCapacity = 230;
     this.waterTankConsumptionRate = 130;
-    this.waterTankRefillRate = 150;
+    this.waterTankRefillRate = 110;
 
     this.waterTankLevel = signal(0);
     this.retardantTankLevel = signal(0);

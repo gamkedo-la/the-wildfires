@@ -3,6 +3,10 @@ import { MapScene } from "../../scenes/game/map-scene";
 import { Vehicle } from "./Vehicle";
 
 export class Martin extends Vehicle {
+  static model = "Martin JRM-3 Mars";
+  static description =
+    "Slow but powerful.It can swoop up to 27,000L of water in 22 seconds.";
+
   constructor(scene: MapScene, x: number, y: number) {
     super(scene, x, y, "martin-spritesheet", "martin-outline", 0.35, "MARTIN");
 

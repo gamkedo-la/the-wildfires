@@ -3,6 +3,10 @@ import { MapScene } from "../../scenes/game/map-scene";
 import { Vehicle } from "./Vehicle";
 
 export class Canadair extends Vehicle {
+  static model = "Canadair CL-415";
+  static description =
+    "Fast and agile. It can swoop up to 6,000L of water in 12 seconds.";
+
   constructor(scene: MapScene, x: number, y: number) {
     super(
       scene,

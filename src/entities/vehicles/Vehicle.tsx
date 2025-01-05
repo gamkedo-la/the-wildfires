@@ -13,6 +13,9 @@ import { RESOURCES } from "@game/assets";
 import { VehicleType } from ".";
 
 export abstract class Vehicle {
+  static model: string;
+  static description: string;
+
   scene: MapScene;
 
   sprite: Phaser.GameObjects.Image;

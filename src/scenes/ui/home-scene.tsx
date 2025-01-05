@@ -4,6 +4,7 @@ import { AbstractScene } from "..";
 import {
   createTransitionSignal,
   Repeat,
+  Sequence,
   Transition,
 } from "../../ui/animation/animation";
 import { Stack } from "../../ui/components/Stack";
@@ -16,6 +17,7 @@ import {
 import { MAPS, MapType, MapWithProperties } from "@game/entities/maps/index";
 import { RESOURCES } from "@game/assets";
 import { Math as PMath } from "phaser";
+import { CREDITS } from "@game/credits";
 
 const NineSlices = ({
   x,
@@ -67,7 +69,7 @@ const VehicleSprite = ({
         x={x}
         y={y}
         angle={-45}
-        scale={0.5}
+        scale={0.33}
         {...props}
       />
       <image
@@ -77,7 +79,7 @@ const VehicleSprite = ({
         x={x}
         y={y}
         angle={-45}
-        scale={0.5}
+        scale={0.33}
         {...props}
       />
     </>
@@ -193,79 +195,136 @@ export class HomeScene extends AbstractScene {
         });
       });
 
+    this.add.existing(
+      <text
+        text={"THE WILDFIRES"}
+        x={110}
+        y={95}
+        origin={0}
+        resolution={2}
+        wordWrapWidth={260}
+        style={{
+          ...TEXT_STYLE,
+          fontSize: 24,
+          lineSpacing: 2,
+        }}
+      />
+    );
+
+    let vehiclesX = createTransitionSignal(-200);
+
+    const showVehiclesDialog = (
+      <Sequence>
+        <Transition
+          signal={vehiclesX}
+          to={100}
+          ease="Cubic.easeInOut"
+          duration={1000}
+        />
+      </Sequence>
+    );
+
+    const hideVehiclesDialog = (
+      <Sequence>
+        <Transition
+          signal={vehiclesX}
+          to={-200}
+          ease="Cubic.easeInOut"
+          duration={1000}
+        />
+      </Sequence>
+    );
+
+    this.add.existing(
+      <container
+        x={160}
+        y={143}
+        width={100}
+        height={25}
+        interactive
+        onPointerdown={() => {
+          if (vehiclesX.get() > 90) {
+            this.animationEngine.run(hideVehiclesDialog);
+          } else if (vehiclesX.get() < -100) {
+            this.animationEngine.run(hideCreditsDialog);
+            this.animationEngine.run(showVehiclesDialog);
+          }
+        }}
+        onPointerover={(self) => {
+          self.first.tint = 0xaaffaa;
+        }}
+        onPointerout={(self) => {
+          self.first.tint = 0xffffff;
+        }}
+      >
+        <NineSlices x={0} y={0} width={200} height={50} scale={0.5} />
+        <text
+          text={"About vehicles"}
+          x={0}
+          y={0}
+          origin={{ x: 0.5, y: 0.55 }}
+          resolution={2}
+          style={{ ...TEXT_STYLE, fontSize: 10, color: "#000000" }}
+        />
+      </container>
+    );
+
     if (import.meta.env.VITE_DEBUG) {
       this.add.existing(
-        <container width={250} height={30} x={173} y={280} scale={0.6}>
-          <NineSlices
-            x={0}
-            y={0}
-            width={250}
-            height={168}
-            origin={{ x: 0.5, y: 0 }}
-          />
+        <container width={280} height={210} x={vehiclesX} y={200}>
+          <NineSlices x={0} y={0} width={280} height={210} origin={0} />
           <text
-            text="Islands"
-            x={0}
+            text="Vehicles"
+            x={60}
             y={0}
             origin={0.5}
             resolution={2}
             style={{
               ...TEXT_STYLE,
+              fontSize: 24,
               color: "#efd8a1",
-              fontStyle: "bold",
               stroke: "#000000",
-              strokeThickness: 4,
+              strokeThickness: 3,
             }}
           />
-          <Stack direction="vertical" spacing={10} x={0} y={30}>
+          <Stack direction="vertical" spacing={10} x={140} y={40}>
             {Object.keys(VEHICLES).map((vehicle, index) => (
-              <container
-                width={230}
-                height={40}
-                interactive
-                onPointerdown={() => {
-                  runConfiguration.vehicle = vehicle as VehicleType;
-                  runConfiguration.map = "ARCHIPELAGO";
-                  runConfiguration.time = this.game.getTime();
-                  this.gameState.startRun(runConfiguration);
-                  this.scene.pause();
-                  this.scene.moveAbove(SCENES.UI_HOME, SCENES.UI_TUTORIAL);
-                  this.scene.launch(SCENES.UI_TUTORIAL);
-                }}
-                onPointerover={(self) => {
-                  self.first.tint = 0xaaffaa;
-                }}
-                onPointerout={(self) => {
-                  self.first.tint = 0xffffff;
-                }}
-              >
-                <NineSlices x={0} y={0} width={230} height={40} />
-                <container width={180} height={40}>
-                  <Stack x={-80} direction="horizontal" spacing={25}>
-                    <VehicleSprite
-                      vehicle={vehicle.toLowerCase() as VehicleTypeLowercase}
-                      origin={0.5}
-                    />
-                    <text
-                      text={vehicle}
-                      origin={0.5}
-                      style={{
-                        ...TEXT_STYLE,
-                        color: "#000000",
-                        fontSize: "14px",
-                      }}
-                    />
-                  </Stack>
-                  <container width={100} height={28} x={58}>
-                    <NineSlices
-                      x={0}
-                      y={0}
-                      width={100}
-                      height={28}
-                      //tint={0xaaffaa}
-                    />
-                  </container>
-                </container>
+              <container width={250} height={50}>
+                <Stack x={-110} y={-20} direction="horizontal" spacing={25}>
+                  <VehicleSprite
+                    vehicle={vehicle.toLowerCase() as VehicleTypeLowercase}
+                  />
+                  <text
+                    text={vehicle}
+                    origin={0.5}
+                    resolution={2}
+                    style={{
+                      ...TEXT_STYLE,
+                      color: "#000000",
+                      fontSize: 14,
+                    }}
+                  />
+                  <text
+                    text={VEHICLES[vehicle].model}
+                    origin={{ x: 0.4, y: 0.5 }}
+                    resolution={2}
+                    style={{ ...TEXT_STYLE, fontSize: 8, color: "#000000" }}
+                  />
+                </Stack>
+                <text
+                  text={VEHICLES[vehicle].description}
+                  x={-120}
+                  y={-10}
+                  origin={0}
+                  resolution={2}
+                  wordWrapWidth={260}
+                  style={{
+                    ...TEXT_STYLE,
+                    fontSize: 11,
+                    color: "#000000",
+                    lineSpacing: 2,
+                  }}
+                />
               </container>
             ))}
           </Stack>
@@ -273,13 +332,117 @@ export class HomeScene extends AbstractScene {
       );
     }
 
+    let creditsX = createTransitionSignal(-200);
+
+    const showCreditsDialog = (
+      <Sequence>
+        <Transition
+          signal={creditsX}
+          to={100}
+          ease="Cubic.easeInOut"
+          duration={1000}
+        />
+      </Sequence>
+    );
+
+    const hideCreditsDialog = (
+      <Sequence>
+        <Transition
+          signal={creditsX}
+          to={-200}
+          ease="Cubic.easeInOut"
+          duration={1000}
+        />
+      </Sequence>
+    );
+
     this.add.existing(
-      <container width={100} height={30} x={173} y={80} scale={0.6}>
+      <container
+        x={160}
+        y={173}
+        width={100}
+        height={25}
+        interactive
+        onPointerdown={() => {
+          if (creditsX.get() > 90) {
+            this.animationEngine.run(hideCreditsDialog);
+          } else if (creditsX.get() < -100) {
+            this.animationEngine.run(hideVehiclesDialog);
+            this.animationEngine.run(showCreditsDialog);
+          }
+        }}
+        onPointerover={(self) => {
+          self.first.tint = 0xaaffaa;
+        }}
+        onPointerout={(self) => {
+          self.first.tint = 0xffffff;
+        }}
+      >
+        <NineSlices x={0} y={0} width={200} height={50} scale={0.5} />
+        <text
+          text={"Credits"}
+          x={0}
+          y={0}
+          origin={{ x: 0.5, y: 0.55 }}
+          resolution={2}
+          style={{ ...TEXT_STYLE, fontSize: 10, color: "#000000" }}
+        />
+      </container>
+    );
+
+    this.add.existing(
+      <container width={280} height={210} x={creditsX} y={200}>
+        <NineSlices x={0} y={0} width={280} height={210} origin={0} />
+        <text
+          text="Credits"
+          x={60}
+          y={0}
+          origin={0.5}
+          resolution={2}
+          style={{
+            ...TEXT_STYLE,
+            fontSize: 24,
+            color: "#efd8a1",
+            stroke: "#000000",
+            strokeThickness: 3,
+          }}
+        />
+        <Stack direction="vertical" spacing={10} x={140} y={40}>
+          {Object.keys(CREDITS).map((credit, index) => (
+            <container width={250} height={20}>
+              <text
+                x={0}
+                y={0}
+                text={credit}
+                origin={0.5}
+                resolution={2}
+                style={{
+                  ...TEXT_STYLE,
+                  color: "#000000",
+                  fontSize: 14,
+                }}
+              />
+              <text
+                x={0}
+                y={10}
+                text={CREDITS[credit]}
+                origin={{ x: 0.4, y: 0.5 }}
+                resolution={2}
+                style={{ ...TEXT_STYLE, fontSize: 8, color: "#000000" }}
+              />
+            </container>
+          ))}
+        </Stack>
+      </container>
+    );
+
+    this.add.existing(
+      <container width={110} height={90} x={500} y={80}>
         <NineSlices
           x={0}
           y={0}
-          width={200}
-          height={145}
+          width={110}
+          height={90}
           origin={{ x: 0.5, y: 0 }}
         />
         <text
@@ -290,17 +453,17 @@ export class HomeScene extends AbstractScene {
           resolution={2}
           style={{
             ...TEXT_STYLE,
+            fontSize: 16,
             color: "#efd8a1",
-            fontStyle: "bold",
             stroke: "#000000",
-            strokeThickness: 4,
+            strokeThickness: 2,
           }}
         />
-        <Stack direction="vertical" spacing={10} x={0} y={30}>
+        <Stack direction="vertical" spacing={3} x={0} y={20}>
           {Object.keys(VEHICLES).map((vehicle, index) => (
             <container
-              width={180}
-              height={30}
+              width={90}
+              height={20}
               interactive
               onPointerdown={() => {
                 runConfiguration.vehicle = vehicle as VehicleType;
@@ -318,8 +481,8 @@ export class HomeScene extends AbstractScene {
                 self.first.tint = 0xffffff;
               }}
             >
-              <NineSlices x={0} y={0} width={180} height={30} />
-              <Stack x={-30} direction="horizontal" spacing={25}>
+              <NineSlices x={0} y={0} width={180} height={40} scale={0.5} />
+              <Stack x={-30} direction="horizontal" spacing={20}>
                 <VehicleSprite
                   vehicle={vehicle.toLowerCase() as VehicleTypeLowercase}
                   x={0}
@@ -331,7 +494,7 @@ export class HomeScene extends AbstractScene {
                   y={0}
                   origin={0.5}
                   resolution={2}
-                  style={{ ...TEXT_STYLE, color: "#000000", fontSize: "14px" }}
+                  style={{ ...TEXT_STYLE, color: "#000000", fontSize: 9 }}
                 />
               </Stack>
             </container>
@@ -341,12 +504,12 @@ export class HomeScene extends AbstractScene {
     );
 
     this.add.existing(
-      <container width={100} height={30} x={500} y={80} scale={0.6}>
+      <container width={110} height={90} x={520} y={200}>
         <NineSlices
           x={0}
           y={0}
-          width={200}
-          height={145}
+          width={110}
+          height={90}
           origin={{ x: 0.5, y: 0 }}
         />
         <text
@@ -358,16 +521,16 @@ export class HomeScene extends AbstractScene {
           style={{
             ...TEXT_STYLE,
             color: "#efd8a1",
-            fontStyle: "bold",
+            fontSize: 16,
             stroke: "#000000",
-            strokeThickness: 4,
+            strokeThickness: 2,
           }}
         />
-        <Stack direction="vertical" spacing={10} x={0} y={30}>
+        <Stack direction="vertical" spacing={3} x={0} y={20}>
           {Object.keys(VEHICLES).map((vehicle, index) => (
             <container
-              width={180}
-              height={30}
+              width={90}
+              height={20}
               interactive
               onPointerdown={() => {
                 runConfiguration.vehicle = vehicle as VehicleType;
@@ -385,8 +548,8 @@ export class HomeScene extends AbstractScene {
                 self.first.tint = 0xffffff;
               }}
             >
-              <NineSlices x={0} y={0} width={180} height={30} />
-              <Stack x={-30} direction="horizontal" spacing={25}>
+              <NineSlices x={0} y={0} width={180} height={40} scale={0.5} />
+              <Stack x={-30} direction="horizontal" spacing={20}>
                 <VehicleSprite
                   vehicle={vehicle.toLowerCase() as VehicleTypeLowercase}
                   x={0}
@@ -398,7 +561,7 @@ export class HomeScene extends AbstractScene {
                   y={0}
                   origin={0.5}
                   resolution={2}
-                  style={{ ...TEXT_STYLE, color: "#000000", fontSize: "14px" }}
+                  style={{ ...TEXT_STYLE, color: "#000000", fontSize: 9 }}
                 />
               </Stack>
             </container>
@@ -408,12 +571,12 @@ export class HomeScene extends AbstractScene {
     );
 
     this.add.existing(
-      <container width={100} height={30} x={333} y={320} scale={0.6}>
+      <container width={110} height={90} x={500} y={320}>
         <NineSlices
           x={0}
           y={0}
-          width={200}
-          height={145}
+          width={110}
+          height={90}
           origin={{ x: 0.5, y: 0 }}
         />
         <text
@@ -425,16 +588,16 @@ export class HomeScene extends AbstractScene {
           style={{
             ...TEXT_STYLE,
             color: "#efd8a1",
-            fontStyle: "bold",
+            fontSize: 16,
             stroke: "#000000",
-            strokeThickness: 4,
+            strokeThickness: 2,
           }}
         />
-        <Stack direction="vertical" spacing={10} x={0} y={30}>
+        <Stack direction="vertical" spacing={3} x={0} y={20}>
           {Object.keys(VEHICLES).map((vehicle, index) => (
             <container
-              width={180}
-              height={30}
+              width={90}
+              height={20}
               interactive
               onPointerdown={() => {
                 runConfiguration.vehicle = vehicle as VehicleType;
@@ -452,8 +615,8 @@ export class HomeScene extends AbstractScene {
                 self.first.tint = 0xffffff;
               }}
             >
-              <NineSlices x={0} y={0} width={180} height={30} />
-              <Stack x={-30} direction="horizontal" spacing={25}>
+              <NineSlices x={0} y={0} width={180} height={40} scale={0.5} />
+              <Stack x={-30} direction="horizontal" spacing={20}>
                 <VehicleSprite
                   vehicle={vehicle.toLowerCase() as VehicleTypeLowercase}
                   x={0}
@@ -465,7 +628,7 @@ export class HomeScene extends AbstractScene {
                   y={0}
                   origin={0.5}
                   resolution={2}
-                  style={{ ...TEXT_STYLE, color: "#000000", fontSize: "14px" }}
+                  style={{ ...TEXT_STYLE, color: "#000000", fontSize: 9 }}
                 />
               </Stack>
             </container>
