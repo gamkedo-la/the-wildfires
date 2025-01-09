@@ -137,13 +137,7 @@ export class HomeScene extends AbstractScene {
     }
 
     this.add.existing(
-      <text
-        text="THE WILDFIRES"
-        x={330}
-        y={600}
-        origin={0.5}
-        style={TEXT_STYLE}
-      />
+      <image texture={RESOURCES["the-wildfires-logo"]} x={335} y={580} />
     );
 
     this.add.existing(
@@ -196,18 +190,12 @@ export class HomeScene extends AbstractScene {
       });
 
     this.add.existing(
-      <text
-        text={"THE WILDFIRES"}
+      <image
+        texture={RESOURCES["the-wildfires-logo"]}
         x={110}
-        y={95}
+        y={55}
+        scale={0.75}
         origin={0}
-        resolution={2}
-        wordWrapWidth={260}
-        style={{
-          ...TEXT_STYLE,
-          fontSize: 24,
-          lineSpacing: 2,
-        }}
       />
     );
 
@@ -271,68 +259,66 @@ export class HomeScene extends AbstractScene {
       </container>
     );
 
-    if (import.meta.env.VITE_DEBUG) {
-      this.add.existing(
-        <container width={280} height={210} x={vehiclesX} y={200}>
-          <NineSlices x={0} y={0} width={280} height={210} origin={0} />
-          <text
-            text="Vehicles"
-            x={60}
-            y={0}
-            origin={0.5}
-            resolution={2}
-            style={{
-              ...TEXT_STYLE,
-              fontSize: 24,
-              color: "#efd8a1",
-              stroke: "#000000",
-              strokeThickness: 3,
-            }}
-          />
-          <Stack direction="vertical" spacing={10} x={140} y={40}>
-            {Object.keys(VEHICLES).map((vehicle) => (
-              <container width={250} height={50}>
-                <Stack x={-110} y={-20} direction="horizontal" spacing={25}>
-                  <VehicleSprite
-                    vehicle={vehicle.toLowerCase() as VehicleTypeLowercase}
-                  />
-                  <text
-                    text={vehicle}
-                    origin={0.5}
-                    resolution={2}
-                    style={{
-                      ...TEXT_STYLE,
-                      color: "#000000",
-                      fontSize: 14,
-                    }}
-                  />
-                  <text
-                    text={VEHICLES[vehicle as keyof typeof VEHICLES].model}
-                    origin={{ x: 0.4, y: 0.5 }}
-                    resolution={2}
-                    style={{ ...TEXT_STYLE, fontSize: 8, color: "#000000" }}
-                  />
-                </Stack>
+    this.add.existing(
+      <container width={280} height={210} x={vehiclesX} y={200}>
+        <NineSlices x={0} y={0} width={280} height={210} origin={0} />
+        <text
+          text="Vehicles"
+          x={60}
+          y={0}
+          origin={0.5}
+          resolution={2}
+          style={{
+            ...TEXT_STYLE,
+            fontSize: 24,
+            color: "#efd8a1",
+            stroke: "#000000",
+            strokeThickness: 3,
+          }}
+        />
+        <Stack direction="vertical" spacing={10} x={140} y={40}>
+          {Object.keys(VEHICLES).map((vehicle) => (
+            <container width={250} height={50}>
+              <Stack x={-110} y={-20} direction="horizontal" spacing={25}>
+                <VehicleSprite
+                  vehicle={vehicle.toLowerCase() as VehicleTypeLowercase}
+                />
                 <text
-                  text={VEHICLES[vehicle as keyof typeof VEHICLES].description}
-                  x={-120}
-                  y={-10}
-                  origin={0}
+                  text={vehicle}
+                  origin={0.5}
                   resolution={2}
-                  wordWrapWidth={260}
                   style={{
                     ...TEXT_STYLE,
-                    fontSize: 11,
                     color: "#000000",
-                    lineSpacing: 2,
+                    fontSize: 14,
                   }}
                 />
-              </container>
-            ))}
-          </Stack>
-        </container>
-      );
-    }
+                <text
+                  text={VEHICLES[vehicle as keyof typeof VEHICLES].model}
+                  origin={{ x: 0.4, y: 0.5 }}
+                  resolution={2}
+                  style={{ ...TEXT_STYLE, fontSize: 8, color: "#000000" }}
+                />
+              </Stack>
+              <text
+                text={VEHICLES[vehicle as keyof typeof VEHICLES].description}
+                x={-120}
+                y={-10}
+                origin={0}
+                resolution={2}
+                wordWrapWidth={260}
+                style={{
+                  ...TEXT_STYLE,
+                  fontSize: 11,
+                  color: "#000000",
+                  lineSpacing: 2,
+                }}
+              />
+            </container>
+          ))}
+        </Stack>
+      </container>
+    );
 
     let creditsX = createTransitionSignal(-200);
 

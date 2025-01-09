@@ -188,6 +188,11 @@
       },
       {
         "type": "image",
+        "key": "the-wildfires-logo",
+        "url": "assets/the-wildfires-logo.png"
+      },
+      {
+        "type": "image",
         "key": "tilemap-planning",
         "url": "assets/tilemap-planning.png"
       },

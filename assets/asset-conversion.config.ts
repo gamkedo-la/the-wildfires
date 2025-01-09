@@ -126,6 +126,7 @@ const config = {
       input: "skycrane/skycrane_pixel_outline.png",
       output: "skycrane-outline.png",
     },
+    { input: "ui/the-wildfires.png", output: "the-wildfires-logo.png" },
     {
       input: "ui/the-wildfires-planes-hud.aseprite",
       output: "planes-hud.png",

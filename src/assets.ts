@@ -40,6 +40,7 @@ export const RESOURCES = {
   "skycrane-sprite": "skycrane-sprite",
   "smoke": "smoke",
   "tanks-overlay": "tanks-overlay",
+  "the-wildfires-logo": "the-wildfires-logo",
   "tilemap-planning": "tilemap-planning",
   "tilemap-test-2": "tilemap-test-2",
   "tilemap-test-3": "tilemap-test-3",
