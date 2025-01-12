@@ -397,31 +397,41 @@ export class HomeScene extends AbstractScene {
             strokeThickness: 3,
           }}
         />
-        <Stack direction="vertical" spacing={10} x={140} y={40}>
-          {Object.keys(CREDITS).map((credit) => (
-            <container width={250} height={20}>
-              <text
-                x={0}
-                y={0}
-                text={credit}
-                origin={0.5}
-                resolution={2}
-                style={{
-                  ...TEXT_STYLE,
-                  color: "#000000",
-                  fontSize: 14,
-                }}
-              />
-              <text
-                x={0}
-                y={10}
-                text={CREDITS[credit as keyof typeof CREDITS]}
-                origin={{ x: 0.4, y: 0.5 }}
-                resolution={2}
-                style={{ ...TEXT_STYLE, fontSize: 8, color: "#000000" }}
-              />
-            </container>
-          ))}
+        <Stack direction="vertical" spacing={10} x={140} y={10}>
+          {Object.keys(CREDITS).map((credit) => {
+            const name = credit;
+            const role = CREDITS[credit as keyof typeof CREDITS];
+            return (
+              <container width={250} height={Math.max(role.length / 15, 7)}>
+                <text
+                  x={0}
+                  y={0}
+                  text={name}
+                  origin={0.5}
+                  resolution={2}
+                  style={{
+                    ...TEXT_STYLE,
+                    color: "#000000",
+                    fontSize: 8,
+                  }}
+                />
+                <text
+                  x={0}
+                  y={6}
+                  text={role}
+                  origin={{ x: 0.5, y: 0 }}
+                  resolution={2}
+                  wordWrapWidth={260}
+                  style={{
+                    ...TEXT_STYLE,
+                    fontSize: 5,
+                    color: "#000000",
+                    align: "center",
+                  }}
+                />
+              </container>
+            );
+          })}
         </Stack>
       </container>
     );
