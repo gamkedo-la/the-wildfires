@@ -45,7 +45,8 @@ export class FireMapSystem implements System {
           },
         },
         quantity: 10,
-        speedY: { min: -25, max: -5 },
+        speedY: { min: -25, max: -15 },
+        scale: 0.75,
         frequency: 25,
         lifespan: { min: 1000, max: 2000 },
         emitting: false,
@@ -121,7 +122,9 @@ export class FireMapSystem implements System {
       mapTile.properties.isBurning = false;
       let tile = this.map.removeFire(tileX, tileY);
       this.stopSmoke(tile);
-      this.retardantChargeFx.explode(2, mapTile.pixelX, mapTile.pixelY);
+      if (Math.random() < 0.2) {
+        this.retardantChargeFx.explode(1, mapTile.pixelX, mapTile.pixelY);
+      }
       this.scene.vehiclesSystem.vehicle.remainingCharges++;
     }
   }
